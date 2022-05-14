@@ -3,9 +3,6 @@ import { CommonEntity } from '../common/common.entity';
 
 @Entity()
 export class User extends CommonEntity {
-  @PrimaryGeneratedColumn()
-  userId: number;
-
   @Column()
   nickname: string;
 

@@ -3,7 +3,6 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-// import { UsersRepository } from './users.repository';
 import { UsersCreateDto } from './dto/users.create.dto';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -24,11 +23,15 @@ export class UsersService {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await this.usersRepository.save({
+    const result = await this.usersRepository.save({
       ...userCreateDto,
       password: hashedPassword,
     });
+
+    return result;
   }
+
+
   // async findById(userId: number) {
   //   const user = await this.userRepository.findOne({ userId });
   //   if (!user) {

@@ -1,13 +1,15 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserLogInDTO } from '../users/dto/users.login.dto';
+import { UserLogInDTO } from './dto/users.login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { User } from '../users/users.entity';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private userService: UsersService,
     private usersRepository: Repository<User>,
     private jwtService: JwtService,
   ) {}
@@ -15,7 +17,7 @@ export class AuthService {
     const { email, password } = userLoginDto;
 
     //* 해당하는 email이 있는가
-    const user = await this.usersRepository.findOne({ email });
+    const user = await this.userService.findUserByEmail(email);
     if (!user) {
       throw new UnauthorizedException('이메일과 비밀번호를 확인해주세요');
     }

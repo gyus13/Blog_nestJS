@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -31,6 +32,15 @@ export class UsersService {
     return result;
   }
 
+  async findUserById(id: string) {
+    try {
+      const user = await this.usersRepository.findOne({ id });
+      if(!user) throw new Error()
+      return user;
+    } catch (error) {
+      throw new BadRequestException('해당하는 사용자를 찾을 수 없습니다.')
+    }
+  }
 
   // async findById(userId: number) {
   //   const user = await this.userRepository.findOne({ userId });

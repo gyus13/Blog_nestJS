@@ -2,15 +2,12 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserLogInDTO } from './dto/users.login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { Repository } from 'typeorm';
-import { User } from '../users/users.entity';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UsersService,
-    private usersRepository: Repository<User>,
     private jwtService: JwtService,
   ) {}
   async verifyUser(userLoginDto: UserLogInDTO) {

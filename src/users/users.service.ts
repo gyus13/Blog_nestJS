@@ -42,12 +42,8 @@ export class UsersService {
     }
   }
 
-  // async findById(userId: number) {
-  //   const user = await this.userRepository.findOne({ userId });
-  //   if (!user) {
-  //     throw new NotFoundException(`user id ${userId} not found`);
-  //   }
-  //   return user;
-  // }
-  //
+  async findUserByEmail(email: string) {
+    const user = await this.usersRepository.findOne({ email });
+    return user;
+  }
 }

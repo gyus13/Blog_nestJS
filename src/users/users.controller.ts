@@ -15,6 +15,7 @@ import { SuccessInterceptor } from '../common/interceptors/success.interceptor';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { CurrentUser } from '../common/decorators/user.decorator';
 import { UserDTO } from './dto/users.dto';
+import {ApiOperation} from "@nestjs/swagger";
 
 @Controller('users')
 @UseInterceptors(SuccessInterceptor)
@@ -24,6 +25,7 @@ export class UsersController {
     private readonly authService: AuthService,
   ) {}
 
+  @ApiOperation({ summary: '회원조회'})
   @Get()
   @UseGuards(JwtAuthGuard)
   getCurrentUser(@CurrentUser() currentUser: UserDTO) {
@@ -36,11 +38,13 @@ export class UsersController {
   //   return await this.userService.findById(userId);
   // }
 
+  @ApiOperation({ summary: '회원가입'})
   @Post()
   async createUser(@Body() userCreateDto: UsersCreateDto) {
     return await this.userService.createUser(userCreateDto);
   }
 
+  @ApiOperation({ summary: '로그인'})
   @Post('login')
   async logIn(@Body() userLoginDTO: UserLogInDTO) {
     console.log(userLoginDTO);

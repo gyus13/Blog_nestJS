@@ -3,7 +3,7 @@ import {
   Controller,
   Get,
   Param,
-  Post,
+  Post, Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -50,4 +50,15 @@ export class UsersController {
     console.log(userLoginDTO);
     return await this.authService.verifyUser(userLoginDTO);
   }
+
+  @Get('google') // 1
+  // @UseGuards(AuthGuard('google'))
+  async googleAuth(@Req() req) {}
+
+  @Get('google/callback') // 2
+  // @UseGuards(AuthGuard('google'))
+  googleAuthRedirect(@Req() req) {
+    return this.authService.googleLogin(req);
+  }
+
 }

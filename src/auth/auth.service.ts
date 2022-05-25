@@ -10,6 +10,8 @@ export class AuthService {
     private userService: UsersService,
     private jwtService: JwtService,
   ) {}
+  async googleLogin(userLoginDto: UserLogInDTO) {}
+
   async verifyUser(userLoginDto: UserLogInDTO) {
     const { email, password } = userLoginDto;
 

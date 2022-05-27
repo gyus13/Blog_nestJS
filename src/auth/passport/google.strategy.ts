@@ -9,7 +9,7 @@ config();
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
     super({
-      clientID: process.env.GOOGLE_CLIENT_ID,  // 1
+      clientID: process.env.GOOGLE_CLIENT_ID, // 1
       clientSecret: process.env.GOOGLE_SECRET,
       callbackURL: 'http://localhost:3000/auth/google/callback',
       scope: ['email', 'profile'],
@@ -17,10 +17,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   }
 
   async validate(
-      accessToken: string,
-      refreshToken: string,
-      profile: any,
-      done: VerifyCallback,
+    accessToken: string,
+    refreshToken: string,
+    profile: any,
+    done: VerifyCallback,
   ): Promise<any> {
     const { name, emails } = profile;
     const user = {

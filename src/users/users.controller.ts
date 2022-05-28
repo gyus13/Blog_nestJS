@@ -60,5 +60,4 @@ export class UsersController {
   googleAuthRedirect(@Req() req) {
     return this.authService.googleLogin(req);
   }
-
 }

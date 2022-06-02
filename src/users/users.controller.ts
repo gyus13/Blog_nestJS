@@ -53,7 +53,9 @@ export class UsersController {
 
   @Get('google') // 1
   // @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req) {}
+  async googleAuth(@Req() req) {
+    return 'googleAuth';
+  }
 
   @Get('google/callback') // 2
   // @UseGuards(AuthGuard('google'))

@@ -22,10 +22,9 @@ import {ApiOperation} from "@nestjs/swagger";
 export class UsersController {
   constructor(
     private readonly userService: UsersService,
-    private readonly authService: AuthService,
   ) {}
 
-  @ApiOperation({ summary: '회원조회'})
+  @ApiOperation({ summary: '회원조회' })
   @Get()
   @UseGuards(JwtAuthGuard)
   getCurrentUser(@CurrentUser() currentUser: UserDTO) {
@@ -42,24 +41,5 @@ export class UsersController {
   @Post()
   async createUser(@Body() userCreateDto: UsersCreateDto) {
     return await this.userService.createUser(userCreateDto);
-  }
-
-  @ApiOperation({ summary: '로그인'})
-  @Post('login')
-  async logIn(@Body() userLoginDTO: UserLogInDTO) {
-    console.log(userLoginDTO);
-    return await this.authService.verifyUser(userLoginDTO);
-  }
-
-  @Get('google') // 1
-  // @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req) {
-    return 'googleAuth';
-  }
-
-  @Get('google/callback') // 2
-  // @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req) {
-    return this.authService.googleLogin(req);
   }
 }

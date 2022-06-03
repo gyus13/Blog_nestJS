@@ -10,7 +10,15 @@ export class AuthService {
     private userService: UsersService,
     private jwtService: JwtService,
   ) {}
-  async googleLogin(userLoginDto: UserLogInDTO) {}
+  async googleLogin(req) {
+    if (!req.user) {
+      return 'No user from google';
+    }
+    return {
+      message: 'User information from google',
+      user: req.user,
+    };
+  }
 
   async verifyUser(userLoginDto: UserLogInDTO) {
     const { email, password } = userLoginDto;

@@ -11,10 +11,10 @@ import { FutureModule } from './future/future.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'endticket.c8pzmu4jd1w2.ap-northeast-2.rds.amazonaws.com',
       port: 3306,
-      username: 'root',
-      password: 'root',
+      username: 'admin',
+      password: '12345678',
       database: 'test',
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,

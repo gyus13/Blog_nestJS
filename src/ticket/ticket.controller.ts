@@ -1,7 +1,16 @@
-import {Controller, Get, Post, UseGuards} from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import {
+  Controller,
+  Patch,
+  Delete,
+  Get,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+//validation swagger에 올려주기
 @Controller('ticket')
+@ApiTags('ticket')
 export class TicketController {
   @ApiOperation({ summary: '티켓조회' })
   @Get()
@@ -16,31 +25,25 @@ export class TicketController {
   }
 
   @ApiOperation({ summary: '티켓수정' })
-  @Post()
+  @Patch()
   async updateTicket() {
     return 'create Ticket';
   }
 
   @ApiOperation({ summary: '티켓삭제' })
-  @Post()
+  @Delete()
   async deleteTicket() {
     return 'create Ticket';
   }
 
   @ApiOperation({ summary: '추천 티켓조회' })
-  @Get()
+  @Get('/:ticketId')
   async getTicketByUserId() {
     return 'this is ticket return';
   }
 
-  @ApiOperation({ summary: '모든 티켓조회' })
-  @Get()
-  async getAllTicket() {
-    return 'this is ticket return';
-  }
-
   @ApiOperation({ summary: '주간목표 조회' })
-  @Get()
+  @Get('/goal')
   async getGoal() {
     return 'get Goal';
   }

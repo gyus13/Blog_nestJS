@@ -1,10 +1,11 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import {ApiOperation, ApiTags} from '@nestjs/swagger';
 import { UserLogInDTO } from './dto/users.login.dto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @ApiOperation({ summary: '로그인' })

@@ -1,6 +1,6 @@
 import {
   Body,
-  Controller,
+  Controller, Delete,
   Get,
   Param,
   Post,
@@ -16,9 +16,10 @@ import { SuccessInterceptor } from '../common/interceptors/success.interceptor';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { CurrentUser } from '../common/decorators/user.decorator';
 import { UserDTO } from './dto/users.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import {ApiOperation, ApiTags} from '@nestjs/swagger';
 
 @Controller('users')
+@ApiTags('users')
 @UseInterceptors(SuccessInterceptor)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
@@ -43,8 +44,21 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: '닉네임등록' })
-  @Post()
+  @Post('/nickname')
   async createNickname() {
     return 'nickname';
   }
+
+  @ApiOperation({ summary: '회원탈퇴' })
+  @Delete()
+  async deleteNickname() {
+    return 'nickname';
+  }
+
+  @ApiOperation({ summary: '문의하기' })
+  @Post('/inquire')
+  async inquire() {
+    return 'nickname';
+  }
+
 }

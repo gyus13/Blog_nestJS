@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { TicketModule } from './ticket/ticket.module';
+import { FutureModule } from './future/future.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { TicketModule } from './ticket/ticket.module';
     UsersModule,
     AuthModule,
     TicketModule,
+    FutureModule,
   ],
   controllers: [AppController],
   providers: [AppService],

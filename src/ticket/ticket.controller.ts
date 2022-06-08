@@ -4,18 +4,21 @@ import {
   Delete,
   Get,
   Post,
-  UseGuards,
+  UseGuards, Body,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { TicketService } from './ticket.service';
 
 //validation swagger에 올려주기
 @Controller('ticket')
 @ApiTags('ticket')
 export class TicketController {
+  constructor(private readonly ticketService: TicketService) {}
+
   @ApiOperation({ summary: '티켓조회' })
   @Get()
   async getTicket() {
-    return 'this is ticket return';
+    return await this.ticketService.findTicket();
   }
 
   @ApiOperation({ summary: '티켓등록' })

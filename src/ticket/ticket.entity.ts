@@ -1,8 +1,8 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { CommonEntity } from '../common/common.entity';
 import { IsEmail, IsString } from 'class-validator';
-import {ApiProperty} from "@nestjs/swagger";
-import {User} from "../users/users.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { User } from '../users/users.entity';
 
 @Entity()
 export class Ticket extends CommonEntity {

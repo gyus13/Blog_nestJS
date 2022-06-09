@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UsersCreateDto } from './dto/users.create.dto';
-import * as bcrypt from 'bcrypt-nodejs';
+import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './users.entity';
 import { Repository } from 'typeorm';
@@ -24,26 +24,31 @@ export class UsersService {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const result = await this.usersRepository.save({
-      ...userCreateDto,
+    const result = await this.usersRepository.create({
+      email,
       password: hashedPassword,
     });
 
     return result;
   }
 
-  async findUserById(id: string) {
+  async findUserById(id: number) {
     try {
       const user = await this.usersRepository.findOne({ id });
-      if(!user) throw new Error()
+      if (!user) throw new Error();
       return user;
     } catch (error) {
-      throw new BadRequestException('해당하는 사용자를 찾을 수 없습니다.')
+      throw new BadRequestException('해당하는 사용자를 찾을 수 없습니다.');
     }
   }
 
   async findUserByEmail(email: string) {
     const user = await this.usersRepository.findOne({ email });
     return user;
+  }
+
+  async createNickname(nicknameDto) {
+    const { nickname } = nicknameDto;
+
   }
 }

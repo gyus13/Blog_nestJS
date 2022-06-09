@@ -17,6 +17,7 @@ import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { CurrentUser } from '../common/decorators/user.decorator';
 import { UserDTO } from './dto/users.dto';
 import {ApiOperation, ApiTags} from '@nestjs/swagger';
+import {UsersNicknameDto} from "./dto/users.nickname.dto";
 
 @Controller('users')
 @ApiTags('users')
@@ -32,10 +33,11 @@ export class UsersController {
     return currentUser;
   }
 
-  // @Get('/:userId')
-  // async getUser(@Param('userId') userId: number){
-  //   return await this.userService.findById(userId);
-  // }
+  @ApiOperation({ summary: '특정 회원조회' })
+  @Get('/:id')
+  async getUser(@Param('id') id: number){
+    return await this.userService.findUserById(id);
+  }
 
   @ApiOperation({ summary: '회원가입' })
   @Post()
@@ -45,8 +47,8 @@ export class UsersController {
 
   @ApiOperation({ summary: '닉네임등록' })
   @Post('/nickname')
-  async createNickname() {
-    return 'nickname';
+  async createNickname(@Body() nicknameDto: UsersNicknameDto) {
+    return await this.userService.createNickname(nicknameDto);
   }
 
   @ApiOperation({ summary: '회원탈퇴' })
@@ -60,5 +62,4 @@ export class UsersController {
   async inquire() {
     return 'nickname';
   }
-
 }

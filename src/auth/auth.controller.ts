@@ -14,7 +14,7 @@ import { JwtAuthGuard } from './jwt/jwt.guard';
 import { PatchNicknameResponse } from './dto/patch-nickname.response';
 import { PatchNicknameRequest } from './dto/patch-nickname.request';
 import { PatchNickname } from './decorator/auth.decorator';
-import {SignInRequest} from "./dto/sign-in.request";
+import { SignInRequest } from './dto/sign-in.request';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -35,6 +35,7 @@ export class AuthController {
   //   return this.authService.googleLogin(req);
   // }
 
+  @ApiOperation({ summary: '로그인' })
   @Post('login')
   async logIn(@Body() signInRequest: SignInRequest) {
     return await this.authService.verifyUser(signInRequest);

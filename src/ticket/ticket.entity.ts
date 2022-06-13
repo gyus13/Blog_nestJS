@@ -40,6 +40,10 @@ export class Ticket extends CommonEntity {
   @IsString()
   isSuccess: string;
 
+  @ApiProperty()
+  @Column()
+  touchCount: number;
+
   @ManyToOne(() => User, (user) => user.ticket)
   user: User;
 }

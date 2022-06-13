@@ -4,10 +4,13 @@ import {
   Delete,
   Get,
   Post,
+  Request,
   UseGuards, Body,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TicketService } from './ticket.service';
+import {AddTicket} from "../common/decorators/auth.decorator";
+import {AddTicketDto} from "./dto/add-ticket.dto";
 
 //validation swagger에 올려주기
 @Controller('ticket')
@@ -23,8 +26,8 @@ export class TicketController {
 
   @ApiOperation({ summary: '티켓등록' })
   @Post()
-  async createTicket() {
-    return 'create Ticket';
+  createTicket(@AddTicket() addTicketDto: AddTicketDto) {
+    return this.ticketService.createTicket(addTicketDto);
   }
 
   @ApiOperation({ summary: '티켓수정' })

@@ -16,21 +16,6 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
-  async createUser(userCreateDto: UsersCreateDto) {
-    const { email, password } = userCreateDto;
-    const user = await this.usersRepository.findOne({ email });
-    if (user) {
-      throw new UnauthorizedException('해당하는 이메일은 이미 존재합니다');
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const result = await this.usersRepository.create({
-      email,
-      password: hashedPassword,
-    });
-
-    return result;
-  }
 
   async findUserById(id: number) {
     try {
@@ -47,8 +32,5 @@ export class UsersService {
     return user;
   }
 
-  async createNickname(nicknameDto) {
-    const { nickname } = nicknameDto;
 
-  }
 }

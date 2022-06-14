@@ -1,7 +1,7 @@
 import {
   Body,
   Controller,
-  Get,
+  Get, Headers,
   Patch,
   Post,
   Req,
@@ -15,6 +15,7 @@ import { PatchNicknameResponse } from './dto/patch-nickname.response';
 import { PatchNicknameRequest } from './dto/patch-nickname.request';
 import { PatchNickname } from './decorator/auth.decorator';
 import { SignInRequest } from './dto/sign-in.request';
+import {SignInResponse} from "./dto/sign-in.response";
 
 @Controller('auth')
 @ApiTags('auth')
@@ -35,6 +36,11 @@ export class AuthController {
   //   return this.authService.googleLogin(req);
   // }
 
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: SignInResponse,
+  })
   @ApiOperation({ summary: '로그인' })
   @Post('login')
   async logIn(@Body() signInRequest: SignInRequest) {

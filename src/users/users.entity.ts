@@ -23,7 +23,4 @@ export class User extends CommonEntity {
   @Column()
   @IsString()
   password: string;
-
-  @OneToMany(() => Ticket, (ticket: Ticket) => ticket.user)
-  ticket: Ticket[];
 }

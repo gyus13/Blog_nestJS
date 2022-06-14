@@ -4,7 +4,7 @@ import { IsEmail, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from '../users/users.entity';
 
-@Entity()
+@Entity('Ticket')
 export class Ticket extends CommonEntity {
   @ApiProperty({
     example: '티켓이름',
@@ -37,13 +37,9 @@ export class Ticket extends CommonEntity {
 
   @ApiProperty()
   @Column()
-  @IsString()
-  isSuccess: string;
+  touchCount: number;
 
   @ApiProperty()
   @Column()
-  touchCount: number;
-
-  @ManyToOne(() => User, (user) => user.ticket)
-  user: User;
+  userId: number;
 }

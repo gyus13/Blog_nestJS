@@ -60,14 +60,4 @@ export const SignUpUser = createParamDecorator(
   },
 );
 
-export const AddTicket = createParamDecorator(
-  (data: unknown, ctx: ExecutionContext) => {
-    const body = ctx.switchToHttp().getRequest().body;
-    if (!body.title) {
-      throw new HttpException('제목을 입력해 주세요.', 201);
-    }
-    if (!regularExp.emailRegex.test(body.email)) {
-      throw new HttpException(response.INVALID_EMAIL, 201);
-    }
-  },
-);
+

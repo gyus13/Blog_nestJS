@@ -22,6 +22,7 @@ import { AddTicket } from '../common/decorators/ticket.decorator';
 import { AddTicketRequest } from './dto/add-ticket.request';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { GetTicketResponse } from './dto/get-ticket.response';
+import { TouchTicketResponse } from './dto/touch-ticket.response';
 
 //validation swagger에 올려주기
 @Controller('ticket')
@@ -78,7 +79,7 @@ export class TicketController {
   @ApiResponse({
     status: 1000,
     description: '성공',
-    type: GetTicketResponse,
+    type: TouchTicketResponse,
   })
   @ApiResponse({
     status: 4000,
@@ -107,9 +108,13 @@ export class TicketController {
     name: 'x-access-token',
     example: 'JWT TOKEN',
   })
-  @Patch()
-  async updateTicket() {
-    return 'create Ticket';
+  @Patch('/:ticketId')
+  async updateTicket(
+    @Param('ticketId') id: number,
+    @Headers('x-access-token') accessToken,
+    @AddTicket() patchTicketRequest: AddTicketRequest,
+  ) {
+    return this.ticketService.patchTicket(accessToken, id, patchTicketRequest);
   }
 
   @ApiOperation({ summary: '티켓삭제' })

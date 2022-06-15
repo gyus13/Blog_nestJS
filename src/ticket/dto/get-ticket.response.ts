@@ -3,8 +3,15 @@ import { IsArray, IsString } from 'class-validator';
 import { BaseResponse } from '../../config/base.response';
 class GetTicketResponseData {
   @ApiProperty({
-    example: 'cookie',
-    description: 'nickname',
+    example: '1',
+    description: '티켓 인덱스',
+    required: true,
+  })
+  id: number;
+
+  @ApiProperty({
+    example: '성장',
+    description: '제목',
     required: true,
   })
   @IsString()
@@ -27,12 +34,36 @@ class GetTicketResponseData {
   end: string;
 
   @ApiProperty({
-    example: 'Yellow',
+    example: '#000000',
     description: '색상',
     required: true,
   })
   @IsString()
   color: string;
+
+  @ApiProperty({
+    example: '운동',
+    description: '카테고리',
+    required: true,
+  })
+  @IsString()
+  category: string;
+
+  @ApiProperty({
+    example: '5',
+    description: '터치횟수(5,10,15)',
+    required: true,
+  })
+  @IsString()
+  touchCount: string;
+
+  @ApiProperty({
+    example: 'NotSuccess',
+    description: '티켓 터치카운트 성공 여부',
+    required: true,
+  })
+  @IsString()
+  isSuccess: string;
 }
 
 export abstract class GetTicketResponse extends BaseResponse {

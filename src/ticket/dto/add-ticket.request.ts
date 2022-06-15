@@ -28,7 +28,7 @@ export class AddTicketRequest {
   end: string;
 
   @ApiProperty({
-    example: 'Yellow',
+    example: '#00000',
     description: '색상',
     required: true,
   })

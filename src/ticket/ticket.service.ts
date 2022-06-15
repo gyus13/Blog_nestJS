@@ -39,6 +39,7 @@ export class TicketService {
       const createTicketData = await queryRunner.manager.save(ticket);
 
       const data = {
+        ticketId: createTicketData.id,
         title: createTicketData.title,
         start: createTicketData.start,
         end: createTicketData.end,
@@ -117,6 +118,8 @@ export class TicketService {
     }
   }
 
+  async patchTicket(accessToken, ticketId, patchTicketRequest) {}
+
   async getTicket(req, accessToken) {
     try {
       const decodeToken = await decodeJwt(accessToken);
@@ -133,6 +136,7 @@ export class TicketService {
           'ticket.end',
           'ticket.color',
           'ticket.touchCount',
+          'ticket.isSuccess',
         ])
         .getMany();
 

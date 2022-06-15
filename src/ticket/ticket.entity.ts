@@ -46,4 +46,8 @@ export class Ticket extends CommonEntity {
   @ApiProperty()
   @Column({ default: 'NotSuccess' })
   isSuccess: string;
+
+  @ApiProperty()
+  @Column({ default: 'NotTouch' })
+  isTouched: string;
 }

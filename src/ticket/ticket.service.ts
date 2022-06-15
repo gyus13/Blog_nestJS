@@ -6,12 +6,16 @@ import { AddTicketRequest } from './dto/add-ticket.request';
 import { decodeJwt, makeResponse } from '../common/function.utils';
 import { response } from '../config/response.utils';
 import { query } from 'express';
+import { TouchCount } from './touch-count.entity';
+import { TouchTicket } from '../common/decorators/ticket.decorator';
 
 @Injectable()
 export class TicketService {
   constructor(
     @InjectRepository(Ticket)
     private ticketRepository: Repository<Ticket>,
+    @InjectRepository(TouchCount)
+    private touchCountRepository: Repository<TouchCount>,
     private connection: Connection,
   ) {}
 
@@ -58,6 +62,61 @@ export class TicketService {
     }
   }
 
+  async touchTicket(accessToken, ticketId) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      const ticket = await this.ticketRepository.findOne({
+        where: { id: ticketId, status: 'ACTIVE' },
+      });
+
+      // TouchTicket 인스턴스 생성 후 정보 담기
+      const touchCount = new TouchCount();
+      touchCount.userId = decodeToken.sub;
+      touchCount.ticketId = ticketId;
+      const createTouchTicketData = await queryRunner.manager.save(touchCount);
+
+      // 해당 유저의 해당티켓 터치횟수
+      const countResult = await getManager()
+        .createQueryBuilder(TouchCount, 'touchCount')
+        .select('touchCount.id')
+        .where('userId IN (:userId)', { userId: decodeToken.sub })
+        .andWhere('ticketId IN (:ticketId)', { ticketId: ticketId })
+        .getMany();
+
+      const counting = countResult.length + 1;
+
+      if (ticket.touchCount <= counting) {
+        await queryRunner.manager.update(
+          Ticket,
+          { id: ticketId },
+          { isSuccess: 'Success' },
+        );
+      }
+
+      const data = {
+        userId: createTouchTicketData.userId,
+        ticketId: createTouchTicketData.ticketId,
+        touchCount: counting,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      // Commit
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return response.ERROR;
+    }
+  }
+
   async getTicket(req, accessToken) {
     try {
       const decodeToken = await decodeJwt(accessToken);
@@ -65,6 +124,7 @@ export class TicketService {
       const ticket = await getManager()
         .createQueryBuilder(Ticket, 'ticket')
         .where('userId In (:userId)', { userId: decodeToken.sub })
+        .andWhere('isSuccess In (:isSuccess)', { isSuccess: 'NotSuccess' })
         .select([
           'ticket.id',
           'ticket.title',

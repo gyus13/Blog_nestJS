@@ -4,7 +4,7 @@ import { IsEmail, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Ticket } from '../ticket/ticket.entity';
 
-@Entity()
+@Entity("user")
 export class User extends CommonEntity {
   @ApiProperty({
     example: 'gyus',

@@ -8,6 +8,7 @@ import {
   UseGuards,
   Body,
   Headers,
+  Param,
 } from '@nestjs/common';
 import {
   ApiHeader,
@@ -74,12 +75,29 @@ export class TicketController {
     return this.ticketService.createTicket(addTicketDto, accessToken);
   }
 
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: GetTicketResponse,
+  })
+  @ApiResponse({
+    status: 4000,
+    description: '서버 에러',
+  })
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
   @ApiOperation({ summary: '티켓터치' })
   @UseGuards(JwtAuthGuard)
-  @Post('/touch')
-  touchTicket(@AddTicket() addTicketDto: AddTicketRequest) {
-    return null;
-    // return this.ticketService.createTicket(addTicketDto);
+  @Post('/touch/:ticketId')
+  touchTicket(
+    @Param('ticketId') id: number,
+    @Headers('x-access-token') accessToken,
+  ) {
+    return this.ticketService.touchTicket(accessToken, id);
   }
 
   @ApiOperation({ summary: '티켓수정' })

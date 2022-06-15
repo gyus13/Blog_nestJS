@@ -55,7 +55,7 @@ class GetTicketResponseData {
     required: true,
   })
   @IsString()
-  touchCount: string;
+  touchCount: number;
 
   @ApiProperty({
     example: 'NotSuccess',
@@ -64,6 +64,14 @@ class GetTicketResponseData {
   })
   @IsString()
   isSuccess: string;
+
+  @ApiProperty({
+    example: '6',
+    description: '현재 터치 횟수',
+    required: true,
+  })
+  @IsString()
+  currentCount: number;
 }
 
 export abstract class GetTicketResponse extends BaseResponse {

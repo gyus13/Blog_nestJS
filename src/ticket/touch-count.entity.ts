@@ -9,8 +9,4 @@ export class TouchCount extends CommonEntity {
   @ApiProperty()
   @Column()
   ticketId: number;
-
-  @ApiProperty()
-  @Column()
-  userId: number;
 }

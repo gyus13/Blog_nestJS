@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, getManager, Repository } from 'typeorm';
+import { Connection, getConnection, getManager, Repository } from 'typeorm';
 import { Ticket } from './ticket.entity';
 import { AddTicketRequest } from './dto/add-ticket.request';
 import { decodeJwt, makeResponse } from '../common/function.utils';
@@ -54,7 +54,6 @@ export class TicketService {
       const touchCount = new TouchCount();
       touchCount.ticketId = createTicketData.id;
       await queryRunner.manager.save(touchCount);
-
 
       const result = makeResponse(response.SUCCESS, data);
 
@@ -122,7 +121,82 @@ export class TicketService {
     }
   }
 
-  async patchTicket(accessToken, ticketId, patchTicketRequest) {}
+  async patchTicket(accessToken, ticketId, patchTicketRequest) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      await getConnection()
+        .createQueryBuilder()
+        .update(Ticket)
+        .set({
+          title: patchTicketRequest.title,
+          start: patchTicketRequest.start,
+          end: patchTicketRequest.end,
+          color: patchTicketRequest.color,
+          category: patchTicketRequest.category,
+          touchCount: patchTicketRequest.touchCount,
+          userId: decodeToken.sub,
+        })
+        .where('id = :id', { id: ticketId })
+        .execute();
+
+      const data = {
+        ticketId: patchTicketRequest.id,
+        title: patchTicketRequest.title,
+        start: patchTicketRequest.start,
+        end: patchTicketRequest.end,
+        color: patchTicketRequest.color,
+        category: patchTicketRequest.category,
+        touchCount: patchTicketRequest.touchCount,
+        userId: decodeToken.sub,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      // Commit
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return response.ERROR;
+    }
+  }
+
+  async deleteTicket(accessToken, ticketId) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      await getConnection()
+        .createQueryBuilder()
+        .delete()
+        .from(Ticket)
+        .where('id = :id', { id: ticketId })
+        .execute();
+
+      const data = {
+        ticketId: ticketId
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      // Commit
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return response.ERROR;
+    }
+  }
 
   async getTicket(req, accessToken) {
     try {

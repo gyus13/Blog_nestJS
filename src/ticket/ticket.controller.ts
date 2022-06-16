@@ -124,9 +124,12 @@ export class TicketController {
     name: 'x-access-token',
     example: 'JWT TOKEN',
   })
-  @Delete()
-  async deleteTicket() {
-    return 'create Ticket';
+  @Delete('/:ticketId')
+  async deleteTicket(
+    @Param('ticketId') id: number,
+    @Headers('x-access-token') accessToken,
+  ) {
+    return this.ticketService.deleteTicket(accessToken, id);
   }
 
   @ApiOperation({ summary: '추천 티켓조회' })

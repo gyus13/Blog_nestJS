@@ -23,6 +23,7 @@ import { AddTicketRequest } from './dto/add-ticket.request';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { GetTicketResponse } from './dto/get-ticket.response';
 import { TouchTicketResponse } from './dto/touch-ticket.response';
+import {DeleteTicketResponse} from "./dto/delete-ticket.response";
 
 //validation swagger에 올려주기
 @Controller('ticket')
@@ -101,6 +102,15 @@ export class TicketController {
     return this.ticketService.touchTicket(accessToken, id);
   }
 
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: GetTicketResponse,
+  })
+  @ApiResponse({
+    status: 4000,
+    description: '서버 에러',
+  })
   @ApiOperation({ summary: '티켓수정' })
   @UseGuards(JwtAuthGuard)
   @ApiHeader({
@@ -117,6 +127,15 @@ export class TicketController {
     return this.ticketService.patchTicket(accessToken, id, patchTicketRequest);
   }
 
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: DeleteTicketResponse,
+  })
+  @ApiResponse({
+    status: 4000,
+    description: '서버 에러',
+  })
   @ApiOperation({ summary: '티켓삭제' })
   @UseGuards(JwtAuthGuard)
   @ApiHeader({

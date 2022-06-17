@@ -93,6 +93,7 @@ export class TicketController {
     example: 'JWT TOKEN',
   })
   @ApiOperation({ summary: '티켓터치' })
+  @ApiQuery({ description: '티켓 ', type: AddTicketRequest })
   @UseGuards(JwtAuthGuard)
   @Post('/touch/:ticketId')
   touchTicket(
@@ -118,6 +119,7 @@ export class TicketController {
     name: 'x-access-token',
     example: 'JWT TOKEN',
   })
+  @ApiQuery({ description: '티켓 ', type: AddTicketRequest })
   @Patch('/:ticketId')
   async updateTicket(
     @Param('ticketId') id: number,
@@ -151,27 +153,27 @@ export class TicketController {
     return this.ticketService.deleteTicket(accessToken, id);
   }
 
-  @ApiOperation({ summary: '추천 티켓조회' })
-  @UseGuards(JwtAuthGuard)
-  @ApiHeader({
-    description: 'jwt token',
-    name: 'x-access-token',
-    example: 'JWT TOKEN',
-  })
-  @Get('/:ticketId')
-  async getTicketByUserId() {
-    return 'this is ticket return';
-  }
-
-  @ApiOperation({ summary: '주간목표 조회' })
-  @UseGuards(JwtAuthGuard)
-  @ApiHeader({
-    description: 'jwt token',
-    name: 'x-access-token',
-    example: 'JWT TOKEN',
-  })
-  @Get('/goal')
-  async getGoal() {
-    return 'get Goal';
-  }
+//   @ApiOperation({ summary: '추천 티켓조회' })
+//   @UseGuards(JwtAuthGuard)
+//   @ApiHeader({
+//     description: 'jwt token',
+//     name: 'x-access-token',
+//     example: 'JWT TOKEN',
+//   })
+//   @Get('/:ticketId')
+//   async getTicketByUserId() {
+//     return 'this is ticket return';
+//   }
+//
+//   @ApiOperation({ summary: '주간목표 조회' })
+//   @UseGuards(JwtAuthGuard)
+//   @ApiHeader({
+//     description: 'jwt token',
+//     name: 'x-access-token',
+//     example: 'JWT TOKEN',
+//   })
+//   @Get('/goal')
+//   async getGoal() {
+//     return 'get Goal';
+//   }
 }

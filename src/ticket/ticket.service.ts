@@ -40,7 +40,7 @@ export class TicketService {
       const createTicketData = await queryRunner.manager.save(ticket);
 
       const data = {
-        ticketId: createTicketData.id,
+        id: createTicketData.id,
         title: createTicketData.title,
         start: createTicketData.start,
         end: createTicketData.end,

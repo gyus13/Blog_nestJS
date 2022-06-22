@@ -38,14 +38,15 @@ export class AuthController {
   // }
 
   @Post('google')
+  @ApiOperation({ summary: '구글 로그인' })
   async googleAuth(@Body() token) {
     return this.authService.verify(token);
   }
-
-  @Post('apple')
-  async appleAuth(@Body() token) {
-    return this.authService.verifyApple(token);
-  }
+  //
+  // @Post('apple')
+  // async appleAuth(@Body() token) {
+  //   return this.authService.verifyApple(token);
+  // }
 
   @ApiResponse({
     status: 1000,

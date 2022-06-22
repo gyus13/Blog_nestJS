@@ -103,6 +103,7 @@ export class TicketService {
       }
 
       const data = {
+        touchCountId: createTouchTicketData.id,
         ticketId: createTouchTicketData.ticketId,
         touchCount: counting,
       };
@@ -182,7 +183,44 @@ export class TicketService {
         .execute();
 
       const data = {
-        ticketId: ticketId
+        ticketId: ticketId,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      // Commit
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return response.ERROR;
+    }
+  }
+
+  async deleteTouchTicket(accessToken, ticketId) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      const entityManager = getManager();
+      await entityManager.query(
+        `
+        DELETE
+        from TouchCount
+        where ticketId= ` +
+          ticketId +
+          `
+        order by createdAt desc
+        limit 1;
+        `,
+      );
+
+      const data = {
+        ticketId: ticketId,
       };
 
       const result = makeResponse(response.SUCCESS, data);

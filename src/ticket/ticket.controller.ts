@@ -22,7 +22,8 @@ import { AddTicketRequest } from './dto/add-ticket.request';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { GetTicketResponse } from './dto/get-ticket.response';
 import { TouchTicketResponse } from './dto/touch-ticket.response';
-import {DeleteTicketResponse} from "./dto/delete-ticket.response";
+import { DeleteTicketResponse } from './dto/delete-ticket.response';
+import {DeleteTouchCountResponse} from "./dto/delete-touch-count.response";
 
 //validation swagger에 올려주기
 @Controller('ticket')
@@ -104,6 +105,31 @@ export class TicketController {
   @ApiResponse({
     status: 1000,
     description: '성공',
+    type: DeleteTouchCountResponse,
+  })
+  @ApiResponse({
+    status: 4000,
+    description: '서버 에러',
+  })
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @ApiOperation({ summary: '티켓터치 취소' })
+  @UseGuards(JwtAuthGuard)
+  @Delete('/touch/:ticketId')
+  touchDeleteTicket(
+    @Param('ticketId') id: number,
+    @Headers('x-access-token') accessToken,
+  ) {
+    return this.ticketService.deleteTouchTicket(accessToken, id);
+  }
+
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
     type: GetTicketResponse,
   })
   @ApiResponse({
@@ -151,27 +177,27 @@ export class TicketController {
     return this.ticketService.deleteTicket(accessToken, id);
   }
 
-//   @ApiOperation({ summary: '추천 티켓조회' })
-//   @UseGuards(JwtAuthGuard)
-//   @ApiHeader({
-//     description: 'jwt token',
-//     name: 'x-access-token',
-//     example: 'JWT TOKEN',
-//   })
-//   @Get('/:ticketId')
-//   async getTicketByUserId() {
-//     return 'this is ticket return';
-//   }
-//
-//   @ApiOperation({ summary: '주간목표 조회' })
-//   @UseGuards(JwtAuthGuard)
-//   @ApiHeader({
-//     description: 'jwt token',
-//     name: 'x-access-token',
-//     example: 'JWT TOKEN',
-//   })
-//   @Get('/goal')
-//   async getGoal() {
-//     return 'get Goal';
-//   }
+  //   @ApiOperation({ summary: '추천 티켓조회' })
+  //   @UseGuards(JwtAuthGuard)
+  //   @ApiHeader({
+  //     description: 'jwt token',
+  //     name: 'x-access-token',
+  //     example: 'JWT TOKEN',
+  //   })
+  //   @Get('/:ticketId')
+  //   async getTicketByUserId() {
+  //     return 'this is ticket return';
+  //   }
+  //
+  //   @ApiOperation({ summary: '주간목표 조회' })
+  //   @UseGuards(JwtAuthGuard)
+  //   @ApiHeader({
+  //     description: 'jwt token',
+  //     name: 'x-access-token',
+  //     example: 'JWT TOKEN',
+  //   })
+  //   @Get('/goal')
+  //   async getGoal() {
+  //     return 'get Goal';
+  //   }
 }

@@ -8,7 +8,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {ApiHeader, ApiOperation, ApiQuery, ApiResponse, ApiTags} from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from './jwt/jwt.guard';
@@ -17,6 +17,7 @@ import { PatchNicknameRequest } from './dto/patch-nickname.request';
 import { PatchNickname } from './decorator/auth.decorator';
 import { SignInRequest } from './dto/sign-in.request';
 import { SignInResponse } from './dto/sign-in.response';
+import {AddTicketRequest} from "../ticket/dto/add-ticket.request";
 
 @Controller('auth')
 @ApiTags('auth')
@@ -39,6 +40,7 @@ export class AuthController {
 
   @Post('google')
   @ApiOperation({ summary: '구글 로그인' })
+  @ApiQuery({ description: '구글 로그인', type: AddTicketRequest })
   async googleAuth(@Body() token) {
     return this.authService.verify(token);
   }
@@ -58,8 +60,6 @@ export class AuthController {
   async logIn(@Body() signInRequest: SignInRequest) {
     return await this.authService.verifyUser(signInRequest);
   }
-
-
 
   @UseGuards(JwtAuthGuard)
   @ApiHeader({

@@ -8,7 +8,13 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import {ApiHeader, ApiOperation, ApiQuery, ApiResponse, ApiTags} from '@nestjs/swagger';
+import {
+  ApiHeader,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from './jwt/jwt.guard';
@@ -17,7 +23,8 @@ import { PatchNicknameRequest } from './dto/patch-nickname.request';
 import { PatchNickname } from './decorator/auth.decorator';
 import { SignInRequest } from './dto/sign-in.request';
 import { SignInResponse } from './dto/sign-in.response';
-import {AddTicketRequest} from "../ticket/dto/add-ticket.request";
+import { AddTicketRequest } from '../ticket/dto/add-ticket.request';
+import { GoogleLoginRequest } from './dto/google-login.request';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -40,9 +47,9 @@ export class AuthController {
 
   @Post('google')
   @ApiOperation({ summary: '구글 로그인' })
-  @ApiQuery({ description: '구글 로그인', type: AddTicketRequest })
-  async googleAuth(@Body() token) {
-    return this.authService.verify(token);
+  @ApiQuery({ description: '구글 로그인', type: GoogleLoginRequest })
+  async googleAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
+    return this.authService.verify(googleLoginRequest.token);
   }
   //
   // @Post('apple')

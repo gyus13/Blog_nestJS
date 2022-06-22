@@ -1,7 +1,8 @@
 import {
   Body,
   Controller,
-  Get, Headers,
+  Get,
+  Headers,
   Patch,
   Post,
   Req,
@@ -15,7 +16,7 @@ import { PatchNicknameResponse } from './dto/patch-nickname.response';
 import { PatchNicknameRequest } from './dto/patch-nickname.request';
 import { PatchNickname } from './decorator/auth.decorator';
 import { SignInRequest } from './dto/sign-in.request';
-import {SignInResponse} from "./dto/sign-in.response";
+import { SignInResponse } from './dto/sign-in.response';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -36,6 +37,16 @@ export class AuthController {
   //   return this.authService.googleLogin(req);
   // }
 
+  @Post('google')
+  async googleAuth(@Body() token) {
+    return this.authService.verify(token);
+  }
+
+  @Post('apple')
+  async appleAuth(@Body() token) {
+    return this.authService.verifyApple(token);
+  }
+
   @ApiResponse({
     status: 1000,
     description: '성공',
@@ -46,6 +57,8 @@ export class AuthController {
   async logIn(@Body() signInRequest: SignInRequest) {
     return await this.authService.verifyUser(signInRequest);
   }
+
+
 
   @UseGuards(JwtAuthGuard)
   @ApiHeader({

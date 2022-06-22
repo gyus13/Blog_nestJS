@@ -4,6 +4,7 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { response } from '../../config/response.utils'
+import {regularExp} from "../../config/regularExp";
 
 // Auth관련 데코레이터
 export const PatchNickname = createParamDecorator(
@@ -12,7 +13,7 @@ export const PatchNickname = createParamDecorator(
     if (!body.nickname) {
       throw new HttpException(response.EMPTY_NICKNAME, 201);
     }
-    if (body.nickname > 10) {
+    if (!regularExp.nickNameRegex.test(body.nickname)) {
       throw new HttpException(response.INVALID_NICKNAME, 201);
     }
     return body;

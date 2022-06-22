@@ -6,7 +6,6 @@ import {
   Post,
   Request,
   UseGuards,
-  Body,
   Headers,
   Param,
 } from '@nestjs/common';
@@ -93,7 +92,6 @@ export class TicketController {
     example: 'JWT TOKEN',
   })
   @ApiOperation({ summary: '티켓터치' })
-  @ApiQuery({ description: '티켓 ', type: AddTicketRequest })
   @UseGuards(JwtAuthGuard)
   @Post('/touch/:ticketId')
   touchTicket(

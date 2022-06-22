@@ -1,6 +1,4 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserLogInDTO } from './dto/users.login.dto';
-import * as bcrypt from 'bcrypt-nodejs'; //
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,6 +6,8 @@ import { User } from '../users/users.entity';
 import { Repository } from 'typeorm';
 import { makeResponse } from '../common/function.utils';
 import { response } from '../config/response.utils';
+import { OAuth2Client } from 'google-auth-library';
+import {secret} from "../common/secret";
 
 @Injectable()
 export class AuthService {
@@ -56,5 +56,41 @@ export class AuthService {
     } catch (error) {
       return response.ERROR;
     }
+  }
+
+  async verify(token) {
+    const client = new OAuth2Client(secret.google_client_id);
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: secret.google_client_id, // Specify the CLIENT_ID of the app that accesses the backend
+      // Or, if multiple clients access the backend:
+      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+    });
+    const payload = ticket.getPayload();
+    const userid = payload['sub'];
+    // If request specified a G Suite domain:
+    // const domain = payload['hd'];
+
+    return {
+      token: this.jwtService.sign(userid),
+    };
+  }
+
+  async verifyApple(token) {
+    const client = new OAuth2Client(secret.google_client_id);
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: secret.google_client_id, // Specify the CLIENT_ID of the app that accesses the backend
+      // Or, if multiple clients access the backend:
+      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+    });
+    const payload = ticket.getPayload();
+    const userid = payload['sub'];
+    // If request specified a G Suite domain:
+    // const domain = payload['hd'];
+
+    return {
+      token: this.jwtService.sign(userid),
+    };
   }
 }

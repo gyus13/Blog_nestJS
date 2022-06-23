@@ -5,7 +5,7 @@ import {
   Headers,
   Patch,
   Post,
-  Req,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -45,11 +45,18 @@ export class AuthController {
   //   return this.authService.googleLogin(req);
   // }
 
-  @Post('google')
-  @ApiOperation({ summary: '구글 로그인' })
-  @ApiQuery({ description: '구글 로그인', type: GoogleLoginRequest })
-  async googleAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
-    return this.authService.verify(googleLoginRequest.token);
+  @Post('ios/google')
+  @ApiOperation({ summary: 'IOS 구글 로그인' })
+  @ApiQuery({ description: 'IOS 구글 로그인', type: GoogleLoginRequest })
+  async iosGoogleAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
+    return this.authService.iosVerifyGoogle(googleLoginRequest.token);
+  }
+
+  @Post('aos/google')
+  @ApiOperation({ summary: 'AOS 구글 로그인' })
+  @ApiQuery({ description: 'AOS 구글 로그인', type: GoogleLoginRequest })
+  async aosGoogleAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
+    return this.authService.aosVerifyGoogle(googleLoginRequest.token);
   }
   //
   // @Post('apple')
@@ -90,8 +97,9 @@ export class AuthController {
   @ApiOperation({ summary: '닉네임등록' })
   @Patch('/nickname')
   async patchNickname(
+    @Headers('x-access-token') accessToken,
     @PatchNickname() patchNicknameRequest: PatchNicknameRequest,
   ) {
-    return await this.authService.patchNickname(patchNicknameRequest);
+    return await this.authService.patchNickname(accessToken, patchNicknameRequest);
   }
 }

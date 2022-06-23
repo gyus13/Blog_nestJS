@@ -17,7 +17,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async findUserById(id: number) {
+  async findUserById(id: string) {
     try {
       const user = await this.usersRepository.findOne({ id });
       if (!user) throw new Error();

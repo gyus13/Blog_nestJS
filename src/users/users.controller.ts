@@ -32,7 +32,7 @@ export class UsersController {
 
   @ApiOperation({ summary: '특정 회원조회' })
   @Get('/:id')
-  async getUser(@Param('id') id: number) {
+  async getUser(@Param('id') id: string) {
     return await this.userService.findUserById(id);
   }
 

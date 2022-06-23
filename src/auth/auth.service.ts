@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { makeResponse } from '../common/function.utils';
 import { response } from '../config/response.utils';
 import { OAuth2Client } from 'google-auth-library';
-import {secret} from "../common/secret";
+import { secret } from '../common/secret';
 
 @Injectable()
 export class AuthService {
@@ -59,21 +59,35 @@ export class AuthService {
   }
 
   async verify(token) {
-    const client = new OAuth2Client(secret.google_client_id);
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: secret.google_client_id, // Specify the CLIENT_ID of the app that accesses the backend
-      // Or, if multiple clients access the backend:
-      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
-    });
-    const payload = ticket.getPayload();
-    const userid = payload['sub'];
-    // If request specified a G Suite domain:
-    // const domain = payload['hd'];
+    const user = this.jwtService.decode(token);
+    console.log(user);
 
-    return {
-      token: this.jwtService.sign(userid),
-    };
+    // const isExistUserByPhoneNumber = await this.userRepository.findOne({
+    //   where: {
+    //     email: user.email
+    //   },
+    // });
+    //
+    // // user 정보가 있는지 체크
+    // if (isExistUserByPhoneNumber == undefined) {
+    //   return response.NON_EXIST_PHONENUMBER;
+    // }
+
+    // const client = new OAuth2Client(secret.google_client_id);
+    // const ticket = await client.verifyIdToken({
+    //   idToken: token,
+    //   audience: secret.google_client_id, // Specify the CLIENT_ID of the app that accesses the backend
+    //   // Or, if multiple clients access the backend:
+    //   //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+    // });
+    // const payload = ticket.getPayload();
+    // const userid = payload['sub'];
+    // // If request specified a G Suite domain:
+    // // const domain = payload['hd'];
+
+    // return {
+    //   token: this.jwtService.sign(userid),
+    // };
   }
 
   async verifyApple(token) {

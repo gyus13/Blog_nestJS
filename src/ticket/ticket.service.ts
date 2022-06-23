@@ -129,6 +129,12 @@ export class TicketService {
     try {
       const decodeToken = await decodeJwt(accessToken);
 
+      const ticket = await this.ticketRepository.findOne({
+        where: { id: ticketId, status: 'ACTIVE' },
+      });
+
+      console.log(ticket.id);
+
       await getConnection()
         .createQueryBuilder()
         .update(Ticket)
@@ -145,7 +151,7 @@ export class TicketService {
         .execute();
 
       const data = {
-        id: ticketId,
+        id: ticket.id,
         title: patchTicketRequest.title,
         start: patchTicketRequest.start,
         end: patchTicketRequest.end,

@@ -3,8 +3,7 @@ import {
   ExecutionContext,
   HttpException,
 } from '@nestjs/common';
-import { response } from '../../config/response.utils'
-import {regularExp} from "../../config/regularExp";
+import { response } from '../../config/response.utils';
 
 // Auth관련 데코레이터
 export const PatchNickname = createParamDecorator(
@@ -13,7 +12,10 @@ export const PatchNickname = createParamDecorator(
     if (!body.nickname) {
       throw new HttpException(response.EMPTY_NICKNAME, 201);
     }
-    if (!regularExp.nickNameRegex.test(body.nickname)) {
+    if (body.nickname.length > 8) {
+      throw new HttpException(response.INVALID_NICKNAME, 201);
+    }
+    if (body.nickname.length < 3) {
       throw new HttpException(response.INVALID_NICKNAME, 201);
     }
     return body;

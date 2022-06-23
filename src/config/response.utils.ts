@@ -91,7 +91,7 @@ export const response = {
   INVALID_NICKNAME: {
     isSuccess: false,
     code: 2017,
-    message: '닉네임은 한글,영문,숫자만 가능하며 3~8자 가능합니다.',
+    message: '닉네임은 3~8자 입력 가능합니다.',
   },
   ERROR: {
     isSuccess: false,

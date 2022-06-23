@@ -145,7 +145,7 @@ export class TicketService {
         .execute();
 
       const data = {
-        ticketId: patchTicketRequest.id,
+        id: ticketId,
         title: patchTicketRequest.title,
         start: patchTicketRequest.start,
         end: patchTicketRequest.end,

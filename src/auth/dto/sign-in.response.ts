@@ -4,9 +4,25 @@ import { BaseResponse } from '../../config/base.response';
 
 class SignInResponseData {
   @ApiProperty({
+    example: '123123167867',
+    description: 'id',
+    required: true,
+  })
+  @IsString()
+  id: string;
+
+  @ApiProperty({
+    example: '닉네임',
+    description: 'nickname',
+    required: true,
+  })
+  @IsString()
+  nickname: string;
+
+  @ApiProperty({
     example:
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJzdWIiOjEsImlhdCI6MTY1NTE2MTYzNCwiZXhwIjoxNjg2NzE5MjM0fQ.go4zOhwNGjNsL9-7G3jfVbbIWgICq1aYw6SBJSFKIQ0',
-    description: 'nickname',
+    description: 'jwtToken',
     required: true,
   })
   @IsString()

@@ -60,13 +60,16 @@ export class AuthService {
         { nickname: patchNicknameRequest.nickname },
       );
       const data = {
+        id: decodeToken.sub,
         nickname: patchNicknameRequest.nickname,
       };
 
-      // const result = makeResponse(response.SUCCESS, data);
+      const result = makeResponse(response.SUCCESS, data);
 
       await queryRunner.commitTransaction();
       await queryRunner.release();
+
+      return result;
     } catch (error) {
       // Rollback
       await queryRunner.rollbackTransaction();
@@ -101,12 +104,17 @@ export class AuthService {
       }
       const payload1 = { sub: userId };
 
-      await queryRunner.commitTransaction();
-      await queryRunner.release();
-      return {
+      const data = {
         id: userId,
+        user: user.nickname,
         token: this.jwtService.sign(payload1),
       };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result;
     } catch (error) {
       // Rollback
       await queryRunner.rollbackTransaction();
@@ -141,12 +149,18 @@ export class AuthService {
       }
       const payload1 = { sub: userId };
 
-      await queryRunner.commitTransaction();
-      await queryRunner.release();
-      return {
+      const data = {
         id: userId,
+        user: user.nickname,
         token: this.jwtService.sign(payload1),
       };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result;
+
     } catch (error) {
       // Rollback
       await queryRunner.rollbackTransaction();

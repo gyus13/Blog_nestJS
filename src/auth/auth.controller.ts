@@ -45,6 +45,11 @@ export class AuthController {
   //   return this.authService.googleLogin(req);
   // }
 
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: SignInResponse,
+  })
   @Post('ios/google')
   @ApiOperation({ summary: 'IOS 구글 로그인' })
   @ApiQuery({ description: 'IOS 구글 로그인', type: GoogleLoginRequest })
@@ -52,6 +57,11 @@ export class AuthController {
     return this.authService.iosVerifyGoogle(googleLoginRequest.token);
   }
 
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: SignInResponse,
+  })
   @Post('aos/google')
   @ApiOperation({ summary: 'AOS 구글 로그인' })
   @ApiQuery({ description: 'AOS 구글 로그인', type: GoogleLoginRequest })
@@ -100,6 +110,9 @@ export class AuthController {
     @Headers('x-access-token') accessToken,
     @PatchNickname() patchNicknameRequest: PatchNicknameRequest,
   ) {
-    return await this.authService.patchNickname(accessToken, patchNicknameRequest);
+    return await this.authService.patchNickname(
+      accessToken,
+      patchNicknameRequest,
+    );
   }
 }

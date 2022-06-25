@@ -10,6 +10,7 @@ import {
   Param,
 } from '@nestjs/common';
 import {
+  ApiBody,
   ApiHeader,
   ApiOperation,
   ApiQuery,
@@ -23,7 +24,8 @@ import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { GetTicketResponse } from './dto/get-ticket.response';
 import { TouchTicketResponse } from './dto/touch-ticket.response';
 import { DeleteTicketResponse } from './dto/delete-ticket.response';
-import {DeleteTouchCountResponse} from "./dto/delete-touch-count.response";
+import { DeleteTouchCountResponse } from './dto/delete-touch-count.response';
+import {AddTicketResponse} from "./dto/add-ticket.response";
 
 //validation swagger에 올려주기
 @Controller('ticket')
@@ -55,7 +57,7 @@ export class TicketController {
   @ApiResponse({
     status: 1000,
     description: '성공',
-    type: GetTicketResponse,
+    type: AddTicketResponse,
   })
   @ApiResponse({
     status: 4000,
@@ -68,7 +70,7 @@ export class TicketController {
     name: 'x-access-token',
     example: 'JWT TOKEN',
   })
-  @ApiQuery({ description: '티켓 ', type: AddTicketRequest })
+  @ApiBody({ description: '티켓 ', type: AddTicketRequest })
   @Post()
   createTicket(
     @AddTicket() addTicketDto: AddTicketRequest,
@@ -143,7 +145,7 @@ export class TicketController {
     name: 'x-access-token',
     example: 'JWT TOKEN',
   })
-  @ApiQuery({ description: '티켓 ', type: AddTicketRequest })
+  @ApiBody({ description: '티켓 ', type: AddTicketRequest })
   @Patch('/:ticketId')
   async updateTicket(
     @Param('ticketId') id: number,
@@ -177,17 +179,27 @@ export class TicketController {
     return this.ticketService.deleteTicket(accessToken, id);
   }
 
-  //   @ApiOperation({ summary: '추천 티켓조회' })
-  //   @UseGuards(JwtAuthGuard)
-  //   @ApiHeader({
-  //     description: 'jwt token',
-  //     name: 'x-access-token',
-  //     example: 'JWT TOKEN',
-  //   })
-  //   @Get('/:ticketId')
-  //   async getTicketByUserId() {
-  //     return 'this is ticket return';
-  //   }
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: GetTicketResponse,
+  })
+  @ApiResponse({
+    status: 4000,
+    description: '서버 에러',
+  })
+  @ApiOperation({ summary: '추천 티켓조회' })
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @Get('/:userId')
+  async getRecommendTicket(@Request() req,@Param('userId') id: string) {
+    return await this.ticketService.getRecommendTicket(req, id);
+  }
+
   //
   //   @ApiOperation({ summary: '주간목표 조회' })
   //   @UseGuards(JwtAuthGuard)

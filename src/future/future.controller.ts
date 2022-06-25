@@ -1,9 +1,19 @@
 import { Controller, Delete, Get, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { GetTicketResponse } from '../ticket/dto/get-ticket.response';
 
 @Controller('future')
 @ApiTags('future')
 export class FutureController {
+  // @ApiResponse({
+  //   status: 1000,
+  //   description: '성공',
+  //   type: GetTicketResponse,
+  // })
+  // @ApiResponse({
+  //   status: 4000,
+  //   description: '서버 에러',
+  // })
   // @ApiOperation({ summary: '미래의 나 조회' })
   // @Get()
   // async getFuture() {

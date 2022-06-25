@@ -185,7 +185,6 @@ export class TicketService {
         where: { id: ticketId, status: 'ACTIVE' },
       });
 
-
       await getConnection()
         .createQueryBuilder()
         .delete()
@@ -269,6 +268,38 @@ export class TicketService {
         ])
         .addSelect('COUNT(ticket.id) AS currentCount')
         .getRawMany();
+
+      const data = {
+        ticket: ticket,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      return result;
+    } catch (error) {
+      return response.ERROR;
+    }
+  }
+
+  async getRecommendTicket(req, id) {
+    try {
+      console.log(id);
+      const ticket = await getManager()
+        .createQueryBuilder(Ticket, 'ticket')
+        .where('ticket.userId In (:userId)', { userId: id })
+        .select([
+          'ticket.id as id',
+          'ticket.title as title',
+          'ticket.category as category',
+          'ticket.start as start',
+          'ticket.end as end',
+          'ticket.color as color',
+          'ticket.touchCount as touchCount',
+          'ticket.isSuccess as isSuccess',
+        ])
+        .getRawMany();
+
+      console.log(ticket)
 
       const data = {
         ticket: ticket,

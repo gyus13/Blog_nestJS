@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsString } from 'class-validator';
 import { BaseResponse } from '../../config/base.response';
-class DeleteTicketResponseData {
+class PatchTicketResponseData {
   @ApiProperty({
     example: '1',
     description: '티켓 인덱스',
@@ -66,11 +66,11 @@ class DeleteTicketResponseData {
   userId: string;
 }
 
-export abstract class DeleteTicketResponse extends BaseResponse {
+export abstract class PatchTicketResponse extends BaseResponse {
   @ApiProperty({
     description: 'result 객체',
     required: true,
   })
   @IsArray()
-  result: DeleteTicketResponseData;
+  result: PatchTicketResponseData;
 }

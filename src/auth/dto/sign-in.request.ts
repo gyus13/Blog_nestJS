@@ -3,7 +3,7 @@ import { IsNumber, IsString } from 'class-validator';
 
 export class SignInRequest {
   @ApiProperty({
-    example: 'test@test.com',
+    example: 'test1@test.com',
     description: '이메일',
     required: true,
   })

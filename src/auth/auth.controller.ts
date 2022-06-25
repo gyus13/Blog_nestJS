@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBody,
   ApiHeader,
   ApiOperation,
   ApiQuery,
@@ -52,7 +53,7 @@ export class AuthController {
   })
   @Post('ios/google')
   @ApiOperation({ summary: 'IOS 구글 로그인' })
-  @ApiQuery({ description: 'IOS 구글 로그인', type: GoogleLoginRequest })
+  @ApiBody({ description: 'IOS 구글 로그인', type: GoogleLoginRequest })
   async iosGoogleAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
     return this.authService.iosVerifyGoogle(googleLoginRequest.token);
   }
@@ -64,7 +65,7 @@ export class AuthController {
   })
   @Post('aos/google')
   @ApiOperation({ summary: 'AOS 구글 로그인' })
-  @ApiQuery({ description: 'AOS 구글 로그인', type: GoogleLoginRequest })
+  @ApiBody({ description: 'AOS 구글 로그인', type: GoogleLoginRequest })
   async aosGoogleAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
     return this.authService.aosVerifyGoogle(googleLoginRequest.token);
   }
@@ -106,6 +107,7 @@ export class AuthController {
   })
   @ApiOperation({ summary: '닉네임등록' })
   @Patch('/nickname')
+  @ApiBody({ description: '닉네임 등록', type: PatchNicknameRequest })
   async patchNickname(
     @Headers('x-access-token') accessToken,
     @PatchNickname() patchNicknameRequest: PatchNicknameRequest,

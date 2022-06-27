@@ -1,4 +1,4 @@
-import { Ticket } from '../ticket.entity';
+import { Ticket } from '../../entity/ticket.entity';
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import {IsString} from "class-validator";
 

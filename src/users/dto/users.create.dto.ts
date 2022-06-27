@@ -1,4 +1,4 @@
-import { User } from '../users.entity';
+import { User } from '../../entity/users.entity';
 import {ApiProperty, PickType} from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 

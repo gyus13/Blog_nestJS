@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, getConnection, getManager, Repository } from 'typeorm';
-import { Ticket } from './ticket.entity';
+import { Ticket } from '../entity/ticket.entity';
 import { AddTicketRequest } from './dto/add-ticket.request';
 import { decodeJwt, makeResponse } from '../common/function.utils';
 import { response } from '../config/response.utils';
 import { query } from 'express';
-import { TouchCount } from './touch-count.entity';
+import { TouchCount } from '../entity/touch-count.entity';
 import { TouchTicket } from '../common/decorators/ticket.decorator';
-import { User } from '../users/users.entity';
+import { User } from '../entity/users.entity';
 
 @Injectable()
 export class TicketService {
@@ -27,7 +27,17 @@ export class TicketService {
     try {
       const decodeToken = await decodeJwt(accessToken);
 
-      console.log(addTicket);
+      const ticketCount = await getManager()
+        .createQueryBuilder(Ticket, 'ticket')
+        .select('ticket.id')
+        .where('ticket.isSuccess IN (:isSuccess)', { isSuccess: 'NotSuccess' })
+        .andWhere('userId IN (:userId)', { userId: decodeToken.sub })
+        .getMany();
+
+      if (ticketCount.length > 5) {
+        return response.NOT_SIX_TICKET;
+      }
+
       // Ticket 인스턴스 생성 후 정보 담기
       const ticket = new Ticket();
       ticket.title = addTicket.title;
@@ -49,11 +59,6 @@ export class TicketService {
         touchCount: createTicketData.touchCount,
         userId: createTicketData.userId,
       };
-
-      // TouchTicket 인스턴스 생성 후 정보 담기
-      const touchCount = new TouchCount();
-      touchCount.ticketId = createTicketData.id;
-      await queryRunner.manager.save(touchCount);
 
       const result = makeResponse(response.SUCCESS, data);
 
@@ -132,8 +137,6 @@ export class TicketService {
       const ticket = await this.ticketRepository.findOne({
         where: { id: ticketId, status: 'ACTIVE' },
       });
-
-      console.log(ticket.id);
 
       await getConnection()
         .createQueryBuilder()
@@ -251,8 +254,8 @@ export class TicketService {
       const decodeToken = await decodeJwt(accessToken);
       const ticket = await getManager()
         .createQueryBuilder(Ticket, 'ticket')
-        .innerJoin(TouchCount, 'count', 'count.ticketId = ticket.id')
-        .innerJoin(User, 'user', 'user.id = ticket.userId')
+        .leftJoin(TouchCount, 'count', 'count.ticketId = ticket.id')
+        .leftJoin(User, 'user', 'user.id = ticket.userId')
         .where('ticket.userId In (:userId)', { userId: decodeToken.sub })
         .having('isSuccess In (:isSuccess)', { isSuccess: 'NotSuccess' })
         .groupBy('ticket.id')
@@ -266,7 +269,7 @@ export class TicketService {
           'ticket.touchCount as touchCount',
           'ticket.isSuccess as isSuccess',
         ])
-        .addSelect('COUNT(ticket.id) AS currentCount')
+        .addSelect('COUNT(count.id) AS currentCount')
         .getRawMany();
 
       const data = {
@@ -283,7 +286,6 @@ export class TicketService {
 
   async getRecommendTicket(req, id) {
     try {
-      console.log(id);
       const ticket = await getManager()
         .createQueryBuilder(Ticket, 'ticket')
         .where('ticket.userId In (:userId)', { userId: id })
@@ -297,9 +299,8 @@ export class TicketService {
           'ticket.touchCount as touchCount',
           'ticket.isSuccess as isSuccess',
         ])
+        .limit(1)
         .getRawMany();
-
-      console.log(ticket)
 
       const data = {
         ticket: ticket,

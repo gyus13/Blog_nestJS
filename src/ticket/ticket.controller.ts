@@ -60,6 +60,34 @@ export class TicketController {
     type: AddTicketResponse,
   })
   @ApiResponse({
+    status: 2018,
+    description: '티켓은 6개까지 생성 가능합니다.',
+  })
+  @ApiResponse({
+    status: 2019,
+    description: '제목을 입력해주세요.',
+  })
+  @ApiResponse({
+    status: 2020,
+    description: '시작역을 입력해주세요.',
+  })
+  @ApiResponse({
+    status: 2021,
+    description: '종착역을 입력해주세요.',
+  })
+  @ApiResponse({
+    status: 2022,
+    description: '색을 입력해주세요.',
+  })
+  @ApiResponse({
+    status: 2023,
+    description: '카테고리를 입력해주세요.',
+  })
+  @ApiResponse({
+    status: 2024,
+    description: '터치횟수를 입력해주세요.',
+  })
+  @ApiResponse({
     status: 4000,
     description: '서버 에러',
   })
@@ -135,6 +163,30 @@ export class TicketController {
     type: GetTicketResponse,
   })
   @ApiResponse({
+    status: 2019,
+    description: '제목을 입력해주세요.',
+  })
+  @ApiResponse({
+    status: 2020,
+    description: '시작역을 입력해주세요.',
+  })
+  @ApiResponse({
+    status: 2021,
+    description: '종착역을 입력해주세요.',
+  })
+  @ApiResponse({
+    status: 2022,
+    description: '색을 입력해주세요.',
+  })
+  @ApiResponse({
+    status: 2023,
+    description: '카테고리를 입력해주세요.',
+  })
+  @ApiResponse({
+    status: 2024,
+    description: '터치횟수를 입력해주세요.',
+  })
+  @ApiResponse({
     status: 4000,
     description: '서버 에러',
   })
@@ -179,6 +231,7 @@ export class TicketController {
     return this.ticketService.deleteTicket(accessToken, id);
   }
 
+  // 스케쥴러
   @ApiResponse({
     status: 1000,
     description: '성공',

@@ -5,7 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { GoogleStrategy } from './passport/google.strategy';
 import { AuthController } from './auth.controller';
-import {User} from "../users/users.entity";
+import {User} from "../entity/users.entity";
 import {TypeOrmModule} from "@nestjs/typeorm";
 
 @Module({

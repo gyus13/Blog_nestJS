@@ -1,8 +1,8 @@
 import {Entity, Column, PrimaryGeneratedColumn, OneToMany, UpdateDateColumn} from 'typeorm';
-import { CommonEntity } from '../common/common.entity';
+import { CommonEntity } from './common.entity';
 import {IsEmail, IsString, IsUUID} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Ticket } from '../ticket/ticket.entity';
+import { Ticket } from './ticket.entity';
 
 @Entity("User")
 export class User{

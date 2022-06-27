@@ -93,6 +93,41 @@ export const response = {
     code: 2017,
     message: '닉네임은 3~8자 입력 가능합니다.',
   },
+  NOT_SIX_TICKET: {
+    isSuccess: false,
+    code: 2018,
+    message: '티켓은 6개까지만 생성 가능합니다.',
+  },
+  EMPTY_TITLE: {
+    isSuccess: false,
+    code: 2019,
+    message: '제목을 입력해주세요.',
+  },
+  EMPTY_START: {
+    isSuccess: false,
+    code: 2020,
+    message: '시작역을 입력해주세요.',
+  },
+  EMPTY_END: {
+    isSuccess: false,
+    code: 2021,
+    message: '종착역을 입력해주세요.',
+  },
+  EMPTY_COLOR: {
+    isSuccess: false,
+    code: 2022,
+    message: '색을 입력해주세요.',
+  },
+  EMPTY_CATEGORY: {
+    isSuccess: false,
+    code: 2023,
+    message: '카테고리를 입력해주세요.',
+  },
+  EMPTY_TOUCHCOUNT: {
+    isSuccess: false,
+    code: 2024,
+    message: '터치횟수를 입력해주세요.',
+  },
   ERROR: {
     isSuccess: false,
     code: 4000,

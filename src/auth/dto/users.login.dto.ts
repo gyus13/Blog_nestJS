@@ -1,6 +1,6 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { User } from '../../users/users.entity';
+import { User } from '../../entity/users.entity';
 
 export class UserLogInDTO extends PickType(User, ['email'] as const) {
   @ApiProperty()

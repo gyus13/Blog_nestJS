@@ -6,7 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../users/users.entity';
+import { User } from '../entity/users.entity';
 import { Connection, Repository } from 'typeorm';
 import { decodeJwt, makeResponse } from '../common/function.utils';
 import { response } from '../config/response.utils';

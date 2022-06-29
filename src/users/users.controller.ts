@@ -12,7 +12,6 @@ import {
 import { UsersService } from './users.service';
 import { SuccessInterceptor } from '../common/interceptors/success.interceptor';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
-import { CurrentUser } from '../common/decorators/user.decorator';
 import { UserDTO } from './dto/users.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -21,14 +20,6 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 @UseInterceptors(SuccessInterceptor)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
-
-  @ApiOperation({ summary: '회원조회' })
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  getCurrentUser(@CurrentUser() currentUser: UserDTO) {
-    console.log(currentUser);
-    return currentUser;
-  }
 
   @ApiOperation({ summary: '특정 회원조회' })
   @Get('/:id')

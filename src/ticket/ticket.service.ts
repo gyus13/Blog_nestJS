@@ -9,6 +9,7 @@ import { query } from 'express';
 import { TouchCount } from '../entity/touch-count.entity';
 import { TouchTicket } from '../common/decorators/ticket.decorator';
 import { User } from '../entity/users.entity';
+import { Experience } from 'src/entity/experience.entity';
 
 @Injectable()
 export class TicketService {
@@ -98,7 +99,6 @@ export class TicketService {
         .getMany();
 
       const counting = countResult.length;
-      console.log(counting);
 
       if (ticket.touchCount < counting) {
         await queryRunner.manager.update(
@@ -106,11 +106,16 @@ export class TicketService {
           { id: ticketId },
           { isSuccess: 'Success' },
         );
+
+        const experience = new Experience();
+        experience.userId = decodeToken.sub;
+        experience.value = 20;
+        await queryRunner.manager.save(experience);
       }
 
       const data = {
         touchCountId: createTouchTicketData.id,
-        ticketId: createTouchTicketData.ticketId
+        ticketId: createTouchTicketData.ticketId,
       };
       const result = makeResponse(response.SUCCESS, data);
 
@@ -325,7 +330,7 @@ export class TicketService {
           'ticket.end as end',
           'ticket.color as color',
         ])
-        .andWhere('ticket.isSuccess IN (:isSuccess)', { isSuccess: 'Success'})
+        .andWhere('ticket.isSuccess IN (:isSuccess)', { isSuccess: 'Success' })
         .limit(3)
         .getRawMany();
 

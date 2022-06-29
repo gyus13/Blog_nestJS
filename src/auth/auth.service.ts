@@ -53,7 +53,6 @@ export class AuthService {
     await queryRunner.startTransaction();
     try {
       const decodeToken = await decodeJwt(accessToken);
-      console.log(decodeToken);
       await queryRunner.manager.update(
         User,
         { id: decodeToken.sub },

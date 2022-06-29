@@ -6,7 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class Experience extends CommonEntity {
   @ApiProperty()
   @Column()
-  futureId: number;
+  userId: string;
 
   @ApiProperty()
   @Column()

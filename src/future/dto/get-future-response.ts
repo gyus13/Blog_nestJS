@@ -18,28 +18,30 @@ class GetFutureResponseData {
   title: string;
 
   @ApiProperty({
-    example: '이미지 URL',
-    description: '내 캐릭터 사진',
-    required: true,
-  })
-  @IsString()
-  characterImageUrl: string;
-
-  @ApiProperty({
-    example: '꽃봉오리',
-    description: '캐릭터 이름',
-    required: true,
-  })
-  @IsString()
-  characterName: string;
-
-  @ApiProperty({
     example: '3',
     description: 'level',
     required: true,
   })
   @IsString()
   level: number;
+
+  @ApiProperty({
+    example: '이미지 URL',
+    description: '프로필 이미지',
+    required: true,
+  })
+  @IsString()
+  profileImageUrl: string;
+
+  @ApiProperty({
+    example: '꽃봉오리',
+    description: '닉네임',
+    required: true,
+  })
+  @IsString()
+  nickname: string;
+
+
 }
 
 export abstract class GetFutureResponse extends BaseResponse {

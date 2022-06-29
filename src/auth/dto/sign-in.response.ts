@@ -21,7 +21,7 @@ class SignInResponseData {
 
   @ApiProperty({
     example:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJzdWIiOjEsImlhdCI6MTY1NTE2MTYzNCwiZXhwIjoxNjg2NzE5MjM0fQ.go4zOhwNGjNsL9-7G3jfVbbIWgICq1aYw6SBJSFKIQ0',
+      'yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJzdWIiOiIxMjM0IiwiaWF0IjoxNjU2NTA2Mjc4LCJleHAiOjE2ODgwNjM4Nzh9.-T-FQ-j1KkvGuzXOlKbyyJ5II1lWH6o_h8QAG4YJwJM',
     description: 'jwtToken',
     required: true,
   })

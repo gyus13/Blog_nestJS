@@ -10,5 +10,5 @@ export class FutureProfile extends CommonEntity {
 
   @ApiProperty()
   @Column()
-  futureId: number;
+  userId: string;
 }

@@ -25,7 +25,8 @@ import { GetTicketResponse } from './dto/get-ticket.response';
 import { TouchTicketResponse } from './dto/touch-ticket.response';
 import { DeleteTicketResponse } from './dto/delete-ticket.response';
 import { DeleteTouchCountResponse } from './dto/delete-touch-count.response';
-import {AddTicketResponse} from "./dto/add-ticket.response";
+import { AddTicketResponse } from './dto/add-ticket.response';
+import {GetOtherTicketResponse} from "./dto/get-other-ticket.response";
 
 //validation swagger에 올려주기
 @Controller('ticket')
@@ -249,8 +250,30 @@ export class TicketController {
     example: 'JWT TOKEN',
   })
   @Get('/:userId')
-  async getRecommendTicket(@Request() req,@Param('userId') id: string) {
+  async getRecommendTicket(@Request() req, @Param('userId') id: string) {
     return await this.ticketService.getRecommendTicket(req, id);
+  }
+
+  // 스케쥴러
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: GetOtherTicketResponse,
+  })
+  @ApiResponse({
+    status: 4000,
+    description: '서버 에러',
+  })
+  @ApiOperation({ summary: '다른 유저 티켓조회' })
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @Get('/other')
+  async getOtherTicket(@Request() req) {
+    return await this.ticketService.getOtherTicket(req);
   }
 
   //

@@ -1,25 +1,44 @@
-import { Controller, Delete, Get, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Delete,
+  Get, Headers,
+  Patch,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetTicketResponse } from '../ticket/dto/get-ticket.response';
+import { GetFutureResponse } from './dto/get-future-response';
+import { FutureService } from './future.service';
+import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 
 @Controller('future')
 @ApiTags('future')
 export class FutureController {
-  // @ApiResponse({
-  //   status: 1000,
-  //   description: '성공',
-  //   type: GetTicketResponse,
-  // })
-  // @ApiResponse({
-  //   status: 4000,
-  //   description: '서버 에러',
-  // })
-  // @ApiOperation({ summary: '미래의 나 조회' })
-  // @Get()
-  // async getFuture() {
-  //   return 'this is ticket return';
-  // }
-  //
+  constructor(private readonly futureService: FutureService) {}
+
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: GetFutureResponse,
+  })
+  @ApiResponse({
+    status: 4000,
+    description: '서버 에러',
+  })
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @ApiOperation({ summary: '미래의 나 조회' })
+  @Get()
+  async getFuture(@Request() req, @Headers('x-access-token') accessToken) {
+    return await this.futureService.retrieveFuture(req, accessToken);
+  }
+
   // @ApiOperation({ summary: '미래의 나 등록' })
   // @Post()
   // async createFuture() {

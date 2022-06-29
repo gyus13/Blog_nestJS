@@ -99,7 +99,7 @@ export class TicketService {
 
       const counting = countResult.length + 1;
 
-      if (ticket.touchCount <= counting) {
+      if (ticket.touchCount < counting) {
         await queryRunner.manager.update(
           Ticket,
           { id: ticketId },
@@ -300,6 +300,34 @@ export class TicketService {
           'ticket.isSuccess as isSuccess',
         ])
         .limit(1)
+        .getRawMany();
+
+      const data = {
+        ticket: ticket,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      return result;
+    } catch (error) {
+      return response.ERROR;
+    }
+  }
+
+  async getOtherTicket(req) {
+    try {
+      const ticket = await getManager()
+        .createQueryBuilder(Ticket, 'ticket')
+        .select([
+          'ticket.id as id',
+          'ticket.title as title',
+          'ticket.category as category',
+          'ticket.start as start',
+          'ticket.end as end',
+          'ticket.color as color',
+        ])
+        .andWhere('ticket.isSuccess IN (:isSuccess)', { isSuccess: 'Success'})
+        .limit(3)
         .getRawMany();
 
       const data = {

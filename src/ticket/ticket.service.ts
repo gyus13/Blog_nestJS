@@ -97,7 +97,8 @@ export class TicketService {
         .andWhere('ticketId IN (:ticketId)', { ticketId: ticketId })
         .getMany();
 
-      const counting = countResult.length + 1;
+      const counting = countResult.length;
+      console.log(counting);
 
       if (ticket.touchCount < counting) {
         await queryRunner.manager.update(
@@ -109,8 +110,7 @@ export class TicketService {
 
       const data = {
         touchCountId: createTouchTicketData.id,
-        ticketId: createTouchTicketData.ticketId,
-        touchCount: counting,
+        ticketId: createTouchTicketData.ticketId
       };
 
       const result = makeResponse(response.SUCCESS, data);

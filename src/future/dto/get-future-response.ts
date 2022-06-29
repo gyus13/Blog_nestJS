@@ -23,7 +23,15 @@ class GetFutureResponseData {
     required: true,
   })
   @IsString()
-  level: number;
+  level: string;
+
+  @ApiProperty({
+    example: '20',
+    description: '경험치',
+    required: true,
+  })
+  @IsString()
+  experience: string;
 
   @ApiProperty({
     example: '이미지 URL',

@@ -112,7 +112,6 @@ export class TicketService {
         touchCountId: createTouchTicketData.id,
         ticketId: createTouchTicketData.ticketId
       };
-
       const result = makeResponse(response.SUCCESS, data);
 
       // Commit

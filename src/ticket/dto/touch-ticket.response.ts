@@ -17,14 +17,6 @@ class TouchTicketResponseData {
   })
   @IsString()
   userId: string;
-
-  @ApiProperty({
-    example: '6',
-    description: '누른 터치횟수',
-    required: true,
-  })
-  @IsString()
-  touchCount: number;
 }
 
 export abstract class TouchTicketResponse extends BaseResponse {

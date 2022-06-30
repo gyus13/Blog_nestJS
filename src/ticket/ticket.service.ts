@@ -99,8 +99,9 @@ export class TicketService {
         .getMany();
 
       const counting = countResult.length;
+      console.log(counting + 1);
 
-      if (ticket.touchCount < counting) {
+      if (ticket.touchCount < counting + 1) {
         await queryRunner.manager.update(
           Ticket,
           { id: ticketId },

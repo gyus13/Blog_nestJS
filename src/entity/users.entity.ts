@@ -1,11 +1,17 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, UpdateDateColumn} from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  UpdateDateColumn,
+} from 'typeorm';
 import { CommonEntity } from './common.entity';
-import {IsEmail, IsString, IsUUID} from 'class-validator';
+import { IsEmail, IsString, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Ticket } from './ticket.entity';
 
-@Entity("User")
-export class User{
+@Entity('User')
+export class User {
   @IsUUID()
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -19,17 +25,23 @@ export class User{
   nickname: string;
 
   @ApiProperty()
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @IsEmail({ message: '이메일 형식으로 작성해 주세요' })
   email: string;
 
   @ApiProperty()
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @IsString()
   password: string;
 
   @ApiProperty()
-  @Column()
+  @Column({
+    nullable: true,
+  })
   title: string;
 
   // 해당 열이 추가된 시각을 자동으로 기록

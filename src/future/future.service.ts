@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { decodeJwt, makeResponse } from '../common/function.utils';
-import { getManager } from 'typeorm';
+import { getConnection, getManager } from 'typeorm';
 import { Connection } from 'typeorm';
 import { User } from '../entity/users.entity';
 import { response } from '../config/response.utils';
@@ -33,8 +33,20 @@ export class FutureService {
         ])
         .getRawOne();
 
+      if (future.level == null) {
+        future.level = 0;
+      }
+      if (future.experience == null) {
+        future.experience = 0;
+      }
+
       const data = {
-        future: future,
+        id: future.id,
+        title: future.title,
+        level: parseInt(future.level),
+        experience: parseInt(future.experience),
+        profileImageUrl: future.profileImageUrl,
+        nickname: future.nickname,
       };
 
       const result = makeResponse(response.SUCCESS, data);

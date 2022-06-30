@@ -90,6 +90,8 @@ export class AuthService {
       });
       const payload = ticket.getPayload();
       const userId = payload['sub'];
+      // const decodeToken = await decodeJwt(token);
+      // const userId = decodeToken.sub;
 
       const user = await this.userRepository.findOne({
         where: { id: userId },
@@ -97,15 +99,14 @@ export class AuthService {
 
       // 유저가 존재하지 않는 경우
       if (user == undefined) {
-        const user = new User();
-        user.id = userId;
-        const createUserData = await queryRunner.manager.save(user);
+        await this.userRepository.save({
+          id: userId,
+        });
       }
       const payload1 = { sub: userId };
-
       const data = {
         id: userId,
-        user: user.nickname,
+        nickname: user.nickname,
         token: this.jwtService.sign(payload1),
       };
 
@@ -142,15 +143,15 @@ export class AuthService {
 
       // 유저가 존재하지 않는 경우
       if (user == undefined) {
-        const user = new User();
-        user.id = userId;
-        const createUserData = await queryRunner.manager.save(user);
+        await this.userRepository.save({
+          id: userId,
+        });
       }
       const payload1 = { sub: userId };
 
       const data = {
         id: userId,
-        user: user.nickname,
+        nickname: user.nickname,
         token: this.jwtService.sign(payload1),
       };
 
@@ -159,7 +160,6 @@ export class AuthService {
       await queryRunner.commitTransaction();
       await queryRunner.release();
       return result;
-
     } catch (error) {
       // Rollback
       await queryRunner.rollbackTransaction();

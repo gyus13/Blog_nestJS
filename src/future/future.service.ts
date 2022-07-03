@@ -4,8 +4,9 @@ import { getConnection, getManager } from 'typeorm';
 import { Connection } from 'typeorm';
 import { User } from '../entity/users.entity';
 import { response } from '../config/response.utils';
-import { FutureProfile } from '../entity/future-profile.entity';
+import { Character } from '../entity/character.entity';
 import { Experience } from '../entity/experience.entity';
+import { Title } from '../entity/title.entity';
 
 @Injectable()
 export class FutureService {
@@ -17,19 +18,18 @@ export class FutureService {
 
       const future = await getManager()
         .createQueryBuilder(User, 'user')
-        .leftJoin(
-          FutureProfile,
-          'futureProfile',
-          'user.id = futureProfile.userId',
-        )
+        .leftJoin(Character, 'character', 'user.id = character.userId')
         .leftJoin(Experience, 'experience', 'experience.userId = user.id')
+        .leftJoin(Title, 'title', 'title.userId = user.id')
         .where('user.id In (:userId)', { userId: decodeToken.sub })
-        .select(['user.id as id', 'user.title as title'])
+        .select(['user.id as id', 'user.subject as subject'])
         .addSelect([
           'sum(experience.value) div 100 as level',
           'right(sum(experience.value),2) as experience',
-          'futureProfile.profileImageUrl as profileImageUrl',
+          'character.characterImageUrl as characterImageUrl',
+          'character.characterImageName as characterImageName',
           'user.nickname as nickname',
+          'title.title as title',
         ])
         .getRawOne();
 
@@ -42,10 +42,12 @@ export class FutureService {
 
       const data = {
         id: future.id,
+        subject: future.subject,
         title: future.title,
         level: parseInt(future.level),
         experience: parseInt(future.experience),
-        profileImageUrl: future.profileImageUrl,
+        characterImageUrl: future.characterImageUrl,
+        characterImageName: future.characterImageName,
         nickname: future.nickname,
       };
 
@@ -67,7 +69,7 @@ export class FutureService {
       await queryRunner.manager.update(
         User,
         { id: decodeToken.sub },
-        { title: patchFutureRequest.title },
+        { subject: patchFutureRequest.subject },
       );
 
       const data = {

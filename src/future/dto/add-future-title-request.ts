@@ -8,5 +8,5 @@ export class AddFutureTitleRequest {
     required: true,
   })
   @IsString()
-  title: string;
+  subject: string;
 }

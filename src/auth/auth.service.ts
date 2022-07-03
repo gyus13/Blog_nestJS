@@ -82,33 +82,40 @@ export class AuthService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      console.log(token);
       const ticket = await client.verifyIdToken({
         idToken: token,
         audience: secret.ios_google_client_id, // Specify the CLIENT_ID of the app that accesses the backend
         // Or, if multiple clients access the backend:
         //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
       });
+      let data = {};
       const payload = ticket.getPayload();
       const userId = payload['sub'];
-      // const decodeToken = await decodeJwt(token);
-      // const userId = decodeToken.sub;
 
       const user = await this.userRepository.findOne({
         where: { id: userId },
       });
+      const payload1 = { sub: userId };
 
       // 유저가 존재하지 않는 경우
       if (user == undefined) {
         await this.userRepository.save({
           id: userId,
         });
+        data = {
+          id: userId,
+          nickname: null,
+          token: this.jwtService.sign(payload1),
+        };
+      } else {
+        console.log(user);
+        data = {
+          id: userId,
+          nickname: user.nickname,
+          token: this.jwtService.sign(payload1),
+        };
       }
-      const payload1 = { sub: userId };
-      const data = {
-        id: userId,
-        nickname: user.nickname,
-        token: this.jwtService.sign(payload1),
-      };
 
       const result = makeResponse(response.SUCCESS, data);
 
@@ -117,6 +124,7 @@ export class AuthService {
       return result;
     } catch (error) {
       // Rollback
+      console.log(error);
       await queryRunner.rollbackTransaction();
       await queryRunner.release();
       return response.ERROR;
@@ -134,6 +142,7 @@ export class AuthService {
         // Or, if multiple clients access the backend:
         //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
       });
+      let data = {};
       const payload = ticket.getPayload();
       const userId = payload['sub'];
 
@@ -141,19 +150,26 @@ export class AuthService {
         where: { id: userId },
       });
 
+      const payload1 = { sub: userId };
+
       // 유저가 존재하지 않는 경우
       if (user == undefined) {
         await this.userRepository.save({
           id: userId,
         });
+        data = {
+          id: userId,
+          nickname: null,
+          token: this.jwtService.sign(payload1),
+        };
+      } else {
+        console.log(user);
+        data = {
+          id: userId,
+          nickname: user.nickname,
+          token: this.jwtService.sign(payload1),
+        };
       }
-      const payload1 = { sub: userId };
-
-      const data = {
-        id: userId,
-        nickname: user.nickname,
-        token: this.jwtService.sign(payload1),
-      };
 
       const result = makeResponse(response.SUCCESS, data);
 

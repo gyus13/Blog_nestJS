@@ -15,6 +15,14 @@ class GetFutureResponseData {
     required: true,
   })
   @IsString()
+  subject: string;
+
+  @ApiProperty({
+    example: '랜선 여행가',
+    description: '타이틀',
+    required: true,
+  })
+  @IsString()
   title: string;
 
   @ApiProperty({
@@ -35,14 +43,22 @@ class GetFutureResponseData {
 
   @ApiProperty({
     example: '이미지 URL',
-    description: '프로필 이미지',
+    description: '캐릭터 이미지',
     required: true,
   })
   @IsString()
-  profileImageUrl: string;
+  characterImageUrl: string;
 
   @ApiProperty({
     example: '꽃봉오리',
+    description: '캐릭터 이미지 이름',
+    required: true,
+  })
+  @IsString()
+  characterImageName: string;
+
+  @ApiProperty({
+    example: '드리밍',
     description: '닉네임',
     required: true,
   })

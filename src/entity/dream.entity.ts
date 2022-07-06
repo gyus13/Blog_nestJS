@@ -1,22 +1,30 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { CommonEntity } from './common.entity';
+import { IsEmail, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Entity('Character')
-export class Character extends CommonEntity {
+@Entity('Dream')
+export class Dream extends CommonEntity {
   @ApiProperty()
   @Column()
-  characterImageUrl: string;
+  @IsString()
+  subject: string;
 
   @ApiProperty()
   @Column()
-  characterImageName: string;
+  @IsEmail()
+  purpose: string;
 
   @ApiProperty()
   @Column()
-  characterImageDescription: string;
+  @IsString()
+  color: string;
 
   @ApiProperty()
   @Column()
   userId: string;
+
+  @ApiProperty()
+  @Column({ default: 'NotSuccess' })
+  isSuccess: string;
 }

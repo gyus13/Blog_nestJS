@@ -7,4 +7,8 @@ export class Title extends CommonEntity {
   @ApiProperty()
   @Column()
   title: string;
+
+  @ApiProperty()
+  @Column()
+  userId: string;
 }

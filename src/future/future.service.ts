@@ -7,10 +7,15 @@ import { response } from '../config/response.utils';
 import { Character } from '../entity/character.entity';
 import { Experience } from '../entity/experience.entity';
 import { Title } from '../entity/title.entity';
+import { Dream } from '../entity/dream.entity';
+import { FutureQuery } from './future.query';
 
 @Injectable()
 export class FutureService {
-  constructor(private connection: Connection) {}
+  constructor(
+    private connection: Connection,
+    private futureQuery: FutureQuery,
+  ) {}
 
   async retrieveFuture(req, accessToken) {
     try {
@@ -74,9 +79,117 @@ export class FutureService {
 
       const data = {
         id: decodeToken.sub,
-        title: patchFutureRequest.title,
+        subject: patchFutureRequest.subject,
       };
 
+      const result = makeResponse(response.SUCCESS, data);
+
+      // Commit
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return response.ERROR;
+    }
+  }
+
+  async retrieveDream(req, accessToken) {
+    const queryRunner = getConnection().createQueryRunner();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      // 받을 총 금액
+      const dream = await queryRunner.query(
+        this.futureQuery.getDreamQuery(decodeToken.sub),
+      );
+
+      console.log(dream);
+
+      const data = {
+        dream: dream,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      return result;
+      await queryRunner.release();
+    } catch (error) {
+      return response.ERROR;
+    }
+  }
+  async createDream(req, accessToken, addDreamRequest) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      const dreamCount = await getManager()
+        .createQueryBuilder(Dream, 'dream')
+        .select('dream.id')
+        .where('dream.isSuccess IN (:isSuccess)', { isSuccess: 'NotSuccess' })
+        .andWhere('userId IN (:userId)', { userId: decodeToken.sub })
+        .getMany();
+
+      if (dreamCount.length > 5) {
+        return response.NOT_SIX_TICKET;
+      }
+
+      // Ticket 인스턴스 생성 후 정보 담기
+      const dream = new Dream();
+      dream.subject = addDreamRequest.subject;
+      dream.purpose = addDreamRequest.purpose;
+      dream.color = addDreamRequest.color;
+      dream.userId = decodeToken.sub;
+      const createDreamData = await queryRunner.manager.save(dream);
+
+      const data = {
+        id: createDreamData.id,
+        subject: createDreamData.subject,
+        purpose: createDreamData.purpose,
+        color: createDreamData.color,
+        userId: createDreamData.userId,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      // Commit
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return response.ERROR;
+    }
+  }
+
+  async touchDream(accessToken, dreamId) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      await queryRunner.manager.update(
+        Dream,
+        { id: dreamId },
+        { isSuccess: 'Success' },
+      );
+
+      const experience = new Experience();
+      experience.userId = decodeToken.sub;
+      experience.value = 15;
+      await queryRunner.manager.save(experience);
+
+      const data = {
+        id: dreamId,
+        isSuccess: 'Success',
+      };
       const result = makeResponse(response.SUCCESS, data);
 
       // Commit

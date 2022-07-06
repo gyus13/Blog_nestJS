@@ -6,7 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class Inquiry extends CommonEntity {
   @ApiProperty()
   @Column()
-  Inquiry: string;
+  inquiry: string;
 
   @ApiProperty()
   @Column()

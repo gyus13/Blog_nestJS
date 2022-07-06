@@ -2,9 +2,13 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { CommonEntity } from './common.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Entity('Purpose')
-export class Purpose extends CommonEntity {
+@Entity('MissionUser')
+export class MissionUser extends CommonEntity {
   @ApiProperty()
   @Column()
-  purpose: string;
+  missionId: number;
+
+  @ApiProperty()
+  @Column()
+  userId: string;
 }

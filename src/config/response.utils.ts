@@ -128,6 +128,11 @@ export const response = {
     code: 2024,
     message: '터치횟수를 입력해주세요.',
   },
+  NOT_SIX_DREAM: {
+    isSuccess: false,
+    code: 2025,
+    message: '상상해보기은 6개까지만 생성 가능합니다.',
+  },
   ERROR: {
     isSuccess: false,
     code: 4000,

@@ -5,9 +5,7 @@ import { Ticket } from '../entity/ticket.entity';
 import { AddTicketRequest } from './dto/add-ticket.request';
 import { decodeJwt, makeResponse } from '../common/function.utils';
 import { response } from '../config/response.utils';
-import { query } from 'express';
 import { TouchCount } from '../entity/touch-count.entity';
-import { TouchTicket } from '../common/decorators/ticket.decorator';
 import { User } from '../entity/users.entity';
 import { Experience } from 'src/entity/experience.entity';
 
@@ -41,9 +39,8 @@ export class TicketService {
 
       // Ticket 인스턴스 생성 후 정보 담기
       const ticket = new Ticket();
-      ticket.title = addTicket.title;
-      ticket.start = addTicket.start;
-      ticket.end = addTicket.end;
+      ticket.subject = addTicket.subject;
+      ticket.purpose = addTicket.purpose;
       ticket.color = addTicket.color;
       ticket.category = addTicket.category;
       ticket.touchCount = addTicket.touchCount;
@@ -52,9 +49,8 @@ export class TicketService {
 
       const data = {
         id: createTicketData.id,
-        title: createTicketData.title,
-        start: createTicketData.start,
-        end: createTicketData.end,
+        subject: createTicketData.subject,
+        purpose: createTicketData.purpose,
         color: createTicketData.color,
         category: createTicketData.category,
         touchCount: createTicketData.touchCount,
@@ -147,9 +143,8 @@ export class TicketService {
         .createQueryBuilder()
         .update(Ticket)
         .set({
-          title: patchTicketRequest.title,
-          start: patchTicketRequest.start,
-          end: patchTicketRequest.end,
+          subject: patchTicketRequest.subject,
+          purpose: patchTicketRequest.purpose,
           color: patchTicketRequest.color,
           category: patchTicketRequest.category,
           touchCount: patchTicketRequest.touchCount,
@@ -160,9 +155,8 @@ export class TicketService {
 
       const data = {
         id: ticket.id,
-        title: patchTicketRequest.title,
-        start: patchTicketRequest.start,
-        end: patchTicketRequest.end,
+        subject: patchTicketRequest.subject,
+        purpose: patchTicketRequest.purpose,
         color: patchTicketRequest.color,
         category: patchTicketRequest.category,
         touchCount: patchTicketRequest.touchCount,
@@ -266,10 +260,9 @@ export class TicketService {
         .groupBy('ticket.id')
         .select([
           'ticket.id as id',
-          'ticket.title as title',
           'ticket.category as category',
-          'ticket.start as start',
-          'ticket.end as end',
+          'ticket.subject as subject',
+          'ticket.purpose as purpose',
           'ticket.color as color',
           'ticket.touchCount as touchCount',
           'ticket.isSuccess as isSuccess',
@@ -296,10 +289,9 @@ export class TicketService {
         .where('ticket.userId In (:userId)', { userId: id })
         .select([
           'ticket.id as id',
-          'ticket.title as title',
           'ticket.category as category',
-          'ticket.start as start',
-          'ticket.end as end',
+          'ticket.subject as subject',
+          'ticket.purpose as purpose',
           'ticket.color as color',
           'ticket.touchCount as touchCount',
           'ticket.isSuccess as isSuccess',
@@ -325,10 +317,9 @@ export class TicketService {
         .createQueryBuilder(Ticket, 'ticket')
         .select([
           'ticket.id as id',
-          'ticket.title as title',
           'ticket.category as category',
-          'ticket.start as start',
-          'ticket.end as end',
+          'ticket.subject as subject',
+          'ticket.purpose as purpose',
           'ticket.color as color',
         ])
         .andWhere('ticket.isSuccess IN (:isSuccess)', { isSuccess: 'Success' })

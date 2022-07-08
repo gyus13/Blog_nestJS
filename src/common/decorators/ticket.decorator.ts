@@ -9,13 +9,10 @@ import { response } from '../../config/response.utils';
 export const AddTicket = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const body = ctx.switchToHttp().getRequest().body;
-    if (!body.title) {
+    if (!body.subject) {
       throw new HttpException(response.EMPTY_TITLE, 201);
     }
-    if (!body.start) {
-      throw new HttpException(response.EMPTY_START, 201);
-    }
-    if (!body.end) {
+    if (!body.purpose) {
       throw new HttpException(response.EMPTY_END, 201);
     }
     if (!body.color) {

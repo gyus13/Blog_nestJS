@@ -25,6 +25,6 @@ export class Dream extends CommonEntity {
   userId: string;
 
   @ApiProperty()
-  @Column({ default: 'NotSuccess' })
-  isSuccess: string;
+  @Column({ default: false })
+  isSuccess: boolean;
 }

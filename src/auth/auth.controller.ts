@@ -4,7 +4,7 @@ import {
   Get,
   Headers,
   Patch,
-  Post,
+  Post, Req,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -17,34 +17,19 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from './jwt/jwt.guard';
 import { PatchNicknameResponse } from './dto/patch-nickname.response';
 import { PatchNicknameRequest } from './dto/patch-nickname.request';
 import { PatchNickname } from './decorator/auth.decorator';
 import { SignInRequest } from './dto/sign-in.request';
 import { SignInResponse } from './dto/sign-in.response';
-import { AddTicketRequest } from '../ticket/dto/add-ticket.request';
 import { GoogleLoginRequest } from './dto/google-login.request';
+import { AppleLoginRequest } from './dto/apple-login.request';
 
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  // @ApiOperation({ summary: '구글 소셜로그인' })
-  // @Get('google') // 1
-  // @UseGuards(AuthGuard('google'))
-  // async googleAuth(@Req() req) {
-  //   return 'googleAuth';
-  // }
-  //
-  // @ApiOperation({ summary: '구글 소셜로그인 콜백' })
-  // @Get('google/callback') // 2
-  // @UseGuards(AuthGuard('google'))
-  // googleAuthRedirect(@Req() req) {
-  //   return this.authService.googleLogin(req);
-  // }
 
   @ApiResponse({
     status: 1000,
@@ -69,11 +54,31 @@ export class AuthController {
   async aosGoogleAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
     return this.authService.aosVerifyGoogle(googleLoginRequest.token);
   }
-  //
-  // @Post('apple')
-  // async appleAuth(@Body() token) {
-  //   return this.authService.verifyApple(token);
+
+  // @ApiResponse({
+  //   status: 1000,
+  //   description: '성공',
+  //   type: SignInResponse,
+  // })
+  // @Post('ios/apple')
+  // @ApiOperation({ summary: 'IOS 애플 로그인' })
+  // @ApiBody({ description: 'IOS 애플 로그인', type: AppleLoginRequest })
+  // async iosAppleAuth(@Body() appleLoginRequest: AppleLoginRequest) {
+  //   return this.authService.iosVerifyApple(appleLoginRequest.token);
   // }
+
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: SignInResponse,
+  })
+  @Post('aos/kakao')
+  @ApiOperation({ summary: 'AOS 카카오 로그인' })
+  @ApiBody({ description: 'AOS 카카오 로그인', type: GoogleLoginRequest })
+  async aosKakaoAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
+    return this.authService.aosVerifyGoogle(googleLoginRequest.token);
+  }
+
 
   @ApiResponse({
     status: 1000,

@@ -111,7 +111,7 @@ export const response = {
   EMPTY_END: {
     isSuccess: false,
     code: 2021,
-    message: '종착역을 입력해주세요.',
+    message: '목적을 입력해주세요.',
   },
   EMPTY_COLOR: {
     isSuccess: false,
@@ -132,6 +132,11 @@ export const response = {
     isSuccess: false,
     code: 2025,
     message: '상상해보기은 6개까지만 생성 가능합니다.',
+  },
+  EMPTY_ID_TOKEN: {
+    isSuccess: false,
+    code: 2026,
+    message: 'id 토큰을 입력해주세요',
   },
   ERROR: {
     isSuccess: false,

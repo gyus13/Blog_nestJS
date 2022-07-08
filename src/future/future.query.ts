@@ -10,7 +10,7 @@ export class FutureQuery {
                    dream.color,
                    dream.isSuccess
             from Dream dream
-            where dream.userId = ${id} and dream.isSuccess = "NotSuccess"
+            where dream.userId = ${id} and dream.isSuccess = false
         `;
   };
 }

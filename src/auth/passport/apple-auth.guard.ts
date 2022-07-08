@@ -4,7 +4,7 @@
 //   Injectable,
 //   UnauthorizedException,
 // } from '@nestjs/common';
-// import { AppleStrategy } from './apple.strategy';
+// import { AppleStrategy } from '../strategies/apple.strategy';
 // import { IdentityTokenSchema, ProviderDataSchema } from '../types/interfaces';
 //
 // @Injectable()

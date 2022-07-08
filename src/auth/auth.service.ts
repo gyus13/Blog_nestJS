@@ -13,6 +13,11 @@ import { response } from '../config/response.utils';
 import { OAuth2Client } from 'google-auth-library';
 import { secret } from '../common/secret';
 const client = new OAuth2Client(secret.ios_google_client_id);
+// const jwt = require('jsonwebtoken');
+// const path = require('path');
+// const AppleAuth = require('apple-auth');
+// const appleConfig = require('../../../../config/apple/apple.json');
+// const auth = new AppleAuth(appleConfig, path.join(__dirname, `../../../../config/apple/${appleConfig.private_key_path}`));
 
 @Injectable()
 export class AuthService {
@@ -183,6 +188,54 @@ export class AuthService {
       return response.ERROR;
     }
   }
+
+  // async iosVerifyApple(token) {
+  //   const queryRunner = this.connection.createQueryRunner();
+  //   await queryRunner.connect();
+  //   await queryRunner.startTransaction();
+  //   try {
+  //     const response = await auth.accessToken(token);
+  //     const idToken = jwt.decode(response.id_token);
+  //     const userId = idToken.sub;
+  //
+  //     let data;
+  //     const user = await this.userRepository.findOne({
+  //       where: { id: userId },
+  //     });
+  //     const payload1 = { sub: userId };
+  //
+  //     // 유저가 존재하지 않는 경우
+  //     if (user == undefined) {
+  //       await this.userRepository.save({
+  //         id: userId,
+  //       });
+  //       data = {
+  //         id: userId,
+  //         nickname: null,
+  //         token: this.jwtService.sign(payload1),
+  //       };
+  //     } else {
+  //       console.log(user);
+  //       data = {
+  //         id: userId,
+  //         nickname: user.nickname,
+  //         token: this.jwtService.sign(payload1),
+  //       };
+  //     }
+  //
+  //     const result = makeResponse(response.SUCCESS, data);
+  //
+  //     await queryRunner.commitTransaction();
+  //     await queryRunner.release();
+  //     return result;
+  //   } catch (error) {
+  //     // Rollback
+  //     console.log(error);
+  //     await queryRunner.rollbackTransaction();
+  //     await queryRunner.release();
+  //     return response.ERROR;
+  //   }
+  // }
 
   // If request specified a G Suite domain:
   // const domain = payload['hd'];

@@ -39,7 +39,9 @@ export class FutureService {
         .getRawOne();
 
       if (future.level == null) {
-        future.level = 0;
+        future.level = 1;
+      } else if (future.level < 1) {
+        future.level = 1;
       }
       if (future.experience == null) {
         future.experience = 0;
@@ -101,7 +103,7 @@ export class FutureService {
     try {
       const decodeToken = await decodeJwt(accessToken);
 
-      // 받을 총 금액
+      // 상상해보기 조회
       const dream = await queryRunner.query(
         this.futureQuery.getDreamQuery(decodeToken.sub),
       );
@@ -130,7 +132,7 @@ export class FutureService {
       const dreamCount = await getManager()
         .createQueryBuilder(Dream, 'dream')
         .select('dream.id')
-        .where('dream.isSuccess IN (:isSuccess)', { isSuccess: 'NotSuccess' })
+        .where('dream.isSuccess IN (:isSuccess)', { isSuccess: false })
         .andWhere('userId IN (:userId)', { userId: decodeToken.sub })
         .getMany();
 
@@ -178,7 +180,7 @@ export class FutureService {
       await queryRunner.manager.update(
         Dream,
         { id: dreamId },
-        { isSuccess: 'Success' },
+        { isSuccess: true },
       );
 
       const experience = new Experience();
@@ -188,7 +190,7 @@ export class FutureService {
 
       const data = {
         id: dreamId,
-        isSuccess: 'Success',
+        isSuccess: true,
       };
       const result = makeResponse(response.SUCCESS, data);
 

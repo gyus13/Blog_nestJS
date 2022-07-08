@@ -17,13 +17,12 @@ export class Ticket extends CommonEntity {
 
   @ApiProperty()
   @Column()
-  @IsEmail()
-  start: string;
+  subject: string;
 
   @ApiProperty()
   @Column()
   @IsString()
-  end: string;
+  purpose: string;
 
   @ApiProperty()
   @Column()

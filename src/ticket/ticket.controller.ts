@@ -26,7 +26,7 @@ import { TouchTicketResponse } from './dto/touch-ticket.response';
 import { DeleteTicketResponse } from './dto/delete-ticket.response';
 import { DeleteTouchCountResponse } from './dto/delete-touch-count.response';
 import { AddTicketResponse } from './dto/add-ticket.response';
-import {GetOtherTicketResponse} from "./dto/get-other-ticket.response";
+import { GetOtherTicketResponse } from './dto/get-other-ticket.response';
 
 //validation swagger에 올려주기
 @Controller('ticket')
@@ -69,12 +69,8 @@ export class TicketController {
     description: '제목을 입력해주세요.',
   })
   @ApiResponse({
-    status: 2020,
-    description: '시작역을 입력해주세요.',
-  })
-  @ApiResponse({
     status: 2021,
-    description: '종착역을 입력해주세요.',
+    description: '목적을 입력해주세요.',
   })
   @ApiResponse({
     status: 2022,

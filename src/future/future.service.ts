@@ -173,6 +173,84 @@ export class FutureService {
     }
   }
 
+  async editDream(accessToken, id, addDreamRequest) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      await queryRunner.manager.update(
+        Dream,
+        { id: id },
+        { subject: addDreamRequest.subject },
+      );
+
+      await queryRunner.manager.update(
+        Dream,
+        { id: id },
+        { purpose: addDreamRequest.purpose },
+      );
+
+      await queryRunner.manager.update(
+        Dream,
+        { id: id },
+        { color: addDreamRequest.color },
+      );
+
+      const data = {
+        id: id,
+        subject: addDreamRequest.subject,
+        purpose: addDreamRequest.purpose,
+        color: addDreamRequest.color,
+        isSuccess: 0,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      // Commit
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return response.ERROR;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async deleteDream(accessToken, id) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      await queryRunner.manager.delete(Dream, { id: id });
+
+      const data = {
+        id: id,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      // Commit
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return response.ERROR;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
   async touchDream(accessToken, dreamId) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();

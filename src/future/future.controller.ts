@@ -27,7 +27,8 @@ import { AddDream, AddTitle } from '../common/decorators/user.decorator';
 import { GetDreamResponse } from './dto/get-dream.response';
 import { AddDreamRequest } from './dto/add-dream.request';
 import { TouchTicketResponse } from '../ticket/dto/touch-ticket.response';
-import {TouchDreamResponse} from "./dto/touch-dream.response";
+import { TouchDreamResponse } from './dto/touch-dream.response';
+import {DeleteDreamResponse} from "./dto/delete-dream.response";
 
 @Controller('future')
 @ApiTags('future')
@@ -123,7 +124,6 @@ export class FutureController {
   })
   @ApiOperation({ summary: '상상해보기 등록' })
   @ApiBody({ description: 'Dream ', type: AddDreamRequest })
-
   @Post('/dream')
   async createDreaming(
     @Request() req,
@@ -160,5 +160,57 @@ export class FutureController {
     @Headers('x-access-token') accessToken,
   ) {
     return this.futureService.touchDream(accessToken, id);
+  }
+
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: GetDreamResponse,
+  })
+  @ApiResponse({
+    status: 4000,
+    description: '서버 에러',
+  })
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @ApiOperation({ summary: '상상해보기 수정' })
+  @ApiBody({ description: 'Dream ', type: AddDreamRequest })
+  @UseGuards(JwtAuthGuard)
+  @Patch('/dream/:dreamId')
+  editDream(
+    @Param('dreamId') id: number,
+    @Headers('x-access-token') accessToken,
+    @AddDream() addDreamRequest: AddDreamRequest,
+  ) {
+    return this.futureService.editDream(accessToken, id, addDreamRequest);
+  }
+
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: DeleteDreamResponse,
+  })
+  @ApiResponse({
+    status: 4000,
+    description: '서버 에러',
+  })
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @ApiOperation({ summary: '상상해보기 삭제' })
+  @UseGuards(JwtAuthGuard)
+  @Delete('/dream/:dreamId')
+  deleteDream(
+    @Param('dreamId') id: number,
+    @Headers('x-access-token') accessToken,
+  ) {
+    return this.futureService.deleteDream(accessToken, id);
   }
 }

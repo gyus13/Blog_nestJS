@@ -8,7 +8,6 @@ import {TouchCount} from "../entity/touch-count.entity";
 @Module({
   imports: [
     TypeOrmModule.forFeature([Ticket, TouchCount]),
-    ScheduleModule.forRoot(),
   ],
   providers: [TicketService],
   controllers: [TicketController],

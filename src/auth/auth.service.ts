@@ -91,7 +91,6 @@ export class AuthService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      console.log(token);
       const ticket = await client.verifyIdToken({
         idToken: token,
         audience: secret.ios_google_client_id, // Specify the CLIENT_ID of the app that accesses the backend
@@ -118,7 +117,6 @@ export class AuthService {
           token: this.jwtService.sign(payload1),
         };
       } else {
-        console.log(user);
         data = {
           id: userId,
           nickname: user.nickname,
@@ -172,7 +170,6 @@ export class AuthService {
           token: this.jwtService.sign(payload1),
         };
       } else {
-        console.log(user);
         data = {
           id: userId,
           nickname: user.nickname,

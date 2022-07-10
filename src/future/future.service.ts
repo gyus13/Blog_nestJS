@@ -95,6 +95,8 @@ export class FutureService {
       await queryRunner.rollbackTransaction();
       await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -108,8 +110,6 @@ export class FutureService {
         this.futureQuery.getDreamQuery(decodeToken.sub),
       );
 
-      console.log(dream);
-
       const data = {
         dream: dream,
       };
@@ -117,9 +117,10 @@ export class FutureService {
       const result = makeResponse(response.SUCCESS, data);
 
       return result;
-      await queryRunner.release();
     } catch (error) {
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
   async createDream(req, accessToken, addDreamRequest) {
@@ -167,6 +168,8 @@ export class FutureService {
       await queryRunner.rollbackTransaction();
       await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -203,6 +206,8 @@ export class FutureService {
       await queryRunner.rollbackTransaction();
       await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 }

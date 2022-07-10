@@ -137,7 +137,7 @@ export class FutureService {
         .getMany();
 
       if (dreamCount.length > 5) {
-        return response.NOT_SIX_TICKET;
+        return response.NOT_SIX_DREAM;
       }
 
       // Ticket 인스턴스 생성 후 정보 담기
@@ -153,7 +153,7 @@ export class FutureService {
         subject: createDreamData.subject,
         purpose: createDreamData.purpose,
         color: createDreamData.color,
-        userId: createDreamData.userId,
+        isSuccess: 0,
       };
 
       const result = makeResponse(response.SUCCESS, data);
@@ -190,7 +190,7 @@ export class FutureService {
 
       const data = {
         id: dreamId,
-        isSuccess: true,
+        isSuccess: 1,
       };
       const result = makeResponse(response.SUCCESS, data);
 

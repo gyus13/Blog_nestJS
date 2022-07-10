@@ -42,8 +42,8 @@ class GetDreamResponseData {
   color: string;
 
   @ApiProperty({
-    example: false,
-    description: '완료여부',
+    example: 0,
+    description: '성취 여부(true:1, false:0)',
     required: true,
   })
   @IsString()

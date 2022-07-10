@@ -3,7 +3,7 @@ import { IsArray, IsString } from 'class-validator';
 import { BaseResponse } from '../../config/base.response';
 class AddFutureTitleResponseData {
   @ApiProperty({
-    example: '1',
+    example: '1234',
     description: '미래의 나 인덱스',
     required: true,
   })

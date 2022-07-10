@@ -10,8 +10,8 @@ class touchDreamResponseData {
   id: number;
 
   @ApiProperty({
-    example: false,
-    description: '성취 여부',
+    example: 0,
+    description: '성취 여부(true:1, false:0)',
     required: true,
   })
   @IsString()

@@ -189,7 +189,7 @@ export class FutureService {
       await queryRunner.manager.save(experience);
 
       const data = {
-        id: dreamId,
+        id: parseInt(dreamId),
         isSuccess: 1,
       };
       const result = makeResponse(response.SUCCESS, data);

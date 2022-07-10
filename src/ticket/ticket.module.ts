@@ -4,7 +4,6 @@ import { TicketController } from './ticket.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Ticket } from '../entity/ticket.entity';
 import {TouchCount} from "../entity/touch-count.entity";
-import {ScheduleModule} from "@nestjs/schedule";
 
 @Module({
   imports: [

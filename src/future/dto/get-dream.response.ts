@@ -42,12 +42,12 @@ class GetDreamResponseData {
   color: string;
 
   @ApiProperty({
-    example: 'NotSuccess',
+    example: false,
     description: '완료여부',
     required: true,
   })
   @IsString()
-  isSuccess: string;
+  isSuccess: boolean;
 }
 
 export abstract class GetDreamResponse extends BaseResponse {

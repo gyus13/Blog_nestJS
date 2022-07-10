@@ -10,12 +10,12 @@ class touchDreamResponseData {
   id: number;
 
   @ApiProperty({
-    example: 'Success',
+    example: false,
     description: '성취 여부',
     required: true,
   })
   @IsString()
-  isSuccess: string;
+  isSuccess: boolean;
 }
 
 export abstract class TouchDreamResponse extends BaseResponse {

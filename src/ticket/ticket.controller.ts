@@ -164,12 +164,8 @@ export class TicketController {
     description: '제목을 입력해주세요.',
   })
   @ApiResponse({
-    status: 2020,
-    description: '시작역을 입력해주세요.',
-  })
-  @ApiResponse({
     status: 2021,
-    description: '종착역을 입력해주세요.',
+    description: '목표를 입력해주세요.',
   })
   @ApiResponse({
     status: 2022,

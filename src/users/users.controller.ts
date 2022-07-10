@@ -54,8 +54,8 @@ export class UsersController {
     description: '성공',
     type: GetLogsResponse,
   })
-  @ApiOperation({ summary: '기록조회' })
-  @Post('/inquire')
+  @ApiOperation({ summary: '티켓기록 조회' })
+  @Get('/inquire')
   async getLogs(
       @Headers('x-access-token') accessToken,
   ) {

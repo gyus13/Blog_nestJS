@@ -55,17 +55,17 @@ export class AuthController {
     return this.authService.aosVerifyGoogle(googleLoginRequest.token);
   }
 
-  // @ApiResponse({
-  //   status: 1000,
-  //   description: '성공',
-  //   type: SignInResponse,
-  // })
-  // @Post('ios/apple')
-  // @ApiOperation({ summary: 'IOS 애플 로그인' })
-  // @ApiBody({ description: 'IOS 애플 로그인', type: AppleLoginRequest })
-  // async iosAppleAuth(@Body() appleLoginRequest: AppleLoginRequest) {
-  //   return this.authService.iosVerifyApple(appleLoginRequest.token);
-  // }
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: SignInResponse,
+  })
+  @Post('ios/apple')
+  @ApiOperation({ summary: 'IOS 애플 로그인' })
+  @ApiBody({ description: 'IOS 애플 로그인', type: AppleLoginRequest })
+  async iosAppleAuth(@Body() appleLoginRequest: AppleLoginRequest) {
+    return this.authService.iosVerifyApple(appleLoginRequest.token);
+  }
 
   @ApiResponse({
     status: 1000,

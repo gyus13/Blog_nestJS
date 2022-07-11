@@ -199,7 +199,7 @@ export class FutureService {
       );
 
       const data = {
-        id: id,
+        id: parseInt(id),
         subject: addDreamRequest.subject,
         purpose: addDreamRequest.purpose,
         color: addDreamRequest.color,
@@ -232,7 +232,7 @@ export class FutureService {
       await queryRunner.manager.delete(Dream, { id: id });
 
       const data = {
-        id: id,
+        id: parseInt(id),
       };
 
       const result = makeResponse(response.SUCCESS, data);

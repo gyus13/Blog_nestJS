@@ -7,7 +7,7 @@ class DeleteDreamResponseData {
     description: '인덱스',
     required: true,
   })
-  id: string;
+  id: number;
 }
 
 export abstract class DeleteDreamResponse extends BaseResponse {

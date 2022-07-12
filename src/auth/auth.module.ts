@@ -7,10 +7,11 @@ import { GoogleStrategy } from './passport/google.strategy';
 import { AuthController } from './auth.controller';
 import {User} from "../entity/users.entity";
 import {TypeOrmModule} from "@nestjs/typeorm";
+import {Character} from "../entity/character.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User,Character]),
     //* JwtService를 사용하기위해서 import 해준다.
     JwtModule.register({
       secret: 'secret',

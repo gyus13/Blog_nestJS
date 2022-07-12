@@ -2,13 +2,13 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { CommonEntity } from './common.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Entity('Characters')
-export class Character extends CommonEntity {
+@Entity('CharacterUser')
+export class CharacterUser extends CommonEntity {
   @ApiProperty()
   @Column()
-  characterImageUrl: string;
+  userId: string;
 
   @ApiProperty()
   @Column()
-  characterGrade: number;
+  characterId: number;
 }

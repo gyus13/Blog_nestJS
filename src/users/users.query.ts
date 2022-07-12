@@ -70,7 +70,7 @@ export class UsersQuery {
             select touchCount.id
             from TouchCount touchCount
                      left join Ticket ticket on ticket.id = touchCount.ticketId
-            where ticket.userId
+            where ticket.userId = ${id}
         `;
   };
 }

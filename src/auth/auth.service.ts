@@ -12,16 +12,12 @@ import { decodeJwt, makeResponse } from '../common/function.utils';
 import { response } from '../config/response.utils';
 import { OAuth2Client } from 'google-auth-library';
 import { secret } from '../common/secret';
+import { CharacterUser } from '../entity/character-user.entity';
+import { Ticket } from '../entity/ticket.entity';
+import { Character } from '../entity/character.entity';
+import { TitleUser } from 'src/entity/title-user.entity';
+import {Experience} from "../entity/experience.entity";
 const client = new OAuth2Client(secret.ios_google_client_id);
-
-
-// import fs from 'fs';
-// import jwt from 'jsonwebtoken';
-// import AppleAuth from 'apple-auth';
-//
-// const config = fs.readFileSync('./config/config.json');
-// // @ts-ignore
-// const auth = new AppleAuth(config, './config/AuthKey.p8', 'text');
 
 @Injectable()
 export class AuthService {
@@ -31,6 +27,8 @@ export class AuthService {
     private connection: Connection,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Character)
+    private readonly characterRepository: Repository<Character>,
   ) {}
   async googleLogin(req) {
     if (!req.user) {
@@ -67,6 +65,12 @@ export class AuthService {
         { id: decodeToken.sub },
         { nickname: patchNicknameRequest.nickname },
       );
+
+      const titleUser = new TitleUser();
+      titleUser.userId = decodeToken.sub;
+      titleUser.titleId = 1;
+      await queryRunner.manager.save(titleUser);
+
       const data = {
         id: decodeToken.sub,
         nickname: patchNicknameRequest.nickname,
@@ -226,13 +230,44 @@ export class AuthService {
       // }
       //
       // const result = makeResponse(response.SUCCESS, data);
-
       // await queryRunner.commitTransaction();
       // await queryRunner.release();
       // return result;
     } catch (error) {
       // Rollback
       console.log(error);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return response.ERROR;
+    }
+  }
+
+  async editCharacter(accessToken, patchCharacterRequest) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+      const characterUser = new CharacterUser();
+      characterUser.userId = decodeToken.sub;
+      characterUser.characterId = patchCharacterRequest.characterId;
+      await queryRunner.manager.save(characterUser);
+
+      const character = await this.characterRepository.findOne({
+        where: { id: patchCharacterRequest.characterId },
+      });
+      const data = {
+        characterImageUrl: character.characterImageUrl,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+
+      return result;
+    } catch (error) {
+      // Rollback
       await queryRunner.rollbackTransaction();
       await queryRunner.release();
       return response.ERROR;

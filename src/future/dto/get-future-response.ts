@@ -50,14 +50,6 @@ class GetFutureResponseData {
   characterImageUrl: string;
 
   @ApiProperty({
-    example: '꽃봉오리',
-    description: '캐릭터 이미지 이름',
-    required: true,
-  })
-  @IsString()
-  characterImageName: string;
-
-  @ApiProperty({
     example: '드리밍',
     description: '닉네임',
     required: true,

@@ -4,7 +4,8 @@ import {
   Get,
   Headers,
   Patch,
-  Post, Req,
+  Post,
+  Req,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -25,6 +26,8 @@ import { SignInRequest } from './dto/sign-in.request';
 import { SignInResponse } from './dto/sign-in.response';
 import { GoogleLoginRequest } from './dto/google-login.request';
 import { AppleLoginRequest } from './dto/apple-login.request';
+import {PatchCharacterRequest} from "./dto/patch-character.request";
+import { PatchCharacterResponse } from './dto/patch-character.response';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -79,7 +82,6 @@ export class AuthController {
     return this.authService.aosVerifyGoogle(googleLoginRequest.token);
   }
 
-
   @ApiResponse({
     status: 1000,
     description: '성공',
@@ -120,6 +122,30 @@ export class AuthController {
     return await this.authService.patchNickname(
       accessToken,
       patchNicknameRequest,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: PatchCharacterResponse,
+  })
+  @ApiOperation({ summary: '캐릭터 등록' })
+  @Post('/character')
+  @ApiBody({ description: '캐릭터 등록', type: PatchCharacterRequest })
+  async patchCharacter(
+    @Headers('x-access-token') accessToken,
+    @Body() patchCharacterRequest: PatchCharacterRequest,
+  ) {
+    return await this.authService.editCharacter(
+      accessToken,
+      patchCharacterRequest,
     );
   }
 }

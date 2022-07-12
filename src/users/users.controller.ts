@@ -6,7 +6,8 @@ import {
   Headers,
   Param,
   Post,
-  Req, Request,
+  Req,
+  Request,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -23,12 +24,15 @@ import {
 import { PostInquireRequest } from './dto/post-inquire.request';
 import { PostInquire } from 'src/common/decorators/user.decorator';
 import { PostInquireResponse } from './dto/post-inquire.response';
-import {GetLogsResponse} from "./dto/get-logs.response";
-import {Category} from "../config/variable.utils";
-import {GetMissionLogsResponse} from "./dto/get-mission-logs.response";
-import {GetDreamLogsResponse} from "./dto/get-dream-logs-response";
-import {GetTicketLogsResponse} from "./dto/get-ticket-logs.response";
+import { GetLogsResponse } from './dto/get-logs.response';
+import { Category } from '../config/variable.utils';
+import { GetMissionLogsResponse } from './dto/get-mission-logs.response';
+import { GetDreamLogsResponse } from './dto/get-dream-logs-response';
+import { GetTicketLogsResponse } from './dto/get-ticket-logs.response';
 import { GetMissionResponse } from './dto/get-mission.response';
+import { DeleteDreamResponse } from '../future/dto/delete-dream.response';
+import { DeleteUserRequest } from './dto/delete-user-request';
+import {DeleteUserResponse} from "./dto/delete-user.response";
 
 @Controller('users')
 @ApiTags('users')
@@ -47,6 +51,32 @@ export class UsersController {
   //   return 'nickname';
   // }
 
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: DeleteUserResponse,
+  })
+  @ApiResponse({
+    status: 4000,
+    description: '서버 에러',
+  })
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @ApiOperation({ summary: '회원 탈퇴' })
+  @ApiBody({ description: '회원 탈퇴', type: DeleteUserRequest })
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:userId')
+  deleteDream(
+    @Param('userId') id: number,
+    @Headers('x-access-token') accessToken,
+  ) {
+    return this.userService.deleteUser(accessToken, id);
+  }
+
   @UseGuards(JwtAuthGuard)
   @ApiHeader({
     description: 'jwt token',
@@ -61,10 +91,8 @@ export class UsersController {
   @ApiOperation({ summary: '티켓기록 조회' })
   @ApiQuery({ name: 'category', enum: Category, required: false })
   @Get('/logs/ticket')
-  async getTicketLogs(@Request() req, @Headers('x-access-token') accessToken) {
-    return await this.userService.retrieveTicketLogs(
-        accessToken, req
-    );
+  async getTicketLogs(@Request() req, @Headers('x-access-token') accessToken, @Body() deleteUserRequest: DeleteUserRequest) {
+    return await this.userService.retrieveTicketLogs(accessToken, req);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -97,9 +125,7 @@ export class UsersController {
   })
   @ApiOperation({ summary: '미션기록 조회' })
   @Get('logs/mission')
-  async getMissionLogs(
-      @Headers('x-access-token') accessToken,
-  ) {
+  async getMissionLogs(@Headers('x-access-token') accessToken) {
     return await this.userService.retrieveMissionLogs(accessToken);
   }
 
@@ -116,9 +142,7 @@ export class UsersController {
   })
   @ApiOperation({ summary: '상상하기 기록 조회' })
   @Get('logs/dream')
-  async getDreamLogs(
-      @Headers('x-access-token') accessToken,
-  ) {
+  async getDreamLogs(@Headers('x-access-token') accessToken) {
     return await this.userService.retrieveDreamLogs(accessToken);
   }
 
@@ -159,9 +183,7 @@ export class UsersController {
   })
   @ApiOperation({ summary: '주간미션' })
   @Get('mission')
-  async getMission(
-      @Headers('x-access-token') accessToken,
-  ) {
+  async getMission(@Headers('x-access-token') accessToken) {
     return await this.userService.retrieveMission(accessToken);
   }
 }

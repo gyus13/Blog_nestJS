@@ -17,6 +17,7 @@ import { Ticket } from '../entity/ticket.entity';
 import { TouchCount } from '../entity/touch-count.entity';
 import { UsersQuery } from './users.query';
 import { Category } from '../config/variable.utils';
+import {Dream} from "../entity/dream.entity";
 
 @Injectable()
 export class UsersService {
@@ -238,6 +239,35 @@ export class UsersService {
 
       return result;
     } catch (error) {
+      return response.ERROR;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async deleteUser(accessToken, id) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      await queryRunner.manager.delete(User, { id: id });
+
+      const data = {
+        id: id,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      // Commit
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
       return response.ERROR;
     } finally {
       await queryRunner.release();

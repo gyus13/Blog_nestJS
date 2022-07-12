@@ -18,44 +18,39 @@ export class FutureService {
   ) {}
 
   async retrieveFuture(req, accessToken) {
+    const queryRunner = this.connection.createQueryRunner();
     try {
       const decodeToken = await decodeJwt(accessToken);
 
-      const future = await getManager()
-        .createQueryBuilder(User, 'user')
-        .leftJoin(Character, 'character', 'user.id = character.userId')
-        .leftJoin(Experience, 'experience', 'experience.userId = user.id')
-        .leftJoin(Title, 'title', 'title.userId = user.id')
-        .where('user.id In (:userId)', { userId: decodeToken.sub })
-        .select(['user.id as id', 'user.subject as subject'])
-        .addSelect([
-          'sum(experience.value) div 100 as level',
-          'right(sum(experience.value),2) as experience',
-          'character.characterImageUrl as characterImageUrl',
-          'character.characterImageName as characterImageName',
-          'user.nickname as nickname',
-          'title.title as title',
-        ])
-        .getRawOne();
+      const title = await queryRunner.query(
+        this.futureQuery.getFutureTitleQuery(decodeToken.sub),
+      );
 
-      if (future.level == null) {
-        future.level = 1;
-      } else if (future.level < 1) {
-        future.level = 1;
+      const experience = await queryRunner.query(
+        this.futureQuery.getFutureExperienceQuery(decodeToken.sub),
+      );
+
+      const character = await queryRunner.query(
+        this.futureQuery.getFutureCharacterQuery(decodeToken.sub),
+      );
+
+      if (experience[0].level == null) {
+        experience[0].level = 1;
+      } else if (experience[0].level < 1) {
+        experience[0].level = 1;
       }
-      if (future.experience == null) {
-        future.experience = 0;
+      if (experience[0].experience == null) {
+        experience[0].experience = 0;
       }
 
       const data = {
-        id: future.id,
-        subject: future.subject,
-        title: future.title,
-        level: parseInt(future.level),
-        experience: parseInt(future.experience),
-        characterImageUrl: future.characterImageUrl,
-        characterImageName: future.characterImageName,
-        nickname: future.nickname,
+        id: character[0].id,
+        subject: character[0].subject,
+        title: title[0].title,
+        level: parseInt(experience[0].level),
+        experience: parseInt(experience[0].experience),
+        characterImageUrl: character[0].characterImageUrl,
+        nickname: character[0].nickname,
       };
 
       const result = makeResponse(response.SUCCESS, data);
@@ -63,6 +58,8 @@ export class FutureService {
       return result;
     } catch (error) {
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 

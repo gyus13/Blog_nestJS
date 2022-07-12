@@ -110,12 +110,11 @@ export class UsersService {
       const ticket = await queryResult
         .select([
           'ticket.id as id',
-          'ticket.category as category',
           'ticket.subject as subject',
           'ticket.purpose as purpose',
           'ticket.color as color',
+          'ticket.category as category',
           'ticket.touchCount as touchCount',
-          'ticket.isSuccess as isSuccess',
         ])
         .getRawMany();
 

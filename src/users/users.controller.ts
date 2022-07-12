@@ -11,7 +11,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { SuccessInterceptor } from '../common/interceptors/success.interceptor';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import {
   ApiBody,
@@ -32,7 +31,6 @@ import {GetTicketLogsResponse} from "./dto/get-ticket-logs.response";
 
 @Controller('users')
 @ApiTags('users')
-@UseInterceptors(SuccessInterceptor)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
@@ -145,5 +143,24 @@ export class UsersController {
       postInquireRequest,
       accessToken,
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: GetMissionLogsResponse,
+  })
+  @ApiOperation({ summary: '주간미션' })
+  @Get('mission')
+  async getMission(
+      @Headers('x-access-token') accessToken,
+  ) {
+    return await this.userService.retrieveMissionLogs(accessToken);
   }
 }

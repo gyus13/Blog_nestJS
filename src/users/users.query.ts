@@ -51,4 +51,17 @@ export class UsersQuery {
         where dream.isSuccess = 1 and dream.userId = ${id}
         `;
   };
+
+  getWeekMissionQuery = (id): string => {
+    return `
+            select mission.id,
+                   mission.mission,
+                   mu.isSuccess
+            from Mission mission
+                     inner join MissionUser mu on mission.id = mu.missionId
+                     inner join User user on user.id = mu.userId
+            where mu.isSuccess = 0 and mu.userId = ${id}
+            limit 1
+        `;
+  };
 }

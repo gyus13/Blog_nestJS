@@ -28,6 +28,7 @@ import {Category} from "../config/variable.utils";
 import {GetMissionLogsResponse} from "./dto/get-mission-logs.response";
 import {GetDreamLogsResponse} from "./dto/get-dream-logs-response";
 import {GetTicketLogsResponse} from "./dto/get-ticket-logs.response";
+import { GetMissionResponse } from './dto/get-mission.response';
 
 @Controller('users')
 @ApiTags('users')
@@ -154,13 +155,13 @@ export class UsersController {
   @ApiResponse({
     status: 1000,
     description: '성공',
-    type: GetMissionLogsResponse,
+    type: GetMissionResponse,
   })
   @ApiOperation({ summary: '주간미션' })
   @Get('mission')
   async getMission(
       @Headers('x-access-token') accessToken,
   ) {
-    return await this.userService.retrieveMissionLogs(accessToken);
+    return await this.userService.retrieveMission(accessToken);
   }
 }

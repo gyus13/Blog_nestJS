@@ -124,7 +124,6 @@ export class UsersService {
 
       const result = makeResponse(response.SUCCESS, data);
 
-
       return result;
     } catch (error) {
       return response.ERROR;
@@ -176,7 +175,7 @@ export class UsersService {
       );
 
       const data = {
-        mission:mission,
+        mission: mission,
       };
 
       const result = makeResponse(response.SUCCESS, data);
@@ -200,6 +199,29 @@ export class UsersService {
 
       const data = {
         dream: dream,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      return result;
+    } catch (error) {
+      return response.ERROR;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async retrieveMission(accessToken) {
+    const queryRunner = getConnection().createQueryRunner();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      const mission = await queryRunner.query(
+        this.userQuery.getWeekMissionQuery(decodeToken.sub),
+      );
+
+      const data = {
+        mission: mission,
       };
 
       const result = makeResponse(response.SUCCESS, data);

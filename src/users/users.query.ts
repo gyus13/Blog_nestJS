@@ -31,7 +31,8 @@ export class UsersQuery {
     return `
             select mission.id,
                    mission.mission,
-                   mu.isSuccess
+                   mu.isSuccess,
+                   date_format(mu.updatedAt, \'%Y.%m.%d\') as updatedAt
             from Mission mission
                      inner join MissionUser mu on mission.id = mu.missionId
                      inner join User user on user.id = mu.userId
@@ -44,7 +45,8 @@ export class UsersQuery {
         select dream.id,
                dream.subject,
                dream.purpose,
-               dream.color
+               dream.color,
+               date_format(dream.updatedAt, \'%Y.%m.%d\') as updatedAt
         from Dream dream
         where dream.isSuccess = 1 and dream.userId = ${id}
         `;

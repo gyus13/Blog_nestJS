@@ -17,6 +17,14 @@ class GetMissionLogsResponseData {
   })
   @IsString()
   mission: string;
+
+  @ApiProperty({
+    example: '2022.07.08',
+    description: '완료 날짜',
+    required: true,
+  })
+  @IsString()
+  updatedAt: string;
 }
 
 export abstract class GetMissionLogsResponse extends BaseResponse {

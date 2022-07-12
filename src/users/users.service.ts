@@ -244,33 +244,4 @@ export class UsersService {
       await queryRunner.release();
     }
   }
-
-  async deleteUser(accessToken, id) {
-    const queryRunner = this.connection.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      const decodeToken = await decodeJwt(accessToken);
-
-      await queryRunner.manager.delete(User, { id: id });
-
-      const data = {
-        id: id,
-      };
-
-      const result = makeResponse(response.SUCCESS, data);
-
-      // Commit
-      await queryRunner.commitTransaction();
-      await queryRunner.release();
-
-      return result;
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      await queryRunner.release();
-      return response.ERROR;
-    } finally {
-      await queryRunner.release();
-    }
-  }
 }

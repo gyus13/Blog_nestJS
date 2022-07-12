@@ -64,4 +64,13 @@ export class UsersQuery {
             limit 1
         `;
   };
+
+  getTicketTouchCountLogsQuery = (id): string => {
+    return `
+            select touchCount.id
+            from TouchCount touchCount
+                     left join Ticket ticket on ticket.id = touchCount.ticketId
+            where ticket.userId
+        `;
+  };
 }

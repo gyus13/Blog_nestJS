@@ -25,6 +25,22 @@ class GetLogsResponseData {
   })
   @IsString()
   missionCount: number;
+
+  @ApiProperty({
+    example: 45,
+    description: '카운트',
+    required: true,
+  })
+  @IsString()
+  ticketTouchCount: number;
+
+  @ApiProperty({
+    example: "미켈",
+    description: '닉네임',
+    required: true,
+  })
+  @IsString()
+  nickname: string;
 }
 
 export abstract class GetLogsResponse extends BaseResponse {

@@ -137,6 +137,10 @@ export class UsersService {
     try {
       const decodeToken = await decodeJwt(accessToken);
 
+      const user = await this.usersRepository.findOne({
+        where: { id: decodeToken.sub },
+      });
+
       const countingDream = await queryRunner.query(
         this.userQuery.getDreamCountLogsQuery(decodeToken.sub),
       );
@@ -149,10 +153,16 @@ export class UsersService {
         this.userQuery.getMissionCountLogsQuery(decodeToken.sub),
       );
 
+      const countingTicketTouch = await queryRunner.query(
+        this.userQuery.getTicketTouchCountLogsQuery(decodeToken.sub),
+      );
+
       const data = {
         dreamCount: countingDream.length,
         ticketCount: countingTicket.length,
         missionCount: countingMission.length,
+        ticketTouchCount: countingTicketTouch.length,
+        nickname: user.nickname,
       };
 
       const result = makeResponse(response.SUCCESS, data);

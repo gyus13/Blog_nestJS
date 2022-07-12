@@ -8,13 +8,15 @@ import { UsersCreateDto } from './dto/users.create.dto';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entity/users.entity';
-import { Connection, getManager, Repository } from 'typeorm';
+import { Connection, getConnection, getManager, Repository } from 'typeorm';
 import { Inquiry } from '../entity/inquirement.entity';
 import { secret } from '../common/secret';
 import { decodeJwt, makeResponse } from '../common/function.utils';
 import { response } from '../config/response.utils';
 import { Ticket } from '../entity/ticket.entity';
 import { TouchCount } from '../entity/touch-count.entity';
+import { UsersQuery } from './users.query';
+import { Category } from '../config/variable.utils';
 
 @Injectable()
 export class UsersService {
@@ -24,6 +26,7 @@ export class UsersService {
     @InjectRepository(Inquiry)
     private inquiryRepository: Repository<Inquiry>,
     private connection: Connection,
+    private userQuery: UsersQuery,
   ) {}
 
   async findUserById(id: string) {
@@ -72,38 +75,52 @@ export class UsersService {
     }
   }
 
-  async retrieveLogs(accessToken) {
+  async retrieveTicketLogs(accessToken, request) {
+    const queryRunner = getConnection().createQueryRunner();
     try {
       const decodeToken = await decodeJwt(accessToken);
-      const ticketCount = await getManager()
-        .createQueryBuilder(Ticket, 'ticket')
-        .where('ticket.userId In (:userId)', { userId: decodeToken.sub })
-        .having('isSuccess In (:isSuccess)', { isSuccess: 'Success' })
-        .groupBy('ticket.id')
-        .select('COUNT(count.id) AS ticketCount')
-        .getRawOne();
 
-      const futureCount = await getManager()
+      const queryResult = await getManager()
         .createQueryBuilder(Ticket, 'ticket')
         .where('ticket.userId In (:userId)', { userId: decodeToken.sub })
-        .having('isSuccess In (:isSuccess)', { isSuccess: 'Success' })
-        .groupBy('ticket.id')
-        .select('COUNT(count.id) AS ticketCount')
-        .getRawOne();
+        .andWhere('ticket.isSuccess In (:isSuccess)', { isSuccess: 'Success' });
 
-      const missionCount = await getManager()
-        .createQueryBuilder(Ticket, 'ticket')
-        .where('ticket.userId In (:userId)', { userId: decodeToken.sub })
-        .having('isSuccess In (:isSuccess)', { isSuccess: 'Success' })
-        .groupBy('ticket.id')
-        .select('COUNT(count.id) AS ticketCount')
-        .getRawOne();
+      if (request.query.category == Category.HEALTH) {
+        await queryResult.andWhere('ticket.category IN (:category)', {
+          category: Category.HEALTH,
+        });
+      } else if (request.query.category == Category.MIND) {
+        await queryResult.andWhere('ticket.category IN (:category)', {
+          category: Category.MIND,
+        });
+      } else if (request.query.category == Category.RELATIONSHIP) {
+        await queryResult.andWhere('ticket.category IN (:category)', {
+          category: Category.RELATIONSHIP,
+        });
+      } else if (request.query.category == Category.DEVELOPMENT) {
+        await queryResult.andWhere('ticket.category IN (:category)', {
+          category: Category.DEVELOPMENT,
+        });
+      } else if (request.query.category == Category.PERSONALITY) {
+        await queryResult.andWhere('ticket.category IN (:category)', {
+          category: Category.PERSONALITY,
+        });
+      }
+
+      const ticket = await queryResult
+        .select([
+          'ticket.id as id',
+          'ticket.category as category',
+          'ticket.subject as subject',
+          'ticket.purpose as purpose',
+          'ticket.color as color',
+          'ticket.touchCount as touchCount',
+          'ticket.isSuccess as isSuccess',
+        ])
+        .getRawMany();
 
       const data = {
-        id: decodeToken.sub,
-        ticketCount,
-        futureCount,
-        missionCount,
+        ticket: ticket,
       };
 
       const result = makeResponse(response.SUCCESS, data);
@@ -111,6 +128,87 @@ export class UsersService {
       return result;
     } catch (error) {
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async retrieveMainLogs(accessToken) {
+    const queryRunner = getConnection().createQueryRunner();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      const countingDream = await queryRunner.query(
+        this.userQuery.getDreamCountLogsQuery(decodeToken.sub),
+      );
+
+      const countingTicket = await queryRunner.query(
+        this.userQuery.getTicketCountLogsQuery(decodeToken.sub),
+      );
+
+      const countingMission = await queryRunner.query(
+        this.userQuery.getMissionCountLogsQuery(decodeToken.sub),
+      );
+
+      const data = {
+        dreamCount: countingDream.length,
+        ticketCount: countingTicket.length,
+        missionCount: countingMission.length,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      return result;
+    } catch (error) {
+      return response.ERROR;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async retrieveMissionLogs(accessToken) {
+    const queryRunner = getConnection().createQueryRunner();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      const mission = await queryRunner.query(
+        this.userQuery.getMissionQuery(decodeToken.sub),
+      );
+
+      const data = {
+        mission:mission,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      return result;
+    } catch (error) {
+      return response.ERROR;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async retrieveDreamLogs(accessToken) {
+    const queryRunner = getConnection().createQueryRunner();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      const dream = await queryRunner.query(
+        this.userQuery.getDreamQuery(decodeToken.sub),
+      );
+
+      const data = {
+        dream: dream,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      return result;
+    } catch (error) {
+      return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 }

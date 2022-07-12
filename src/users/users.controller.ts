@@ -6,7 +6,7 @@ import {
   Headers,
   Param,
   Post,
-  Req,
+  Req, Request,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -17,6 +17,7 @@ import {
   ApiBody,
   ApiHeader,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -24,6 +25,10 @@ import { PostInquireRequest } from './dto/post-inquire.request';
 import { PostInquire } from 'src/common/decorators/user.decorator';
 import { PostInquireResponse } from './dto/post-inquire.response';
 import {GetLogsResponse} from "./dto/get-logs.response";
+import {Category} from "../config/variable.utils";
+import {GetMissionLogsResponse} from "./dto/get-mission-logs.response";
+import {GetDreamLogsResponse} from "./dto/get-dream-logs-response";
+import {GetTicketLogsResponse} from "./dto/get-ticket-logs.response";
 
 @Controller('users')
 @ApiTags('users')
@@ -52,16 +57,70 @@ export class UsersController {
   @ApiResponse({
     status: 1000,
     description: '성공',
-    type: GetLogsResponse,
+    type: GetTicketLogsResponse,
   })
   @ApiOperation({ summary: '티켓기록 조회' })
-  @Get('/inquire')
-  async getLogs(
+  @ApiQuery({ name: 'category', enum: Category, required: false })
+  @Get('/logs/ticket')
+  async getTicketLogs(@Request() req, @Headers('x-access-token') accessToken) {
+    return await this.userService.retrieveTicketLogs(
+        accessToken, req
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: GetLogsResponse,
+  })
+  @ApiOperation({ summary: '메인기록 조회' })
+  @Get('logs/main')
+  async getLogs(@Headers('x-access-token') accessToken) {
+    return await this.userService.retrieveMainLogs(accessToken);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: GetMissionLogsResponse,
+  })
+  @ApiOperation({ summary: '미션기록 조회' })
+  @Get('logs/mission')
+  async getMissionLogs(
       @Headers('x-access-token') accessToken,
   ) {
-    return await this.userService.retrieveLogs(
-        accessToken
-    );
+    return await this.userService.retrieveMissionLogs(accessToken);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: GetDreamLogsResponse,
+  })
+  @ApiOperation({ summary: '상상하기 기록 조회' })
+  @Get('logs/dream')
+  async getDreamLogs(
+      @Headers('x-access-token') accessToken,
+  ) {
+    return await this.userService.retrieveDreamLogs(accessToken);
   }
 
   @UseGuards(JwtAuthGuard)

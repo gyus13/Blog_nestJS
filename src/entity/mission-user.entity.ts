@@ -11,4 +11,8 @@ export class MissionUser extends CommonEntity {
   @ApiProperty()
   @Column()
   userId: string;
+
+  @ApiProperty()
+  @Column()
+  isSuccess: boolean;
 }

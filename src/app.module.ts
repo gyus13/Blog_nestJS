@@ -23,6 +23,7 @@ import { FutureModule } from './future/future.module';
     AuthModule,
     TicketModule,
     FutureModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],

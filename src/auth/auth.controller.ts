@@ -1,8 +1,10 @@
 import {
   Body,
-  Controller, Delete,
+  Controller,
+  Delete,
   Get,
-  Headers, Param,
+  Headers,
+  Param,
   Patch,
   Post,
   Req,
@@ -26,10 +28,10 @@ import { SignInRequest } from './dto/sign-in.request';
 import { SignInResponse } from './dto/sign-in.response';
 import { GoogleLoginRequest } from './dto/google-login.request';
 import { AppleLoginRequest } from './dto/apple-login.request';
-import {PatchCharacterRequest} from "./dto/patch-character.request";
+import { PatchCharacterRequest } from './dto/patch-character.request';
 import { PatchCharacterResponse } from './dto/patch-character.response';
-import {DeleteUserResponse} from "../users/dto/delete-user.response";
-import {DeleteUserRequest} from "../users/dto/delete-user-request";
+import { DeleteUserResponse } from '../users/dto/delete-user.response';
+import { DeleteUserRequest } from '../users/dto/delete-user-request';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -179,12 +181,15 @@ export class AuthController {
     example: 'JWT TOKEN',
   })
   @ApiOperation({ summary: '회원 탈퇴' })
-  @ApiBody({ description: '회원 탈퇴', type: DeleteUserRequest, required: false})
-  @Delete('/:userId')
+  @ApiBody({
+    description: '회원 탈퇴',
+    type: DeleteUserRequest,
+    required: false,
+  })
+  @Delete()
   deleteDream(
-      @Param('userId') id: number,
-      @Headers('x-access-token') accessToken,
+    @Headers('x-access-token') accessToken,
   ) {
-    return this.authService.deleteUser(accessToken, id);
+    return this.authService.deleteUser(accessToken);
   }
 }

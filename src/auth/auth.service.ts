@@ -378,17 +378,17 @@ export class AuthService {
     }
   }
 
-  async deleteUser(accessToken, id) {
+  async deleteUser(accessToken) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
       const decodeToken = await decodeJwt(accessToken);
 
-      await queryRunner.manager.delete(User, { id: id });
+      await queryRunner.manager.delete(User, { id: decodeToken.sub });
 
       const data = {
-        id: id,
+        id: decodeToken.sub,
       };
 
       const result = makeResponse(response.SUCCESS, data);

@@ -13,11 +13,19 @@ import { response } from '../config/response.utils';
 import { OAuth2Client } from 'google-auth-library';
 import { secret } from '../common/secret';
 import { CharacterUser } from '../entity/character-user.entity';
-import { Ticket } from '../entity/ticket.entity';
 import { Character } from '../entity/character.entity';
 import { TitleUser } from 'src/entity/title-user.entity';
-import {Experience} from "../entity/experience.entity";
 const client = new OAuth2Client(secret.ios_google_client_id);
+// const fs = require('fs');
+const jwt = require('jsonwebtoken');
+// const path = require('path');
+// const AppleAuth = require('apple-auth');
+//
+// const appleConfig = fs.readFileSync('./configuration/config.json');
+// const auth = new AppleAuth(
+//   appleConfig,
+//   path.join(__dirname, `./configuration/${appleConfig.private_key_path}`),
+// );
 
 @Injectable()
 export class AuthService {
@@ -200,39 +208,135 @@ export class AuthService {
     await queryRunner.startTransaction();
     try {
       // const response1 = await auth.accessToken(token);
-      // const idToken = jwt.decode(response1.id_token);
-      // const userId = idToken.sub;
-      //
-      // console.log(userId);
-      // let data;
-      // const user = await this.userRepository.findOne({
-      //   where: { id: userId },
-      // });
-      // const payload1 = { sub: userId };
-      //
-      // //유저가 존재하지 않는경우
-      // if (user == undefined) {
-      //   // await this.userRepository.save({
-      //   //   id: userId,
-      //   // });
-      //   data = {
-      //     id: userId,
-      //     nickname: null,
-      //     token: this.jwtService.sign(payload1),
-      //   };
-      // } else {
-      //   console.log(user);
-      //   data = {
-      //     id: userId,
-      //     nickname: user.nickname,
-      //     token: this.jwtService.sign(payload1),
-      //   };
-      // }
-      //
-      // const result = makeResponse(response.SUCCESS, data);
-      // await queryRunner.commitTransaction();
-      // await queryRunner.release();
-      // return result;
+      const idToken = jwt.decode(token);
+      const userId = idToken.sub;
+
+      console.log(userId);
+      let data;
+      const user = await this.userRepository.findOne({
+        where: { id: userId },
+      });
+      const payload1 = { sub: userId };
+
+      //유저가 존재하지 않는경우
+      if (user == undefined) {
+        await this.userRepository.save({
+          id: userId,
+        });
+        data = {
+          id: userId,
+          nickname: null,
+          token: this.jwtService.sign(payload1),
+        };
+      } else {
+        console.log(user);
+        data = {
+          id: userId,
+          nickname: user.nickname,
+          token: this.jwtService.sign(payload1),
+        };
+      }
+
+      const result = makeResponse(response.SUCCESS, data);
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result;
+    } catch (error) {
+      // Rollback
+      console.log(error);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return response.ERROR;
+    }
+  }
+
+  async iosVerifyKakao(token) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      // const response1 = await auth.accessToken(token);
+      const idToken = jwt.decode(token);
+      const userId = idToken.sub;
+
+      console.log(userId);
+      let data;
+      const user = await this.userRepository.findOne({
+        where: { id: userId },
+      });
+      const payload1 = { sub: userId };
+
+      //유저가 존재하지 않는경우
+      if (user == undefined) {
+        await this.userRepository.save({
+          id: userId,
+        });
+        data = {
+          id: userId,
+          nickname: null,
+          token: this.jwtService.sign(payload1),
+        };
+      } else {
+        console.log(user);
+        data = {
+          id: userId,
+          nickname: user.nickname,
+          token: this.jwtService.sign(payload1),
+        };
+      }
+
+      const result = makeResponse(response.SUCCESS, data);
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result;
+    } catch (error) {
+      // Rollback
+      console.log(error);
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return response.ERROR;
+    }
+  }
+
+  async aosVerifyKakao(token) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      // const response1 = await auth.accessToken(token);
+      const idToken = jwt.decode(token);
+      const userId = idToken.sub;
+
+      console.log(userId);
+      let data;
+      const user = await this.userRepository.findOne({
+        where: { id: userId },
+      });
+      const payload1 = { sub: userId };
+
+      //유저가 존재하지 않는경우
+      if (user == undefined) {
+        await this.userRepository.save({
+          id: userId,
+        });
+        data = {
+          id: userId,
+          nickname: null,
+          token: this.jwtService.sign(payload1),
+        };
+      } else {
+        console.log(user);
+        data = {
+          id: userId,
+          nickname: user.nickname,
+          token: this.jwtService.sign(payload1),
+        };
+      }
+
+      const result = makeResponse(response.SUCCESS, data);
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return result;
     } catch (error) {
       // Rollback
       console.log(error);

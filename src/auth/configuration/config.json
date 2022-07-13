@@ -3,5 +3,5 @@
   "team_id": "69F5355JYF",
   "key_id": "YB42DHVL9Q",
   "redirect_uri": "https://dev.endticket.shop/auth",
-  "scope": "name email"
+  "private_key_path": "AuthKey_AB12CD123E.p8"
 }

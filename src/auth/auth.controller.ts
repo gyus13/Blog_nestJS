@@ -81,7 +81,19 @@ export class AuthController {
   @ApiOperation({ summary: 'AOS 카카오 로그인' })
   @ApiBody({ description: 'AOS 카카오 로그인', type: GoogleLoginRequest })
   async aosKakaoAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
-    return this.authService.aosVerifyGoogle(googleLoginRequest.token);
+    return this.authService.aosVerifyKakao(googleLoginRequest.token);
+  }
+
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: SignInResponse,
+  })
+  @Post('ios/kakao')
+  @ApiOperation({ summary: 'iOS 카카오 로그인' })
+  @ApiBody({ description: 'iOS 카카오 로그인', type: GoogleLoginRequest })
+  async iosKakaoAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
+    return this.authService.iosVerifyKakao(googleLoginRequest.token);
   }
 
   @ApiResponse({

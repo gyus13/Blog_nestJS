@@ -71,7 +71,7 @@ export class AuthController {
   @ApiOperation({ summary: 'IOS 애플 로그인' })
   @ApiBody({ description: 'IOS 애플 로그인', type: AppleLoginRequest })
   async iosAppleAuth(@Body() appleLoginRequest: AppleLoginRequest) {
-    return this.authService.iosVerifyApple(appleLoginRequest.token);
+    return this.authService.iosVerifyApple(appleLoginRequest.token, appleLoginRequest.email);
   }
 
   @ApiResponse({

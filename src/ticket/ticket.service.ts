@@ -8,6 +8,10 @@ import { response } from '../config/response.utils';
 import { TouchCount } from '../entity/touch-count.entity';
 import { User } from '../entity/users.entity';
 import { Experience } from 'src/entity/experience.entity';
+import { TicketQuery } from './ticket.query';
+import { FutureService } from '../future/future.service';
+import { TitleUser } from '../entity/title-user.entity';
+import { CharacterUser } from '../entity/character-user.entity';
 
 @Injectable()
 export class TicketService {
@@ -17,6 +21,9 @@ export class TicketService {
     @InjectRepository(TouchCount)
     private touchCountRepository: Repository<TouchCount>,
     private connection: Connection,
+    private ticketQuery: TicketQuery,
+    @InjectRepository(CharacterUser)
+    private cuRepository: Repository<CharacterUser>,
   ) {}
 
   async createTicket(addTicket: AddTicketRequest, accessToken) {
@@ -108,6 +115,12 @@ export class TicketService {
         experience.value = 20;
         await queryRunner.manager.save(experience);
       }
+
+      // const experience = await queryRunner.query(
+      //   this.ticketQuery.getFutureExperienceQuery(decodeToken.sub),
+      // );
+      //
+      // await this.countLevel(experience[0].level, decodeToken.sub);
 
       const data = {
         touchCountId: createTouchTicketData.id,
@@ -334,6 +347,85 @@ export class TicketService {
       return result;
     } catch (error) {
       return response.ERROR;
+    }
+  }
+
+  async countLevel(level, userId) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      if (level >= 6 && level <= 10) {
+        await queryRunner.manager.update(
+          TitleUser,
+          { userId: userId },
+          { titleId: 2 },
+        );
+
+        const characterLevel = await this.cuRepository.findOne({
+          where: { id: userId },
+        });
+
+        await queryRunner.manager.update(
+          CharacterUser,
+          { userId: userId },
+          { characterId: characterLevel.characterId + 1 },
+        );
+      } else if (level >= 11 && level <= 15) {
+        await queryRunner.manager.update(
+          TitleUser,
+          { userId: userId },
+          { titleId: 3 },
+        );
+
+        const characterLevel = await this.cuRepository.findOne({
+          where: { id: userId },
+        });
+
+        await queryRunner.manager.update(
+          CharacterUser,
+          { userId: userId },
+          { characterId: characterLevel.characterId + 1 },
+        );
+      } else if (level >= 16 && level <= 20) {
+        await queryRunner.manager.update(
+          TitleUser,
+          { userId: userId },
+          { titleId: 4 },
+        );
+
+        const characterLevel = await this.cuRepository.findOne({
+          where: { id: userId },
+        });
+
+        await queryRunner.manager.update(
+          CharacterUser,
+          { userId: userId },
+          { characterId: characterLevel.characterId + 1 },
+        );
+      } else if (level >= 21 && level <= 25) {
+        await queryRunner.manager.update(
+          TitleUser,
+          { userId: userId },
+          { titleId: 5 },
+        );
+
+        const characterLevel = await this.cuRepository.findOne({
+          where: { id: userId },
+        });
+
+        await queryRunner.manager.update(
+          CharacterUser,
+          { userId: userId },
+          { characterId: characterLevel.characterId + 1 },
+        );
+      }
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 }

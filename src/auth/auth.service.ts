@@ -202,7 +202,7 @@ export class AuthService {
     }
   }
 
-  async iosVerifyApple(token) {
+  async iosVerifyApple(token, email) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -222,11 +222,13 @@ export class AuthService {
       if (user == undefined) {
         await this.userRepository.save({
           id: userId,
+          email: email,
         });
         data = {
           id: userId,
           nickname: null,
           token: this.jwtService.sign(payload1),
+          email: email,
         };
       } else {
         console.log(user);
@@ -234,6 +236,7 @@ export class AuthService {
           id: userId,
           nickname: user.nickname,
           token: this.jwtService.sign(payload1),
+          email: email,
         };
       }
 

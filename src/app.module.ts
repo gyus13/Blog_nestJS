@@ -17,7 +17,7 @@ import { FutureModule } from './future/future.module';
       password: '12345678',
       database: 'test',
       entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      synchronize: false,
     }),
     UsersModule,
     AuthModule,

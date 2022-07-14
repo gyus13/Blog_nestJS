@@ -10,5 +10,5 @@ export class Inquiry extends CommonEntity {
 
   @ApiProperty()
   @Column()
-  userId: string;
+  userId: number;
 }

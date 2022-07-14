@@ -10,5 +10,5 @@ export class TitleUser extends CommonEntity {
 
   @ApiProperty()
   @Column()
-  userId: string;
+  userId: number;
 }

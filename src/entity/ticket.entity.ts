@@ -40,7 +40,7 @@ export class Ticket extends CommonEntity {
 
   @ApiProperty()
   @Column()
-  userId: string;
+  userId: number;
 
   @ApiProperty()
   @Column({ default: 'NotSuccess' })

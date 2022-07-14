@@ -30,15 +30,15 @@ export class UsersService {
     private userQuery: UsersQuery,
   ) {}
 
-  async findUserById(id: string) {
-    try {
-      const user = await this.usersRepository.findOne({ id });
-      if (!user) throw new Error();
-      return user;
-    } catch (error) {
-      throw new BadRequestException('해당하는 사용자를 찾을 수 없습니다.');
-    }
-  }
+  // async findUserById(id: string) {
+  //   try {
+  //     const user = await this.usersRepository.findOne({ id });
+  //     if (!user) throw new Error();
+  //     return user;
+  //   } catch (error) {
+  //     throw new BadRequestException('해당하는 사용자를 찾을 수 없습니다.');
+  //   }
+  // }
 
   async findUserByEmail(email: string) {
     const user = await this.usersRepository.findOne({ email });

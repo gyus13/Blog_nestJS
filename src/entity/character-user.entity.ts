@@ -6,7 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CharacterUser extends CommonEntity {
   @ApiProperty()
   @Column()
-  userId: string;
+  userId: number;
 
   @ApiProperty()
   @Column()

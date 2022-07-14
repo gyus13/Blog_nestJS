@@ -28,56 +28,56 @@ export class FutureService {
     try {
       const decodeToken = await decodeJwt(accessToken);
 
-      const title = await getManager()
-        .createQueryBuilder(User, 'user')
-        .leftJoin(TitleUser, 'TU', 'user.id = TU.userId')
-        .leftJoin(Title, 'title', 'title.id = TU.titleId')
-        .addSelect('title.title as title')
-        .where('TU.userId IN (:userId)', { userId: decodeToken.sub })
-        .getRawOne();
+      // const title = await getManager()
+      //   .createQueryBuilder(User, 'user')
+      //   .leftJoin(TitleUser, 'TU', 'user.id = TU.userId')
+      //   .leftJoin(Title, 'title', 'title.id = TU.titleId')
+      //   .addSelect('title.title as title')
+      //   .where('TU.userId IN (:userId)', { userId: decodeToken.sub })
+      //   .getRawOne();
+
+      const title = await queryRunner.query(
+        this.futureQuery.getFutureTitleQuery(decodeToken.sub),
+      );
+
       console.log(title);
 
-      const experience = await getManager()
-        .createQueryBuilder(User, 'user')
-        .leftJoin(Experience, 'experience', 'experience.userId = user.id')
-        .addSelect('sum(experience.value) div 100 as level')
-        .addSelect('right(sum(experience.value),2) as experience')
-        .where('experience.userId IN (:userId)', { userId: decodeToken.sub })
-        .getRawOne();
-      console.log(experience);
+      // const experience = await getManager()
+      //   .createQueryBuilder(User, 'user')
+      //   .leftJoin(Experience, 'experience', 'experience.userId = user.id')
+      //   .addSelect('sum(experience.value) div 100 as level')
+      //   .addSelect('right(sum(experience.value),2) as experience')
+      //   .where('experience.userId IN (:userId)', { userId: decodeToken.sub })
+      //   .getRawOne();
 
-      const character = await getManager()
-        .createQueryBuilder(User, 'user')
-        .leftJoin(CharacterUser, 'CU', 'CU.userId = user.id')
-        .leftJoin(Character, 'character', 'character.id = CU.characterId')
-        .select([
-          'user.id as id',
-          'user.nickname as nickname',
-          'user.subject as subject',
-        ])
-        .addSelect('character.characterImageUrl as characterImageUrl')
-        .where('CU.userId IN (:userId)', { userId: decodeToken.sub })
-        .getRawOne();
+      const experience = await queryRunner.query(
+        this.futureQuery.getFutureExperienceQuery(decodeToken.sub),
+      );
 
-      console.log(character.characterImageUrl);
-
-      if (experience.level == null) {
-        experience.level = 1;
-      } else if (experience.level < 1) {
-        experience.level = 1;
+      if (experience[0].level == null) {
+        experience[0].level = 1;
+      } else if (experience[0].level < 1) {
+        experience[0].level = 1;
       }
-      if (experience.experience == null) {
-        experience.experience = 0;
+      if (experience[0].experience == null) {
+        experience[0].experience = 0;
       }
+
+      console.log(experience[0]);
+
+      const character = await queryRunner.query(
+        this.futureQuery.getFutureCharacterQuery(decodeToken.sub),
+      );
+      console.log(character[0]);
 
       const data = {
-        id: character.id,
-        subject: character.subject,
-        title: title.title,
-        level: parseInt(experience.level),
-        experience: parseInt(experience.experience),
-        characterImageUrl: character.characterImageUrl,
-        nickname: character.nickname,
+        id: character[0].id,
+        subject: character[0].subject,
+        title: title[0].title,
+        level: parseInt(experience[0].level),
+        experience: parseInt(experience[0].experience),
+        characterImageUrl: character[0].characterImageUrl,
+        nickname: character[0].nickname,
       };
 
       const result = makeResponse(response.SUCCESS, data);

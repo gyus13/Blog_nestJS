@@ -111,28 +111,30 @@ export class AuthService {
       });
       let data = {};
       const payload = ticket.getPayload();
-      const userId = payload['sub'];
+      const accountId = payload['sub'];
 
-      const user = await this.userRepository.findOne({
-        where: { id: userId },
+      let user = await this.userRepository.findOne({
+        where: { accountId: accountId },
       });
-      const payload1 = { sub: userId };
+      let accountPayload;
 
       // 유저가 존재하지 않는 경우
       if (user == undefined) {
-        await this.userRepository.save({
-          id: userId,
+        user = await this.userRepository.save({
+          accountId: accountId,
         });
+        accountPayload = { sub: user.id };
         data = {
-          id: userId,
+          accountId: accountId,
           nickname: null,
-          token: this.jwtService.sign(payload1),
+          token: this.jwtService.sign(accountPayload),
         };
       } else {
+        accountPayload = { sub: user.id }
         data = {
-          id: userId,
+          accountId: accountId,
           nickname: user.nickname,
-          token: this.jwtService.sign(payload1),
+          token: this.jwtService.sign(accountPayload),
         };
       }
 
@@ -163,29 +165,30 @@ export class AuthService {
       });
       let data = {};
       const payload = ticket.getPayload();
-      const userId = payload['sub'];
+      const accountId = payload['sub'];
 
-      const user = await this.userRepository.findOne({
-        where: { id: userId },
+      let user = await this.userRepository.findOne({
+        where: { accountId: accountId },
       });
-
-      const payload1 = { sub: userId };
+      let accountPayload;
 
       // 유저가 존재하지 않는 경우
       if (user == undefined) {
-        await this.userRepository.save({
-          id: userId,
+        user = await this.userRepository.save({
+          accountId: accountId,
         });
+        accountPayload = { sub: user.id };
         data = {
-          id: userId,
+          accountId: accountId,
           nickname: null,
-          token: this.jwtService.sign(payload1),
+          token: this.jwtService.sign(accountPayload),
         };
       } else {
+        accountPayload = { sub: user.id }
         data = {
-          id: userId,
+          accountId: accountId,
           nickname: user.nickname,
-          token: this.jwtService.sign(payload1),
+          token: this.jwtService.sign(accountPayload),
         };
       }
 
@@ -202,41 +205,39 @@ export class AuthService {
     }
   }
 
-  async iosVerifyApple(token, email) {
+  async iosVerifyApple(token) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
       // const response1 = await auth.accessToken(token);
-      const idToken = jwt.decode(token);
-      const userId = idToken.sub;
-
-      console.log(userId);
       let data;
-      const user = await this.userRepository.findOne({
-        where: { id: userId },
-      });
-      const payload1 = { sub: userId };
+      const idToken = jwt.decode(token);
+      const accountId = idToken.sub;
 
-      //유저가 존재하지 않는경우
+      let user = await this.userRepository.findOne({
+        where: { accountId: accountId },
+      });
+      console.log(user)
+      let accountPayload;
+
+      // 유저가 존재하지 않는 경우
       if (user == undefined) {
-        await this.userRepository.save({
-          id: userId,
-          email: email,
+        user = await this.userRepository.save({
+          accountId: accountId,
         });
+        accountPayload = { sub: user.id };
         data = {
-          id: userId,
+          accountId: accountId,
           nickname: null,
-          token: this.jwtService.sign(payload1),
-          email: email,
+          token: this.jwtService.sign(accountPayload),
         };
       } else {
-        console.log(user);
+        accountPayload = { sub: user.id }
         data = {
-          id: userId,
+          accountId: accountId,
           nickname: user.nickname,
-          token: this.jwtService.sign(payload1),
-          email: email,
+          token: this.jwtService.sign(accountPayload),
         };
       }
 
@@ -260,31 +261,32 @@ export class AuthService {
     try {
       // const response1 = await auth.accessToken(token);
       const idToken = jwt.decode(token);
-      const userId = idToken.sub;
-
-      console.log(userId);
       let data;
-      const user = await this.userRepository.findOne({
-        where: { id: userId },
-      });
-      const payload1 = { sub: userId };
+      const accountId = idToken.sub;
 
-      //유저가 존재하지 않는경우
+      let user = await this.userRepository.findOne({
+        where: { accountId: accountId },
+      });
+      console.log(user)
+      let accountPayload;
+
+      // 유저가 존재하지 않는 경우
       if (user == undefined) {
-        await this.userRepository.save({
-          id: userId,
+        user = await this.userRepository.save({
+          accountId: accountId,
         });
+        accountPayload = { sub: user.id };
         data = {
-          id: userId,
+          accountId: accountId,
           nickname: null,
-          token: this.jwtService.sign(payload1),
+          token: this.jwtService.sign(accountPayload),
         };
       } else {
-        console.log(user);
+        accountPayload = { sub: user.id }
         data = {
-          id: userId,
+          accountId: accountId,
           nickname: user.nickname,
-          token: this.jwtService.sign(payload1),
+          token: this.jwtService.sign(accountPayload),
         };
       }
 
@@ -308,31 +310,32 @@ export class AuthService {
     try {
       // const response1 = await auth.accessToken(token);
       const idToken = jwt.decode(token);
-      const userId = idToken.sub;
-
-      console.log(userId);
       let data;
-      const user = await this.userRepository.findOne({
-        where: { id: userId },
-      });
-      const payload1 = { sub: userId };
+      const accountId = idToken.sub;
 
-      //유저가 존재하지 않는경우
+      let user = await this.userRepository.findOne({
+        where: { accountId: accountId },
+      });
+      console.log(user)
+      let accountPayload;
+
+      // 유저가 존재하지 않는 경우
       if (user == undefined) {
-        await this.userRepository.save({
-          id: userId,
+        user = await this.userRepository.save({
+          accountId: accountId,
         });
+        accountPayload = { sub: user.id };
         data = {
-          id: userId,
+          accountId: accountId,
           nickname: null,
-          token: this.jwtService.sign(payload1),
+          token: this.jwtService.sign(accountPayload),
         };
       } else {
-        console.log(user);
+        accountPayload = { sub: user.id }
         data = {
-          id: userId,
+          accountId: accountId,
           nickname: user.nickname,
-          token: this.jwtService.sign(payload1),
+          token: this.jwtService.sign(accountPayload),
         };
       }
 

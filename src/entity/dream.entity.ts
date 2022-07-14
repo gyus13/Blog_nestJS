@@ -22,7 +22,7 @@ export class Dream extends CommonEntity {
 
   @ApiProperty()
   @Column()
-  userId: string;
+  userId: number;
 
   @ApiProperty()
   @Column({ default: false })

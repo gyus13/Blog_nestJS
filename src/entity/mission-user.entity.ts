@@ -10,7 +10,7 @@ export class MissionUser extends CommonEntity {
 
   @ApiProperty()
   @Column()
-  userId: string;
+  userId: number;
 
   @ApiProperty()
   @Column()

@@ -186,7 +186,7 @@ export class AuthController {
     type: DeleteUserRequest,
     required: false,
   })
-  @Delete()
+  @Patch()
   deleteDream(
     @Headers('x-access-token') accessToken,
   ) {

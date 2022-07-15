@@ -17,7 +17,8 @@ import { Ticket } from '../entity/ticket.entity';
 import { TouchCount } from '../entity/touch-count.entity';
 import { UsersQuery } from './users.query';
 import { Category } from '../config/variable.utils';
-import {Dream} from "../entity/dream.entity";
+import { Dream } from '../entity/dream.entity';
+import { TitleUser } from '../entity/title-user.entity';
 
 @Injectable()
 export class UsersService {
@@ -250,11 +251,11 @@ export class UsersService {
     try {
       const decodeToken = await decodeJwt(accessToken);
 
-      console.log(decodeToken)
+      console.log(decodeToken);
       const user = await this.usersRepository.findOne({
         where: { id: decodeToken.sub },
       });
-      console.log(user)
+      console.log(user);
       const data = {
         email: user.email,
       };
@@ -266,6 +267,37 @@ export class UsersService {
       return response.ERROR;
     } finally {
       await queryRunner.release();
+    }
+  }
+
+  async editEmail(accessToken, postEmailRequest) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+      await queryRunner.manager.update(
+        User,
+        { id: decodeToken.sub },
+        { email: postEmailRequest.email },
+      );
+
+      const data = {
+        id: decodeToken.sub,
+        nickname: postEmailRequest.email,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+
+      return result;
+    } catch (error) {
+      // Rollback
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return response.ERROR;
     }
   }
 }

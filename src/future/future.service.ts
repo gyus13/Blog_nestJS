@@ -187,7 +187,7 @@ export class FutureService {
         subject: createDreamData.subject,
         purpose: createDreamData.purpose,
         color: createDreamData.color,
-        isSuccess: 0,
+        isSuccess: false,
       };
 
       const result = makeResponse(response.SUCCESS, data);
@@ -236,7 +236,7 @@ export class FutureService {
         subject: addDreamRequest.subject,
         purpose: addDreamRequest.purpose,
         color: addDreamRequest.color,
-        isSuccess: 0,
+        isSuccess: false,
       };
 
       const result = makeResponse(response.SUCCESS, data);
@@ -310,7 +310,7 @@ export class FutureService {
 
       const data = {
         id: parseInt(dreamId),
-        isSuccess: 1,
+        isSuccess: true,
       };
       const result = makeResponse(response.SUCCESS, data);
 

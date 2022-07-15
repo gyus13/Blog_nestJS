@@ -244,4 +244,28 @@ export class UsersService {
       await queryRunner.release();
     }
   }
+
+  async retrieveEmail(accessToken) {
+    const queryRunner = getConnection().createQueryRunner();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      console.log(decodeToken)
+      const user = await this.usersRepository.findOne({
+        where: { id: decodeToken.sub },
+      });
+      console.log(user)
+      const data = {
+        email: user.email,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      return result;
+    } catch (error) {
+      return response.ERROR;
+    } finally {
+      await queryRunner.release();
+    }
+  }
 }

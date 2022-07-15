@@ -29,6 +29,7 @@ import { GetMissionLogsResponse } from './dto/get-mission-logs.response';
 import { GetDreamLogsResponse } from './dto/get-dream-logs-response';
 import { GetTicketLogsResponse } from './dto/get-ticket-logs.response';
 import { GetMissionResponse } from './dto/get-mission.response';
+import { GetEmailResponse } from './dto/get-email.response';
 
 @Controller('users')
 @ApiTags('users')
@@ -145,5 +146,20 @@ export class UsersController {
     return await this.userService.retrieveMission(accessToken);
   }
 
-
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: GetEmailResponse,
+  })
+  @ApiOperation({ summary: '이메일 추출' })
+  @Get('email')
+  async getEmail(@Headers('x-access-token') accessToken) {
+    return await this.userService.retrieveEmail(accessToken);
+  }
 }

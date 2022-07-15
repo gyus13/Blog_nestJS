@@ -9,12 +9,4 @@ export class AppleLoginRequest {
   })
   @IsString()
   token: string;
-
-  @ApiProperty({
-    example: 'user@test.com',
-    description: 'email',
-    required: true,
-  })
-  @IsString()
-  email: string;
 }

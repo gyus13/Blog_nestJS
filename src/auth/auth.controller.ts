@@ -45,9 +45,13 @@ export class AuthController {
   })
   @Post('ios/google')
   @ApiOperation({ summary: 'IOS 구글 로그인' })
-  @ApiBody({ description: 'IOS 구글 로그인', type: GoogleLoginRequest })
-  async iosGoogleAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
-    return this.authService.iosVerifyGoogle(googleLoginRequest.token);
+  @ApiHeader({
+    description: 'id-token',
+    name: 'id-token',
+    example: 'id-TOKEN',
+  })
+  async iosGoogleAuth(@Headers('id-token') idToken) {
+    return this.authService.iosVerifyGoogle(idToken);
   }
 
   @ApiResponse({
@@ -57,9 +61,13 @@ export class AuthController {
   })
   @Post('aos/google')
   @ApiOperation({ summary: 'AOS 구글 로그인' })
-  @ApiBody({ description: 'AOS 구글 로그인', type: GoogleLoginRequest })
-  async aosGoogleAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
-    return this.authService.aosVerifyGoogle(googleLoginRequest.token);
+  @ApiHeader({
+    description: 'id-token',
+    name: 'id-token',
+    example: 'id-TOKEN',
+  })
+  async aosGoogleAuth(@Headers('id-token') idToken) {
+    return this.authService.aosVerifyGoogle(idToken);
   }
 
   @ApiResponse({
@@ -69,9 +77,13 @@ export class AuthController {
   })
   @Post('ios/apple')
   @ApiOperation({ summary: 'IOS 애플 로그인' })
-  @ApiBody({ description: 'IOS 애플 로그인', type: AppleLoginRequest })
-  async iosAppleAuth(@Body() appleLoginRequest: AppleLoginRequest) {
-    return this.authService.iosVerifyApple(appleLoginRequest.token);
+  @ApiHeader({
+    description: 'id-token',
+    name: 'id-token',
+    example: 'id-TOKEN',
+  })
+  async iosAppleAuth(@Headers('id-token') idToken) {
+    return this.authService.iosVerifyApple(idToken);
   }
 
   @ApiResponse({
@@ -81,9 +93,13 @@ export class AuthController {
   })
   @Post('aos/kakao')
   @ApiOperation({ summary: 'AOS 카카오 로그인' })
-  @ApiBody({ description: 'AOS 카카오 로그인', type: GoogleLoginRequest })
-  async aosKakaoAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
-    return this.authService.aosVerifyKakao(googleLoginRequest.token);
+  @ApiHeader({
+    description: 'id-token',
+    name: 'id-token',
+    example: 'id-TOKEN',
+  })
+  async aosKakaoAuth(@Headers('id-token') idToken) {
+    return this.authService.aosVerifyKakao(idToken);
   }
 
   @ApiResponse({
@@ -92,10 +108,14 @@ export class AuthController {
     type: SignInResponse,
   })
   @Post('ios/kakao')
-  @ApiOperation({ summary: 'iOS 카카오 로그인' })
-  @ApiBody({ description: 'iOS 카카오 로그인', type: GoogleLoginRequest })
-  async iosKakaoAuth(@Body() googleLoginRequest: GoogleLoginRequest) {
-    return this.authService.iosVerifyKakao(googleLoginRequest.token);
+  @ApiOperation({ summary: 'IOS 카카오 로그인' })
+  @ApiHeader({
+    description: 'id-token',
+    name: 'id-token',
+    example: 'id-TOKEN',
+  })
+  async iosKakaoAuth(@Headers('id-token') idToken) {
+    return this.authService.iosVerifyKakao(idToken);
   }
 
   @ApiResponse({
@@ -187,9 +207,7 @@ export class AuthController {
     required: false,
   })
   @Patch()
-  deleteDream(
-    @Headers('x-access-token') accessToken,
-  ) {
+  deleteDream(@Headers('x-access-token') accessToken) {
     return this.authService.deleteUser(accessToken);
   }
 }

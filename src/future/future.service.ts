@@ -302,11 +302,12 @@ export class FutureService {
       experience.value = 15;
       await queryRunner.manager.save(experience);
 
-      // const countExperience = await queryRunner.query(
-      //   this.futureQuery.getFutureExperienceQuery(decodeToken.sub),
-      // );
-      //
-      // await this.countLevel(countExperience[0].level, decodeToken.sub);
+      const countExperience = await queryRunner.query(
+        this.futureQuery.getFutureExperienceQuery(decodeToken.sub),
+      );
+      console.log(countExperience)
+
+      await this.countLevel(countExperience[0].level, decodeToken.sub);
 
       const data = {
         id: parseInt(dreamId),
@@ -339,11 +340,9 @@ export class FutureService {
           { userId: userId },
           { titleId: 2 },
         );
-
         const characterLevel = await this.cuRepository.findOne({
           where: { id: userId },
         });
-
         await queryRunner.manager.update(
           CharacterUser,
           { userId: userId },
@@ -355,7 +354,6 @@ export class FutureService {
           { userId: userId },
           { titleId: 3 },
         );
-
         const characterLevel = await this.cuRepository.findOne({
           where: { id: userId },
         });
@@ -365,6 +363,7 @@ export class FutureService {
           { userId: userId },
           { characterId: characterLevel.characterId + 1 },
         );
+
       } else if (level >= 16 && level <= 20) {
         await queryRunner.manager.update(
           TitleUser,

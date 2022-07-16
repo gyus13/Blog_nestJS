@@ -135,8 +135,9 @@ export class TicketService {
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -361,11 +362,11 @@ export class TicketService {
           { userId: userId },
           { titleId: 2 },
         );
-
+        console.log('1')
         const characterLevel = await this.cuRepository.findOne({
           where: { id: userId },
         });
-
+      console.log('2')
         await queryRunner.manager.update(
           CharacterUser,
           { userId: userId },

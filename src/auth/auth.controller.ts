@@ -82,7 +82,7 @@ export class AuthController {
     name: 'id-token',
     example: 'id-TOKEN',
   })
-  async iosAppleAuth(@Headers('id-token') idToken,@Body() appleLoginRequest:AppleLoginRequest) {
+  async iosAppleAuth(@Headers('id-token') idToken) {
     return this.authService.iosVerifyApple(idToken);
   }
 

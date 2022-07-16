@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entity/users.entity';
-import { Connection, Repository } from 'typeorm';
+import { Connection, getManager, Repository } from 'typeorm';
 import { decodeJwt, makeResponse } from '../common/function.utils';
 import { response } from '../config/response.utils';
 import { OAuth2Client } from 'google-auth-library';
@@ -15,6 +15,7 @@ import { secret } from '../common/secret';
 import { CharacterUser } from '../entity/character-user.entity';
 import { Character } from '../entity/character.entity';
 import { TitleUser } from 'src/entity/title-user.entity';
+import { Dream } from '../entity/dream.entity';
 const client = new OAuth2Client(secret.ios_google_client_id);
 // const fs = require('fs');
 const jwt = require('jsonwebtoken');
@@ -127,13 +128,21 @@ export class AuthService {
         data = {
           accountId: accountId,
           nickname: null,
+          characterImageUrl: null,
           token: this.jwtService.sign(accountPayload),
         };
       } else {
-        accountPayload = { sub: user.id }
+        const characterImageUrl = await getManager()
+            .createQueryBuilder(Character, 'characters')
+            .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+            .select('characters.characterImageUrl')
+            .where('CU.userId IN (:userId)', { userId: user.id })
+            .getOne();
+        accountPayload = { sub: user.id };
         data = {
           accountId: accountId,
           nickname: user.nickname,
+          characterImageUrl: characterImageUrl.characterImageUrl,
           token: this.jwtService.sign(accountPayload),
         };
       }
@@ -181,13 +190,21 @@ export class AuthService {
         data = {
           accountId: accountId,
           nickname: null,
+          characterImageUrl: null,
           token: this.jwtService.sign(accountPayload),
         };
       } else {
-        accountPayload = { sub: user.id }
+        const characterImageUrl = await getManager()
+            .createQueryBuilder(Character, 'characters')
+            .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+            .select('characters.characterImageUrl')
+            .where('CU.userId IN (:userId)', { userId: user.id })
+            .getOne();
+        accountPayload = { sub: user.id };
         data = {
           accountId: accountId,
           nickname: user.nickname,
+          characterImageUrl: characterImageUrl.characterImageUrl,
           token: this.jwtService.sign(accountPayload),
         };
       }
@@ -218,7 +235,7 @@ export class AuthService {
       let user = await this.userRepository.findOne({
         where: { accountId: accountId },
       });
-      console.log(user)
+
       let accountPayload;
 
       // 유저가 존재하지 않는 경우
@@ -230,13 +247,21 @@ export class AuthService {
         data = {
           accountId: accountId,
           nickname: null,
+          characterImageUrl: null,
           token: this.jwtService.sign(accountPayload),
         };
       } else {
-        accountPayload = { sub: user.id }
+        const characterImageUrl = await getManager()
+          .createQueryBuilder(Character, 'characters')
+          .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+          .select('characters.characterImageUrl')
+          .where('CU.userId IN (:userId)', { userId: user.id })
+          .getOne();
+        accountPayload = { sub: user.id };
         data = {
           accountId: accountId,
           nickname: user.nickname,
+          characterImageUrl: characterImageUrl.characterImageUrl,
           token: this.jwtService.sign(accountPayload),
         };
       }
@@ -267,7 +292,7 @@ export class AuthService {
       let user = await this.userRepository.findOne({
         where: { accountId: accountId },
       });
-      console.log(user)
+      console.log(user);
       let accountPayload;
 
       // 유저가 존재하지 않는 경우
@@ -279,13 +304,21 @@ export class AuthService {
         data = {
           accountId: accountId,
           nickname: null,
+          characterImageUrl: null,
           token: this.jwtService.sign(accountPayload),
         };
       } else {
-        accountPayload = { sub: user.id }
+        const characterImageUrl = await getManager()
+          .createQueryBuilder(Character, 'characters')
+          .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+          .select('characters.characterImageUrl')
+          .where('CU.userId IN (:userId)', { userId: user.id })
+          .getOne();
+        accountPayload = { sub: user.id };
         data = {
           accountId: accountId,
           nickname: user.nickname,
+          characterImageUrl: characterImageUrl.characterImageUrl,
           token: this.jwtService.sign(accountPayload),
         };
       }
@@ -316,7 +349,7 @@ export class AuthService {
       let user = await this.userRepository.findOne({
         where: { accountId: accountId },
       });
-      console.log(user)
+      console.log(user);
       let accountPayload;
 
       // 유저가 존재하지 않는 경우
@@ -328,13 +361,21 @@ export class AuthService {
         data = {
           accountId: accountId,
           nickname: null,
+          characterImageUrl: null,
           token: this.jwtService.sign(accountPayload),
         };
       } else {
-        accountPayload = { sub: user.id }
+        const characterImageUrl = await getManager()
+          .createQueryBuilder(Character, 'characters')
+          .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+          .select('characters.characterImageUrl')
+          .where('CU.userId IN (:userId)', { userId: user.id })
+          .getOne();
+        accountPayload = { sub: user.id };
         data = {
           accountId: accountId,
           nickname: user.nickname,
+          characterImageUrl: characterImageUrl.characterImageUrl,
           token: this.jwtService.sign(accountPayload),
         };
       }

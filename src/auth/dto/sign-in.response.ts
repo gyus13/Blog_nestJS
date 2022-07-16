@@ -20,6 +20,14 @@ class SignInResponseData {
   nickname: string;
 
   @ApiProperty({
+    example: 'imageurl',
+    description: 'characterImageUrl',
+    required: true,
+  })
+  @IsString()
+  characterImageUrl: string;
+
+  @ApiProperty({
     example:
       'yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJzdWIiOiIxMjM0IiwiaWF0IjoxNjU2NTA2Mjc4LCJleHAiOjE2ODgwNjM4Nzh9.-T-FQ-j1KkvGuzXOlKbyyJ5II1lWH6o_h8QAG4YJwJM',
     description: 'jwtToken',

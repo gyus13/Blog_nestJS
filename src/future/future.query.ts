@@ -42,6 +42,7 @@ export class FutureQuery {
             user.id,
             user.nickname,
             user.subject,
+            Characters.id as id,
             Characters.characterImageUrl as characterImageUrl
         from User user
         inner join CharacterUser CU on CU.userId = user.id

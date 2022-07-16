@@ -76,6 +76,7 @@ export class FutureService {
         title: title[0].title,
         level: parseInt(experience[0].level),
         experience: parseInt(experience[0].experience),
+        characterId: character[0].id,
         characterImageUrl: character[0].characterImageUrl,
         nickname: character[0].nickname,
       };

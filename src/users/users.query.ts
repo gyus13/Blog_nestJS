@@ -73,4 +73,19 @@ export class UsersQuery {
             where ticket.userId = ${id}
         `;
   };
+
+  getFutureCharacterQuery = (id): string => {
+    return `
+        select
+            user.id,
+            user.nickname,
+            user.subject,
+            Characters.id as id,
+            Characters.characterImageUrl as characterImageUrl
+        from User user
+        inner join CharacterUser CU on CU.userId = user.id
+            inner join Characters on Characters.id = CU.characterId
+        where CU.userId = ${id}
+        `;
+  };
 }

@@ -255,9 +255,14 @@ export class UsersService {
       const user = await this.usersRepository.findOne({
         where: { id: decodeToken.sub },
       });
-      console.log(user);
+
+      const character = await queryRunner.query(
+        this.userQuery.getFutureCharacterQuery(decodeToken.sub),
+      );
+
       const data = {
         email: user.email,
+        characterImageUrl: character[0].characterImageUrl,
       };
 
       const result = makeResponse(response.SUCCESS, data);

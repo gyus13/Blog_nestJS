@@ -16,7 +16,7 @@ import { CharacterUser } from '../entity/character-user.entity';
 import { Character } from '../entity/character.entity';
 import { TitleUser } from 'src/entity/title-user.entity';
 import { Dream } from '../entity/dream.entity';
-import {AuthQuery} from "./auth.query";
+import { AuthQuery } from './auth.query';
 const client = new OAuth2Client(secret.ios_google_client_id);
 // const fs = require('fs');
 const jwt = require('jsonwebtoken');
@@ -39,7 +39,7 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Character)
     private readonly characterRepository: Repository<Character>,
-    private authQuery: AuthQuery
+    private authQuery: AuthQuery,
   ) {}
   async googleLogin(req) {
     if (!req.user) {
@@ -140,16 +140,29 @@ export class AuthService {
           token: this.jwtService.sign(accountPayload),
         };
       } else {
-        const characterImageUrl = await queryRunner.query(
-          this.authQuery.getFutureCharacterQuery(user.id),
-        );
+        const characterImageUrl = await getManager()
+          .createQueryBuilder(Character, 'characters')
+          .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+          .select('characters.characterImageUrl')
+          .where('CU.userId IN (:userId)', { userId: user.id })
+          .getOne();
+
         accountPayload = { sub: user.id };
-        data = {
-          accountId: accountId,
-          nickname: user.nickname,
-          characterImageUrl: characterImageUrl[0].characterImageUrl,
-          token: this.jwtService.sign(accountPayload),
-        };
+        if (characterImageUrl == undefined) {
+          data = {
+            accountId: accountId,
+            nickname: user.nickname,
+            characterImageUrl: null,
+            token: this.jwtService.sign(accountPayload),
+          };
+        } else {
+          data = {
+            accountId: accountId,
+            nickname: user.nickname,
+            characterImageUrl: characterImageUrl.characterImageUrl,
+            token: this.jwtService.sign(accountPayload),
+          };
+        }
       }
 
       const result = makeResponse(response.SUCCESS, data);
@@ -199,16 +212,29 @@ export class AuthService {
           token: this.jwtService.sign(accountPayload),
         };
       } else {
-        const characterImageUrl = await queryRunner.query(
-            this.authQuery.getFutureCharacterQuery(user.id),
-        );
+        const characterImageUrl = await getManager()
+            .createQueryBuilder(Character, 'characters')
+            .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+            .select('characters.characterImageUrl')
+            .where('CU.userId IN (:userId)', { userId: user.id })
+            .getOne();
+
         accountPayload = { sub: user.id };
-        data = {
-          accountId: accountId,
-          nickname: user.nickname,
-          characterImageUrl: characterImageUrl[0].characterImageUrl,
-          token: this.jwtService.sign(accountPayload),
-        };
+        if (characterImageUrl == undefined) {
+          data = {
+            accountId: accountId,
+            nickname: user.nickname,
+            characterImageUrl: null,
+            token: this.jwtService.sign(accountPayload),
+          };
+        } else {
+          data = {
+            accountId: accountId,
+            nickname: user.nickname,
+            characterImageUrl: characterImageUrl.characterImageUrl,
+            token: this.jwtService.sign(accountPayload),
+          };
+        }
       }
 
       const result = makeResponse(response.SUCCESS, data);
@@ -253,16 +279,29 @@ export class AuthService {
           token: this.jwtService.sign(accountPayload),
         };
       } else {
-        const characterImageUrl = await queryRunner.query(
-            this.authQuery.getFutureCharacterQuery(user.id),
-        );
+        const characterImageUrl = await getManager()
+            .createQueryBuilder(Character, 'characters')
+            .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+            .select('characters.characterImageUrl')
+            .where('CU.userId IN (:userId)', { userId: user.id })
+            .getOne();
+
         accountPayload = { sub: user.id };
-        data = {
-          accountId: accountId,
-          nickname: user.nickname,
-          characterImageUrl: characterImageUrl[0].characterImageUrl,
-          token: this.jwtService.sign(accountPayload),
-        };
+        if (characterImageUrl == undefined) {
+          data = {
+            accountId: accountId,
+            nickname: user.nickname,
+            characterImageUrl: null,
+            token: this.jwtService.sign(accountPayload),
+          };
+        } else {
+          data = {
+            accountId: accountId,
+            nickname: user.nickname,
+            characterImageUrl: characterImageUrl.characterImageUrl,
+            token: this.jwtService.sign(accountPayload),
+          };
+        }
       }
 
       const result = makeResponse(response.SUCCESS, data);
@@ -307,16 +346,29 @@ export class AuthService {
           token: this.jwtService.sign(accountPayload),
         };
       } else {
-        const characterImageUrl = await queryRunner.query(
-            this.authQuery.getFutureCharacterQuery(user.id),
-        );
+        const characterImageUrl = await getManager()
+            .createQueryBuilder(Character, 'characters')
+            .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+            .select('characters.characterImageUrl')
+            .where('CU.userId IN (:userId)', { userId: user.id })
+            .getOne();
+
         accountPayload = { sub: user.id };
-        data = {
-          accountId: accountId,
-          nickname: user.nickname,
-          characterImageUrl: characterImageUrl[0].characterImageUrl,
-          token: this.jwtService.sign(accountPayload),
-        };
+        if (characterImageUrl == undefined) {
+          data = {
+            accountId: accountId,
+            nickname: user.nickname,
+            characterImageUrl: null,
+            token: this.jwtService.sign(accountPayload),
+          };
+        } else {
+          data = {
+            accountId: accountId,
+            nickname: user.nickname,
+            characterImageUrl: characterImageUrl.characterImageUrl,
+            token: this.jwtService.sign(accountPayload),
+          };
+        }
       }
 
       const result = makeResponse(response.SUCCESS, data);
@@ -361,16 +413,29 @@ export class AuthService {
           token: this.jwtService.sign(accountPayload),
         };
       } else {
-        const characterImageUrl = await queryRunner.query(
-            this.authQuery.getFutureCharacterQuery(user.id),
-        );
+        const characterImageUrl = await getManager()
+            .createQueryBuilder(Character, 'characters')
+            .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+            .select('characters.characterImageUrl')
+            .where('CU.userId IN (:userId)', { userId: user.id })
+            .getOne();
+
         accountPayload = { sub: user.id };
-        data = {
-          accountId: accountId,
-          nickname: user.nickname,
-          characterImageUrl: characterImageUrl[0].characterImageUrl,
-          token: this.jwtService.sign(accountPayload),
-        };
+        if (characterImageUrl == undefined) {
+          data = {
+            accountId: accountId,
+            nickname: user.nickname,
+            characterImageUrl: null,
+            token: this.jwtService.sign(accountPayload),
+          };
+        } else {
+          data = {
+            accountId: accountId,
+            nickname: user.nickname,
+            characterImageUrl: characterImageUrl.characterImageUrl,
+            token: this.jwtService.sign(accountPayload),
+          };
+        }
       }
 
       const result = makeResponse(response.SUCCESS, data);

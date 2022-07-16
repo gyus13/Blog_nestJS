@@ -166,6 +166,8 @@ export class TicketService {
         .where('id = :id', { id: ticketId })
         .execute();
 
+      await queryRunner.manager.delete(TouchCount, { ticketId: ticketId });
+
       const data = {
         id: ticket.id,
         subject: patchTicketRequest.subject,

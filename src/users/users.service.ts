@@ -284,7 +284,7 @@ export class UsersService {
 
       const data = {
         id: decodeToken.sub,
-        nickname: postEmailRequest.email,
+        email: postEmailRequest.email,
       };
 
       const result = makeResponse(response.SUCCESS, data);

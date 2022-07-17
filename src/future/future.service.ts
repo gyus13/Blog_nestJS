@@ -113,12 +113,10 @@ export class FutureService {
 
       // Commit
       await queryRunner.commitTransaction();
-      await queryRunner.release();
 
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
     } finally {
       await queryRunner.release();
@@ -195,12 +193,10 @@ export class FutureService {
 
       // Commit
       await queryRunner.commitTransaction();
-      await queryRunner.release();
 
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
     } finally {
       await queryRunner.release();
@@ -244,12 +240,10 @@ export class FutureService {
 
       // Commit
       await queryRunner.commitTransaction();
-      await queryRunner.release();
 
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
     } finally {
       await queryRunner.release();
@@ -273,12 +267,10 @@ export class FutureService {
 
       // Commit
       await queryRunner.commitTransaction();
-      await queryRunner.release();
 
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
     } finally {
       await queryRunner.release();
@@ -318,12 +310,10 @@ export class FutureService {
 
       // Commit
       await queryRunner.commitTransaction();
-      await queryRunner.release();
 
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
     } finally {
       await queryRunner.release();
@@ -398,9 +388,10 @@ export class FutureService {
           { characterId: characterLevel.characterId + 1 },
         );
       }
+      // Commit
+      await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
     } finally {
       await queryRunner.release();

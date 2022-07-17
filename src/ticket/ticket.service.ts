@@ -68,13 +68,13 @@ export class TicketService {
 
       // Commit
       await queryRunner.commitTransaction();
-      await queryRunner.release();
 
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -116,22 +116,19 @@ export class TicketService {
         await queryRunner.manager.save(experience);
       }
 
-      // const experience = await queryRunner.query(
-      //   this.ticketQuery.getFutureExperienceQuery(decodeToken.sub),
-      // );
-      //
-      // await this.countLevel(experience[0].level, decodeToken.sub);
+      const countExperience = await queryRunner.query(
+        this.ticketQuery.getFutureExperienceQuery(decodeToken.sub),
+      );
+
+      await this.countLevel(countExperience[0].level, decodeToken.sub);
 
       const data = {
         touchCountId: createTouchTicketData.id,
         ticketId: createTouchTicketData.ticketId,
       };
       const result = makeResponse(response.SUCCESS, data);
-
       // Commit
       await queryRunner.commitTransaction();
-      await queryRunner.release();
-
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -182,12 +179,12 @@ export class TicketService {
 
       // Commit
       await queryRunner.commitTransaction();
-      await queryRunner.release();
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -217,12 +214,12 @@ export class TicketService {
 
       // Commit
       await queryRunner.commitTransaction();
-      await queryRunner.release();
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -254,12 +251,12 @@ export class TicketService {
 
       // Commit
       await queryRunner.commitTransaction();
-      await queryRunner.release();
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -364,11 +361,11 @@ export class TicketService {
           { userId: userId },
           { titleId: 2 },
         );
-        console.log('1')
+        console.log('1');
         const characterLevel = await this.cuRepository.findOne({
           where: { id: userId },
         });
-      console.log('2')
+        console.log('2');
         await queryRunner.manager.update(
           CharacterUser,
           { userId: userId },
@@ -423,9 +420,9 @@ export class TicketService {
           { characterId: characterLevel.characterId + 1 },
         );
       }
+      await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
     } finally {
       await queryRunner.release();

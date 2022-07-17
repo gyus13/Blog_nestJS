@@ -6,6 +6,8 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { TicketModule } from './ticket/ticket.module';
 import { FutureModule } from './future/future.module';
+import {ScheduleModule} from "@nestjs/schedule";
+import { TasksService } from './tasks/tasks.service';
 
 @Module({
   imports: [
@@ -23,9 +25,9 @@ import { FutureModule } from './future/future.module';
     AuthModule,
     TicketModule,
     FutureModule,
-
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, TasksService],
 })
 export class AppModule {}

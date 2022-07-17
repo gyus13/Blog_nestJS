@@ -96,14 +96,14 @@ export class AuthService {
       const result = makeResponse(response.SUCCESS, data);
 
       await queryRunner.commitTransaction();
-      await queryRunner.release();
 
       return result;
     } catch (error) {
       // Rollback
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -168,14 +168,14 @@ export class AuthService {
       const result = makeResponse(response.SUCCESS, data);
 
       await queryRunner.commitTransaction();
-      await queryRunner.release();
+
       return result;
     } catch (error) {
       // Rollback
-      console.log(error);
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -213,11 +213,11 @@ export class AuthService {
         };
       } else {
         const characterImageUrl = await getManager()
-            .createQueryBuilder(Character, 'characters')
-            .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
-            .select('characters.characterImageUrl')
-            .where('CU.userId IN (:userId)', { userId: user.id })
-            .getOne();
+          .createQueryBuilder(Character, 'characters')
+          .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+          .select('characters.characterImageUrl')
+          .where('CU.userId IN (:userId)', { userId: user.id })
+          .getOne();
 
         accountPayload = { sub: user.id };
         if (characterImageUrl == undefined) {
@@ -240,13 +240,14 @@ export class AuthService {
       const result = makeResponse(response.SUCCESS, data);
 
       await queryRunner.commitTransaction();
-      await queryRunner.release();
+
       return result;
     } catch (error) {
       // Rollback
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -280,11 +281,11 @@ export class AuthService {
         };
       } else {
         const characterImageUrl = await getManager()
-            .createQueryBuilder(Character, 'characters')
-            .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
-            .select('characters.characterImageUrl')
-            .where('CU.userId IN (:userId)', { userId: user.id })
-            .getOne();
+          .createQueryBuilder(Character, 'characters')
+          .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+          .select('characters.characterImageUrl')
+          .where('CU.userId IN (:userId)', { userId: user.id })
+          .getOne();
 
         accountPayload = { sub: user.id };
         if (characterImageUrl == undefined) {
@@ -306,14 +307,14 @@ export class AuthService {
 
       const result = makeResponse(response.SUCCESS, data);
       await queryRunner.commitTransaction();
-      await queryRunner.release();
+
       return result;
     } catch (error) {
       // Rollback
-      console.log(error);
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -347,11 +348,11 @@ export class AuthService {
         };
       } else {
         const characterImageUrl = await getManager()
-            .createQueryBuilder(Character, 'characters')
-            .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
-            .select('characters.characterImageUrl')
-            .where('CU.userId IN (:userId)', { userId: user.id })
-            .getOne();
+          .createQueryBuilder(Character, 'characters')
+          .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+          .select('characters.characterImageUrl')
+          .where('CU.userId IN (:userId)', { userId: user.id })
+          .getOne();
 
         accountPayload = { sub: user.id };
         if (characterImageUrl == undefined) {
@@ -373,14 +374,14 @@ export class AuthService {
 
       const result = makeResponse(response.SUCCESS, data);
       await queryRunner.commitTransaction();
-      await queryRunner.release();
+
       return result;
     } catch (error) {
       // Rollback
-      console.log(error);
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -414,11 +415,11 @@ export class AuthService {
         };
       } else {
         const characterImageUrl = await getManager()
-            .createQueryBuilder(Character, 'characters')
-            .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
-            .select('characters.characterImageUrl')
-            .where('CU.userId IN (:userId)', { userId: user.id })
-            .getOne();
+          .createQueryBuilder(Character, 'characters')
+          .innerJoin(CharacterUser, 'CU', 'characters.id = CU.characterId')
+          .select('characters.characterImageUrl')
+          .where('CU.userId IN (:userId)', { userId: user.id })
+          .getOne();
 
         accountPayload = { sub: user.id };
         if (characterImageUrl == undefined) {
@@ -440,14 +441,14 @@ export class AuthService {
 
       const result = makeResponse(response.SUCCESS, data);
       await queryRunner.commitTransaction();
-      await queryRunner.release();
+
       return result;
     } catch (error) {
       // Rollback
-      console.log(error);
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -472,14 +473,14 @@ export class AuthService {
       const result = makeResponse(response.SUCCESS, data);
 
       await queryRunner.commitTransaction();
-      await queryRunner.release();
 
       return result;
     } catch (error) {
       // Rollback
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -500,12 +501,11 @@ export class AuthService {
 
       // Commit
       await queryRunner.commitTransaction();
-      await queryRunner.release();
 
       return result;
     } catch (error) {
+      // Rollback
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
     } finally {
       await queryRunner.release();

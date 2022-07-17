@@ -67,13 +67,13 @@ export class UsersService {
       const result = makeResponse(response.SUCCESS, data);
 
       await queryRunner.commitTransaction();
-      await queryRunner.release();
       return result;
     } catch (error) {
       // Rollback
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -295,14 +295,14 @@ export class UsersService {
       const result = makeResponse(response.SUCCESS, data);
 
       await queryRunner.commitTransaction();
-      await queryRunner.release();
 
       return result;
     } catch (error) {
       // Rollback
       await queryRunner.rollbackTransaction();
-      await queryRunner.release();
       return response.ERROR;
+    } finally {
+      await queryRunner.release();
     }
   }
 }

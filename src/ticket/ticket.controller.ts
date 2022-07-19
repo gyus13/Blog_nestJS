@@ -242,15 +242,14 @@ export class TicketController {
     example: 'JWT TOKEN',
   })
   @Get('/:userId')
-  async getRecommendTicket(@Request() req, @Param('userId') id: string) {
+  async getRecommendTicket(@Request() req, @Param('userId') id: number) {
     return await this.ticketService.getRecommendTicket(req, id);
   }
 
-  // 스케쥴러
   @ApiResponse({
     status: 1000,
     description: '성공',
-    type: GetOtherTicketResponse,
+    type: GetTicketResponse,
   })
   @ApiResponse({
     status: 4000,
@@ -263,22 +262,9 @@ export class TicketController {
     name: 'x-access-token',
     example: 'JWT TOKEN',
   })
-  @Get('/other')
-  async getOthersTicket(@Request() req) {
-    return "ss"
-    // return await this.ticketService.getTicket(req, accessToken);
+  @Get('other/:userId')
+  async getOtherTicket(@Request() req, @Param('userId') id: number) {
+    const userId = 1;
+    return await this.ticketService.getOtherTicket(req, userId);
   }
-
-  //
-  //   @ApiOperation({ summary: '주간목표 조회' })
-  //   @UseGuards(JwtAuthGuard)
-  //   @ApiHeader({
-  //     description: 'jwt token',
-  //     name: 'x-access-token',
-  //     example: 'JWT TOKEN',
-  //   })
-  //   @Get('/goal')
-  //   async getGoal() {
-  //     return 'get Goal';
-  //   }
 }

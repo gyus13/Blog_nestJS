@@ -338,7 +338,7 @@ export class TicketService {
           'ticket.touchCount as touchCount',
           'ticket.isSuccess as isSuccess',
         ])
-        .limit(1)
+        .limit(3)
         .getRawMany();
       console.log(ticket);
 

@@ -310,6 +310,7 @@ export class TicketService {
         ])
         .limit(1)
         .getRawMany();
+      console.log(ticket);
 
       const data = {
         ticket: ticket,
@@ -323,20 +324,23 @@ export class TicketService {
     }
   }
 
-  async getOtherTicket(req) {
+  async getOtherTicket(req, id) {
     try {
       const ticket = await getManager()
         .createQueryBuilder(Ticket, 'ticket')
+        .where('ticket.userId In (:userId)', { userId: id })
         .select([
           'ticket.id as id',
           'ticket.category as category',
           'ticket.subject as subject',
           'ticket.purpose as purpose',
           'ticket.color as color',
+          'ticket.touchCount as touchCount',
+          'ticket.isSuccess as isSuccess',
         ])
-        .andWhere('ticket.isSuccess IN (:isSuccess)', { isSuccess: 'Success' })
-        .limit(3)
+        .limit(1)
         .getRawMany();
+      console.log(ticket);
 
       const data = {
         ticket: ticket,

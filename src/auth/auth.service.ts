@@ -244,6 +244,7 @@ export class AuthService {
       return result;
     } catch (error) {
       // Rollback
+      console.log(error)
       await queryRunner.rollbackTransaction();
       return response.ERROR;
     } finally {

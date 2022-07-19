@@ -264,8 +264,9 @@ export class TicketController {
     example: 'JWT TOKEN',
   })
   @Get('/other')
-  async getOtherTicket(@Request() req) {
-    return await this.ticketService.getOtherTicket(req);
+  async getOthersTicket(@Request() req) {
+    return "ss"
+    // return await this.ticketService.getTicket(req, accessToken);
   }
 
   //

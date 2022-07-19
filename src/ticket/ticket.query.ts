@@ -13,4 +13,18 @@ export class TicketQuery {
 
         `;
   };
+
+  getTicketQuery = (id): string => {
+    return `
+        select
+            ticket.id,
+            ticket.subject,
+            ticket.purpose,
+            ticket.color,
+            ticket.category,
+            ticket.touchCount
+        from Ticket ticket
+        where userId = ${id}
+        `;
+  };
 }

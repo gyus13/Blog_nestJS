@@ -19,7 +19,7 @@ export abstract class CommonEntity {
   // DB SQL QUERY : set time zone 'Asia/Seoul'; set time zone 'UTC'; show timezone;
   @ApiProperty()
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  createdAt: string;
 
   @ApiProperty()
   @UpdateDateColumn({ type: 'timestamp' })

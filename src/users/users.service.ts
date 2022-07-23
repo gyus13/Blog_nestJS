@@ -11,7 +11,7 @@ import { User } from '../entity/users.entity';
 import { Connection, getConnection, getManager, Repository } from 'typeorm';
 import { Inquiry } from '../entity/inquirement.entity';
 import { secret } from '../common/secret';
-import { decodeJwt, makeResponse } from '../common/function.utils';
+import {dateToString, decodeJwt, makeResponse} from '../common/function.utils';
 import { response } from '../config/response.utils';
 import { Ticket } from '../entity/ticket.entity';
 import { TouchCount } from '../entity/touch-count.entity';
@@ -231,6 +231,9 @@ export class UsersService {
       const mission = await queryRunner.query(
         this.userQuery.getWeekMissionQuery(decodeToken.sub),
       );
+      console.log(mission)
+      console.log(mission[0].timeDiff);
+      console.log(dateToString(mission[0].timeDiff))
 
       const data = {
         mission: mission,
@@ -241,6 +244,7 @@ export class UsersService {
       return result;
     } catch (error) {
       return response.ERROR;
+      console.log(error)
     } finally {
       await queryRunner.release();
     }

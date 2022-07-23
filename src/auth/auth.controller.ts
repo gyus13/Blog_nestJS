@@ -210,4 +210,9 @@ export class AuthController {
   deleteDream(@Headers('x-access-token') accessToken) {
     return this.authService.deleteUser(accessToken);
   }
+
+  @Get('/test')
+  test() {
+    // return getDateTime();
+  }
 }

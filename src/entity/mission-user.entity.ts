@@ -19,4 +19,12 @@ export class MissionUser extends CommonEntity {
   @ApiProperty()
   @Column()
   missionEndDate: string;
+
+  @ApiProperty()
+  @Column()
+  missionStartDate: string;
+
+  @ApiProperty()
+  @Column()
+  remainingDate: string;
 }

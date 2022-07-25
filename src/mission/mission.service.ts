@@ -4,7 +4,9 @@ import { Connection, getConnection, getManager } from 'typeorm';
 import {
   dateToString,
   decodeJwt,
-  defaultCurrentDateTime, getAfterSevenDayTime, getcurrentDateTime,
+  defaultCurrentDateTime,
+  getAfterSevenDayTime,
+  getcurrentDateTime,
   makeResponse,
 } from '../common/function.utils';
 import { response } from '../config/response.utils';
@@ -55,9 +57,9 @@ export class MissionService {
         .createQueryBuilder(User, 'user')
         .select('user.id')
         .getMany();
-      console.log(users.length)
+      console.log(users.length);
       for (let i = 0; i < users.length; i++) {
-        console.log(users[i].id)
+        console.log(users[i].id);
         const mission = new MissionUser();
         mission.missionId = 1;
         mission.userId = users[i].id;
@@ -66,15 +68,46 @@ export class MissionService {
         await queryRunner.manager.save(mission);
       }
 
-      // const data = {
-      //   mission: mission,
-      // };
-      //
-      // const result = makeResponse(response.SUCCESS, data);
-      //
-      // return result;
+      const data = {
+        mission: 'mission이  업데이트 되었습니다.',
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
       await queryRunner.commitTransaction();
-      // return result;
+      return result;
+    } catch (error) {
+      console.log(error);
+      // Rollback
+      await queryRunner.rollbackTransaction();
+      return response.ERROR;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async createMissionByUserId(accessToken, postMissionRequest) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const decodeToken = await decodeJwt(accessToken);
+
+      const mission = new MissionUser();
+      mission.missionId = 1;
+      mission.userId = decodeToken.sub;
+      mission.missionStartDate = getcurrentDateTime();
+      mission.missionEndDate = getAfterSevenDayTime();
+      const createdMission = await queryRunner.manager.save(mission);
+
+      const data = {
+        mission: createdMission,
+      };
+
+      const result = makeResponse(response.SUCCESS, data);
+
+      await queryRunner.commitTransaction();
+      return result;
     } catch (error) {
       console.log(error);
       // Rollback

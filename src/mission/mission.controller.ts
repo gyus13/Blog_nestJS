@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Headers,
+  Param,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -58,6 +59,30 @@ export class MissionController {
     @Body() postMissionRequest: PostMissionRequest,
   ) {
     return await this.missionService.createMission(
+      accessToken,
+      postMissionRequest,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    description: 'jwt token',
+    name: 'x-access-token',
+    example: 'JWT TOKEN',
+  })
+  @ApiResponse({
+    status: 1000,
+    description: '성공',
+    type: GetMissionResponse,
+  })
+  @ApiOperation({ summary: '수동미션 업데이트' })
+  @ApiBody({ description: '수동미션 업데이트 dto', type: PostMissionRequest })
+  @Post('/manual')
+  async postMissionByUserId(
+    @Headers('x-access-token') accessToken,
+    @Body() postMissionRequest: PostMissionRequest,
+  ) {
+    return await this.missionService.createMissionByUserId(
       accessToken,
       postMissionRequest,
     );

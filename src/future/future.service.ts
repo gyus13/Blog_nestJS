@@ -298,7 +298,7 @@ export class FutureService {
       const countExperience = await queryRunner.query(
         this.futureQuery.getFutureExperienceQuery(decodeToken.sub),
       );
-      console.log(countExperience)
+      console.log(countExperience);
 
       await this.countLevel(countExperience[0].level, decodeToken.sub);
 
@@ -325,37 +325,63 @@ export class FutureService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      if (level >= 6 && level <= 10) {
+      if (level == 6) {
         await queryRunner.manager.update(
           TitleUser,
           { userId: userId },
           { titleId: 2 },
         );
         const characterLevel = await this.cuRepository.findOne({
-          where: { id: userId },
+          where: { userId: userId },
         });
-        await queryRunner.manager.update(
-          CharacterUser,
-          { userId: userId },
-          { characterId: characterLevel.characterId + 1 },
-        );
-      } else if (level >= 11 && level <= 15) {
+        if (characterLevel.characterId == 1) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 2 },
+          );
+        } else if (characterLevel.characterId == 6) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 7 },
+          );
+        } else if (characterLevel.characterId == 11) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 12 },
+          );
+        }
+      } else if (level == 11) {
         await queryRunner.manager.update(
           TitleUser,
           { userId: userId },
           { titleId: 3 },
         );
         const characterLevel = await this.cuRepository.findOne({
-          where: { id: userId },
+          where: { userId: userId },
         });
-
-        await queryRunner.manager.update(
-          CharacterUser,
-          { userId: userId },
-          { characterId: characterLevel.characterId + 1 },
-        );
-
-      } else if (level >= 16 && level <= 20) {
+        if (characterLevel.characterId == 2) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 3 },
+          );
+        } else if (characterLevel.characterId == 7) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 8 },
+          );
+        } else if (characterLevel.characterId == 12) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 13 },
+          );
+        }
+      } else if (level == 16) {
         await queryRunner.manager.update(
           TitleUser,
           { userId: userId },
@@ -363,15 +389,29 @@ export class FutureService {
         );
 
         const characterLevel = await this.cuRepository.findOne({
-          where: { id: userId },
+          where: { userId: userId },
         });
 
-        await queryRunner.manager.update(
-          CharacterUser,
-          { userId: userId },
-          { characterId: characterLevel.characterId + 1 },
-        );
-      } else if (level >= 21 && level <= 25) {
+        if (characterLevel.characterId == 3) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 4 },
+          );
+        } else if (characterLevel.characterId == 8) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 9 },
+          );
+        } else if (characterLevel.characterId == 13) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 14 },
+          );
+        }
+      } else if (level == 21) {
         await queryRunner.manager.update(
           TitleUser,
           { userId: userId },
@@ -379,14 +419,28 @@ export class FutureService {
         );
 
         const characterLevel = await this.cuRepository.findOne({
-          where: { id: userId },
+          where: { userId: userId },
         });
 
-        await queryRunner.manager.update(
-          CharacterUser,
-          { userId: userId },
-          { characterId: characterLevel.characterId + 1 },
-        );
+        if (characterLevel.characterId == 4) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 5 },
+          );
+        } else if (characterLevel.characterId == 9) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 10 },
+          );
+        } else if (characterLevel.characterId == 14) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 15 },
+          );
+        }
       }
       // Commit
       await queryRunner.commitTransaction();

@@ -31,7 +31,7 @@ export class TasksService {
         const mission = new MissionUser();
         mission.missionId = 1;
         mission.userId = users[i].id;
-        mission.createdAt = getcurrentDateTime();
+        mission.missionStartDate = getcurrentDateTime();
         mission.missionEndDate = getAfterSevenDayTime();
         await queryRunner.manager.save(mission);
       }

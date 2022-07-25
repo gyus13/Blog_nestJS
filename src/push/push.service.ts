@@ -32,6 +32,10 @@ export class PushService {
         title: '테스트 데이터 발송',
         body: '데이터가 잘 가나요?',
       },
+      notification: {
+        title: 'notification title text',
+        body: 'notification body text',
+      },
       token: target_token,
     };
 

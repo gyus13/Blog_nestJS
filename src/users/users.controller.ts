@@ -139,23 +139,6 @@ export class UsersController {
   @ApiResponse({
     status: 1000,
     description: '성공',
-    type: GetMissionResponse,
-  })
-  @ApiOperation({ summary: '주간미션' })
-  @Get('mission')
-  async getMission(@Headers('x-access-token') accessToken) {
-    return await this.userService.retrieveMission(accessToken);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @ApiHeader({
-    description: 'jwt token',
-    name: 'x-access-token',
-    example: 'JWT TOKEN',
-  })
-  @ApiResponse({
-    status: 1000,
-    description: '성공',
     type: GetEmailResponse,
   })
   @ApiOperation({ summary: '이메일 추출' })

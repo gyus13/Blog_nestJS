@@ -6,6 +6,8 @@ import { Mission } from '../entity/mission.entity';
 import { MissionUser } from '../entity/mission-user.entity';
 import { Connection, getManager } from 'typeorm';
 import {
+  defaultAfterSevenDateTimes,
+  defaultCurrentDateTimes,
   getAfterSevenDayTime,
   getcurrentDateTime,
 } from '../common/function.utils';
@@ -28,12 +30,23 @@ export class TasksService {
 
       // Ticket 인스턴스 생성 후 정보 담기
       for (let i = 0; i < users.length; i++) {
-        const mission = new MissionUser();
-        mission.missionId = 1;
-        mission.userId = users[i].id;
-        mission.missionStartDate = getcurrentDateTime();
-        mission.missionEndDate = getAfterSevenDayTime();
-        await queryRunner.manager.save(mission);
+        await queryRunner.manager.update(
+          MissionUser,
+          { userId: users[i].id },
+          { missionId: 1 },
+        );
+
+        await queryRunner.manager.update(
+          MissionUser,
+          { userId: users[i].id },
+          { missionStartDate: defaultCurrentDateTimes() },
+        );
+
+        await queryRunner.manager.update(
+          MissionUser,
+          { userId: users[i].id },
+          { missionEndDate: defaultAfterSevenDateTimes() },
+        );
       }
     } catch (error) {
       await queryRunner.rollbackTransaction();

@@ -4,14 +4,13 @@ import { Injectable } from '@nestjs/common';
 export class MissionQuery {
   getWeekMissionQuery = (id): string => {
     return `
-        select mission.id,
+        select mu.id,
                mission.mission,
-               mu.isSuccess,
-               TIMEDIFF(mu.missionEndDate,NOW()) as timeDiff
+               TIMESTAMPDIFF(second,NOW(),mu.missionEndDate) as time
         from Mission mission
                  inner join MissionUser mu on mission.id = mu.missionId
                  inner join User user on user.id = mu.userId
-        where mu.isSuccess = 0 and mu.userId = ${id}
+        where  mu.userId = ${id}
         order by mu.createdAt DESC
             limit 1
         `;

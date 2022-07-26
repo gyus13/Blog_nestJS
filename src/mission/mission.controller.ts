@@ -51,33 +51,9 @@ export class MissionController {
     description: '성공',
     type: GetMissionResponse,
   })
-  @ApiOperation({ summary: '수동미션 업데이트' })
+  @ApiOperation({ summary: '개인 수동미션 업데이트' })
   @ApiBody({ description: '수동미션 업데이트 dto', type: PostMissionRequest })
   @Post()
-  async postMission(
-    @Headers('x-access-token') accessToken,
-    @Body() postMissionRequest: PostMissionRequest,
-  ) {
-    return await this.missionService.createMission(
-      accessToken,
-      postMissionRequest,
-    );
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @ApiHeader({
-    description: 'jwt token',
-    name: 'x-access-token',
-    example: 'JWT TOKEN',
-  })
-  @ApiResponse({
-    status: 1000,
-    description: '성공',
-    type: GetMissionResponse,
-  })
-  @ApiOperation({ summary: '수동미션 업데이트' })
-  @ApiBody({ description: '수동미션 업데이트 dto', type: PostMissionRequest })
-  @Post('/manual')
   async postMissionByUserId(
     @Headers('x-access-token') accessToken,
     @Body() postMissionRequest: PostMissionRequest,
@@ -87,6 +63,26 @@ export class MissionController {
       postMissionRequest,
     );
   }
+
+  // @UseGuards(JwtAuthGuard)
+  // @ApiHeader({
+  //   description: 'jwt token',
+  //   name: 'x-access-token',
+  //   example: 'JWT TOKEN',
+  // })
+  // @ApiResponse({
+  //   status: 1000,
+  //   description: '성공',
+  //   type: GetMissionResponse,
+  // })
+  // @ApiOperation({ summary: '미션확인' })
+  // @Post('/:missionId')
+  // async postMissionByMissionId(
+  //   @Headers('x-access-token') accessToken,
+  //   @Param('missionId') id: number,
+  // ) {
+  //   return await this.missionService.compeleteMission(accessToken);
+  // }
 
   @ApiOperation({ summary: '푸시' })
   @Post('push')

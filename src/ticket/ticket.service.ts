@@ -12,6 +12,8 @@ import { TicketQuery } from './ticket.query';
 import { FutureService } from '../future/future.service';
 import { TitleUser } from '../entity/title-user.entity';
 import { CharacterUser } from '../entity/character-user.entity';
+import { MissionUser } from 'src/entity/mission-user.entity';
+import { MissionService } from '../mission/mission.service';
 
 @Injectable()
 export class TicketService {
@@ -24,6 +26,9 @@ export class TicketService {
     private ticketQuery: TicketQuery,
     @InjectRepository(CharacterUser)
     private cuRepository: Repository<CharacterUser>,
+    @InjectRepository(MissionUser)
+    private muRepository: Repository<MissionUser>,
+    private readonly missionService: MissionService,
   ) {}
 
   async createTicket(addTicket: AddTicketRequest, accessToken) {
@@ -119,6 +124,18 @@ export class TicketService {
       const countExperience = await queryRunner.query(
         this.ticketQuery.getFutureExperienceQuery(decodeToken.sub),
       );
+
+      const mission = await this.muRepository.findOne({
+        where: { userId: decodeToken.sub },
+      });
+
+      console.log(mission);
+
+      if (mission.isSuccess == 'false') {
+        if (counting + 1 == 5) {
+          await this.missionService.compeleteMission(accessToken);
+        }
+      }
 
       await this.countLevel(countExperience[0].level, decodeToken.sub);
 

@@ -292,7 +292,7 @@ export class FutureService {
 
       const experience = new Experience();
       experience.userId = decodeToken.sub;
-      experience.value = 15;
+      experience.value = 10;
       await queryRunner.manager.save(experience);
 
       const countExperience = await queryRunner.query(

@@ -122,8 +122,13 @@ export function getAfterSevenDayTime(): string {
 
 // Date to string 함수
 export function dateToString(format) {
-  // let date = format.getDate();
-  // if (date < 10) date = '0' + date;
+  const year = format.getFullYear();
+
+  let month = format.getMonth() + 1;
+  if (month < 10) month = '0' + month;
+
+  let date = format.getDate();
+  if (date < 10) date = '0' + date;
 
   let hour = format.getHours();
   if (hour < 10) hour = '0' + hour;
@@ -131,7 +136,10 @@ export function dateToString(format) {
   let min = format.getMinutes();
   if (min < 10) min = '0' + min;
 
-  return ' ' + hour + ':' + min;
+  let sec = format.getSeconds();
+  if (sec < 10) sec = '0' + sec;
+
+  return year + '-' + month + '-' + date;
 }
 
 // Date to string 함수
@@ -157,13 +165,37 @@ export function defaultCurrentDateTime() {
 export function defaultCurrentDateTimes() {
   const object = generateDateFormatComponent();
 
-  return object.day + ' ' + object.hour + ':' + object.min;
+  return (
+    object.year +
+    '-' +
+    object.month +
+    '-' +
+    object.day +
+    ' ' +
+    object.hour +
+    ':' +
+    object.min +
+    ':' +
+    object.sec
+  );
 }
 
 export function defaultAfterSevenDateTimes() {
   const object = generateSevenDateFormatComponent();
 
-  return object.day + ' ' + object.hour + ':' + object.min;
+  return (
+    object.year +
+    '-' +
+    object.month +
+    '-' +
+    object.day +
+    ' ' +
+    object.hour +
+    ':' +
+    object.min +
+    ':' +
+    object.sec
+  );
 }
 
 export function generateDateFormatComponent() {
@@ -258,4 +290,16 @@ export function generateSevenDateFormatComponent() {
     sec: sec,
     milSec: milSec,
   };
+}
+
+export function getRemainingTime(getTime) {
+  const time = getTime;
+  const Day = 24 * 60 * 60;
+  const Hour = 60 * 60;
+  const Min = 60;
+  const days = Math.floor(time / Day);
+  const hours = Math.floor((time % Day) / Hour);
+  const mins = Math.floor(((time % Day) % Hour) / Min);
+
+  return days + "일" + hours + "시" + mins + "분";
 }

@@ -3,15 +3,7 @@ import { IsString } from 'class-validator';
 
 export class PostMissionRequest {
   @ApiProperty({
-    example: '2022-07-19 07:09:20',
-    description: '날짜',
-    required: true,
-  })
-  @IsString()
-  missionStartDate: string;
-
-  @ApiProperty({
-    example: '2022-07-24 07:09:20',
+    example: '2022-07-24 07:06:00',
     description: '날짜',
     required: true,
   })

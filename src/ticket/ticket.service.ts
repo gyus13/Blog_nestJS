@@ -12,6 +12,8 @@ import { TicketQuery } from './ticket.query';
 import { FutureService } from '../future/future.service';
 import { TitleUser } from '../entity/title-user.entity';
 import { CharacterUser } from '../entity/character-user.entity';
+import { MissionUser } from 'src/entity/mission-user.entity';
+import { MissionService } from '../mission/mission.service';
 
 @Injectable()
 export class TicketService {
@@ -24,6 +26,9 @@ export class TicketService {
     private ticketQuery: TicketQuery,
     @InjectRepository(CharacterUser)
     private cuRepository: Repository<CharacterUser>,
+    @InjectRepository(MissionUser)
+    private muRepository: Repository<MissionUser>,
+    private readonly missionService: MissionService,
   ) {}
 
   async createTicket(addTicket: AddTicketRequest, accessToken) {
@@ -119,6 +124,18 @@ export class TicketService {
       const countExperience = await queryRunner.query(
         this.ticketQuery.getFutureExperienceQuery(decodeToken.sub),
       );
+
+      const mission = await this.muRepository.findOne({
+        where: { userId: decodeToken.sub },
+      });
+
+      console.log(mission);
+
+      if (mission.isSuccess == 'false') {
+        if (counting + 1 == 5) {
+          await this.missionService.compeleteMission(accessToken);
+        }
+      }
 
       await this.countLevel(countExperience[0].level, decodeToken.sub);
 
@@ -338,7 +355,7 @@ export class TicketService {
           'ticket.touchCount as touchCount',
           'ticket.isSuccess as isSuccess',
         ])
-        .limit(1)
+        .limit(3)
         .getRawMany();
       console.log(ticket);
 
@@ -359,39 +376,63 @@ export class TicketService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      if (level >= 6 && level <= 10) {
+      if (level == 6) {
         await queryRunner.manager.update(
           TitleUser,
           { userId: userId },
           { titleId: 2 },
         );
-        console.log('1');
         const characterLevel = await this.cuRepository.findOne({
-          where: { id: userId },
+          where: { userId: userId },
         });
-        console.log('2');
-        await queryRunner.manager.update(
-          CharacterUser,
-          { userId: userId },
-          { characterId: characterLevel.characterId + 1 },
-        );
-      } else if (level >= 11 && level <= 15) {
+        if (characterLevel.characterId == 1) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 2 },
+          );
+        } else if (characterLevel.characterId == 6) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 7 },
+          );
+        } else if (characterLevel.characterId == 11) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 12 },
+          );
+        }
+      } else if (level == 11) {
         await queryRunner.manager.update(
           TitleUser,
           { userId: userId },
           { titleId: 3 },
         );
-
         const characterLevel = await this.cuRepository.findOne({
-          where: { id: userId },
+          where: { userId: userId },
         });
-
-        await queryRunner.manager.update(
-          CharacterUser,
-          { userId: userId },
-          { characterId: characterLevel.characterId + 1 },
-        );
-      } else if (level >= 16 && level <= 20) {
+        if (characterLevel.characterId == 2) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 3 },
+          );
+        } else if (characterLevel.characterId == 7) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 8 },
+          );
+        } else if (characterLevel.characterId == 12) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 13 },
+          );
+        }
+      } else if (level == 16) {
         await queryRunner.manager.update(
           TitleUser,
           { userId: userId },
@@ -399,15 +440,29 @@ export class TicketService {
         );
 
         const characterLevel = await this.cuRepository.findOne({
-          where: { id: userId },
+          where: { userId: userId },
         });
 
-        await queryRunner.manager.update(
-          CharacterUser,
-          { userId: userId },
-          { characterId: characterLevel.characterId + 1 },
-        );
-      } else if (level >= 21 && level <= 25) {
+        if (characterLevel.characterId == 3) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 4 },
+          );
+        } else if (characterLevel.characterId == 8) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 9 },
+          );
+        } else if (characterLevel.characterId == 13) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 14 },
+          );
+        }
+      } else if (level == 21) {
         await queryRunner.manager.update(
           TitleUser,
           { userId: userId },
@@ -415,15 +470,30 @@ export class TicketService {
         );
 
         const characterLevel = await this.cuRepository.findOne({
-          where: { id: userId },
+          where: { userId: userId },
         });
 
-        await queryRunner.manager.update(
-          CharacterUser,
-          { userId: userId },
-          { characterId: characterLevel.characterId + 1 },
-        );
+        if (characterLevel.characterId == 4) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 5 },
+          );
+        } else if (characterLevel.characterId == 9) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 10 },
+          );
+        } else if (characterLevel.characterId == 14) {
+          await queryRunner.manager.update(
+            CharacterUser,
+            { userId: userId },
+            { characterId: 15 },
+          );
+        }
       }
+      // Commit
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();

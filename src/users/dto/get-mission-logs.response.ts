@@ -24,7 +24,7 @@ class GetMissionLogsResponseData {
     required: true,
   })
   @IsString()
-  updatedAt: string;
+  completeDate: string;
 }
 
 export abstract class GetMissionLogsResponse extends BaseResponse {

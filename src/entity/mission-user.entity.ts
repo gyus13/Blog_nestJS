@@ -14,9 +14,21 @@ export class MissionUser extends CommonEntity {
 
   @ApiProperty()
   @Column()
-  isSuccess: boolean;
+  isSuccess: string;
 
   @ApiProperty()
   @Column()
   missionEndDate: string;
+
+  @ApiProperty()
+  @Column()
+  missionStartDate: string;
+
+  @ApiProperty()
+  @Column()
+  remainingDate: string;
+
+  @ApiProperty()
+  @Column()
+  successCount: number;
 }

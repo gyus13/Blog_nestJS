@@ -6,8 +6,11 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { TicketModule } from './ticket/ticket.module';
 import { FutureModule } from './future/future.module';
-import {ScheduleModule} from "@nestjs/schedule";
+import { ScheduleModule } from '@nestjs/schedule';
 import { TasksService } from './tasks/tasks.service';
+import { PushService } from './push/push.service';
+import { PushModule } from './push/push.module';
+import { MissionModule } from './mission/mission.module';
 
 @Module({
   imports: [
@@ -26,8 +29,10 @@ import { TasksService } from './tasks/tasks.service';
     TicketModule,
     FutureModule,
     ScheduleModule.forRoot(),
+    PushModule,
+    MissionModule,
   ],
   controllers: [AppController],
-  providers: [AppService, TasksService],
+  providers: [AppService, TasksService, PushService],
 })
 export class AppModule {}

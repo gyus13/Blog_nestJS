@@ -32,6 +32,7 @@ import { PatchCharacterRequest } from './dto/patch-character.request';
 import { PatchCharacterResponse } from './dto/patch-character.response';
 import { DeleteUserResponse } from '../users/dto/delete-user.response';
 import { DeleteUserRequest } from '../users/dto/delete-user-request';
+import {defaultAfterSevenDateTimes, defaultCurrentDateTimes} from "../common/function.utils";
 
 @Controller('auth')
 @ApiTags('auth')
@@ -209,5 +210,12 @@ export class AuthController {
   @Patch()
   deleteDream(@Headers('x-access-token') accessToken) {
     return this.authService.deleteUser(accessToken);
+  }
+
+  @Get('/test')
+  test() {
+    console.log(defaultCurrentDateTimes());
+    console.log(defaultAfterSevenDateTimes());
+    return defaultCurrentDateTimes()
   }
 }

@@ -40,10 +40,7 @@ export class MissionService {
       const mission = await getManager()
         .createQueryBuilder(MissionUser, 'mu')
         .leftJoin(Mission, 'mission', 'mission.id = mu.missionId')
-        .select([
-          'mu.id as id',
-          'mu.isSuccess as isSuccess',
-        ])
+        .select(['mu.id as id', 'mu.isSuccess as isSuccess'])
         .addSelect('TIMESTAMPDIFF(second,NOW(),mu.missionEndDate) as time')
         .addSelect('mission.mission as mission')
         .where('mu.userId IN (:userId)', { userId: decodeToken.sub })
@@ -96,6 +93,12 @@ export class MissionService {
         MissionUser,
         { userId: decodeToken.sub },
         { updatedAt: defaultCurrentDateTimes() },
+      );
+
+      await queryRunner.manager.update(
+        MissionUser,
+        { userId: decodeToken.sub },
+        { successCount: + 1 },
       );
 
       const experience = new Experience();

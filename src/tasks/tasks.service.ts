@@ -39,6 +39,12 @@ export class TasksService {
         await queryRunner.manager.update(
           MissionUser,
           { userId: users[i].id },
+          { isSuccess: 'false' },
+        );
+
+        await queryRunner.manager.update(
+          MissionUser,
+          { userId: users[i].id },
           { missionStartDate: defaultCurrentDateTimes() },
         );
 
@@ -46,6 +52,12 @@ export class TasksService {
           MissionUser,
           { userId: users[i].id },
           { missionEndDate: defaultAfterSevenDateTimes() },
+        );
+
+        await queryRunner.manager.update(
+          MissionUser,
+          { userId: users[i].id },
+          { remainingDate: null },
         );
       }
     } catch (error) {

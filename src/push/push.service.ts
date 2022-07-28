@@ -19,10 +19,10 @@ export class PushService {
     //target_token은 푸시 메시지를 받을 디바이스의 토큰값입니다
 
     const payload = {
-      // data: {
-      //   title: '테스트 데이터 발송',
-      //   body: '데이터가 잘 가나요?',
-      // },
+      data: {
+        title: '테스트 데이터 발송',
+        body: '데이터가 잘 가나요?',
+      },
       notification: {
         title: 'notification title text',
         body: 'notification body text',

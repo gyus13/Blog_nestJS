@@ -98,7 +98,7 @@ export class MissionService {
       await queryRunner.manager.update(
         MissionUser,
         { userId: decodeToken.sub },
-        { successCount: + 1 },
+        { successCount: +1 },
       );
 
       const experience = new Experience();

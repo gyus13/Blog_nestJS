@@ -129,8 +129,6 @@ export class TicketService {
         where: { userId: decodeToken.sub },
       });
 
-      console.log(mission);
-
       if (mission.isSuccess == 'false') {
         if (counting + 1 == 5) {
           await this.missionService.compeleteMission(accessToken);

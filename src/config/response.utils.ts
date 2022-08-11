@@ -138,6 +138,11 @@ export const response = {
     code: 2026,
     message: 'id 토큰을 입력해주세요',
   },
+  FAIL_PUSH: {
+    isSuccess: false,
+    code: 2027,
+    message: '푸시알림에 실패했습니다.',
+  },
   ERROR: {
     isSuccess: false,
     code: 4000,

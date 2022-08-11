@@ -166,7 +166,7 @@ export class UsersService {
       const data = {
         dreamCount: countingDream.length,
         ticketCount: countingTicket.length,
-        missionCount: countingMission.length,
+        missionCount: countingMission,
         ticketTouchCount: countingTicketTouch.length,
         nickname: user.nickname,
       };
